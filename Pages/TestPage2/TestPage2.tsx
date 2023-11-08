@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, Text, View,TextInput } from "react-native";
 import { RootStackParamList } from "../../routes/routes";
 
 type TProps = NativeStackScreenProps<RootStackParamList>;
@@ -10,7 +10,8 @@ export default function TestPage({ navigation }: TProps) {
     };
     return (
         <View style={{ marginTop: 50 }}>
-            <Text>Я тестовая страница</Text>
+            <Text>Выберите вашу цель</Text>
+            <TextInput />
             <Pressable onPress={loadPage}>
                 <Text>Тестовая страница 3</Text>
             </Pressable>

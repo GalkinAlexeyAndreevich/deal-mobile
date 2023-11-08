@@ -18,7 +18,7 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export const AppNavigator = () => {
     return (
         <NavigationContainer>
-                <Stack.Navigator initialRouteName="TestPage1">
+                <Stack.Navigator initialRouteName="HomePage">
                     <Stack.Screen
                         name="TestPage1"
                         component={TestPage1}

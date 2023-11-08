@@ -1,6 +1,12 @@
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { StyleSheet, View, Image, Pressable, Text } from "react-native";
-export default function Home() {
+import { RootStackParamList } from "../../routes/routes";
+type TProps = NativeStackScreenProps<RootStackParamList>
+export default function Home({navigation}:TProps) {
+    const foundAlly = ()=>{
+        navigation.navigate("TestPage1");
+    }
     return (
         <View
             style={{
@@ -8,11 +14,12 @@ export default function Home() {
                 flexDirection: "column",
                 alignItems: "center",
                 height: "100%",
+                backgroundColor:"white"
             }}>
             <View style={{ marginTop: 20 }}>
                 <Image
-                    style={{ width: 300, height: 180 }}
-                    source={require("../../assets/deal1.jpg")}
+                    style={{ width: 300, height: 160 }}
+                    source={require("../../assets/deal.jpg")}
                 />
             </View>
             <View
@@ -24,18 +31,22 @@ export default function Home() {
                     gap: 20,
                 }}>
                 <Image
-                    style={{ width: 300, height: 180 }}
+                    style={{ width: 300, height: 140 }}
                     source={require("../../assets/handshake.jpg")}
                 />
-                <Pressable style={styles.button}>
-                    <Text>Найти союзника</Text>
+                <Pressable style={styles.button} onPress={foundAlly}>
+                    <Text style={{
+                        textAlign:"center",
+                    }}>Найти союзника</Text>
                 </Pressable>
                 <Pressable style={styles.button}>
-                    <Text>Стать союзником</Text>
+                    <Text style={{
+                        textAlign:"center",
+                    }}>Стать союзником</Text>
                 </Pressable>
             </View>
             <View>
-                <Text style={{ width: 300 }}>
+                <Text style={{ width: 300, paddingTop:20 }}>
                     Deal - это сайт, который поможет вам в борьбе с
                     прокрастинацией.
                 </Text>
@@ -46,12 +57,14 @@ export default function Home() {
 
 const styles = StyleSheet.create({
     button: {
+        display:"flex",
         borderWidth: 1,
         paddingHorizontal: 15,
         paddingVertical: 20,
         fontSize: 15,
         width: 200,
-        /* margin-top: 10px; */
+        justifyContent:"center",
+        
         backgroundColor: "white",
     },
 });
