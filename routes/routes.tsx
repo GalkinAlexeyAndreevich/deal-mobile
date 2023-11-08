@@ -1,44 +1,36 @@
-import SettingsPage from "../Pages/SettingsPage";
-import TestPage from "../Pages/TestPage";
+import Home from "../Pages/Home";
+import Main from "../Pages/Main";
+import TestPage1 from "../Pages/TestPage1";
+import TestPage2 from "../Pages/TestPage2";
+import TestPage3 from "../Pages/TestPage3";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import WeatherPage from "../Pages/WeatherPage";
-import SearchCityPage from "../Pages/SearchCityPage";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 export type RootStackParamList = {
-    SettingsPage: undefined;
-    WeatherPage: { codeCity: string };
-    TestPage: undefined;
-    DrawerNavigator: undefined;
-    SearchCityPage: undefined;
+    TestPage1: undefined;
+    TestPage2: undefined;
+    TestPage3: undefined;
+    HomePage:undefined;
+    MainPage:undefined;
 };
-const queryClient = new QueryClient();
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const AppNavigator = () => {
     return (
         <NavigationContainer>
-            <QueryClientProvider client={queryClient}>
-                <Stack.Navigator initialRouteName="WeatherPage">
+                <Stack.Navigator initialRouteName="TestPage1">
                     <Stack.Screen
-                        name="SettingsPage"
-                        component={SettingsPage}
+                        name="TestPage1"
+                        component={TestPage1}
                         options={{
-                            title: "Настройки",
+                            title: "TestPage1",
                         }}
                     />
-                    <Stack.Screen name="TestPage" component={TestPage} />
-                    <Stack.Screen name="WeatherPage" component={WeatherPage} />
-                    <Stack.Screen
-                        name="SearchCityPage"
-                        component={SearchCityPage}
-                        options={{
-                            title: "Поиск города",
-                        }}
-                    />
+                    <Stack.Screen name="TestPage2" component={TestPage2} />
+                    <Stack.Screen name="TestPage3" component={TestPage3} />
+                    <Stack.Screen name="HomePage" component={Home} />
+                    <Stack.Screen name="MainPage" component={Main} />
                 </Stack.Navigator>
-            </QueryClientProvider>
 
         </NavigationContainer>
     );
