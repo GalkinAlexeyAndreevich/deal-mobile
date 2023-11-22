@@ -6,7 +6,6 @@
         "jsx": "react-native",
         "outDir":"./dist",
         "paths": {
-            "*": ["src/*"],
             "@components/*": ["src/components/*"]
         }
     },

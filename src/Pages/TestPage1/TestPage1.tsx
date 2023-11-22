@@ -1,12 +1,12 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable, Text, View, StyleSheet, Alert } from "react-native";
-import { RootStackParamList } from "../../routes/routes";
+import { AddTaskParamList } from "../../routes/routes";
 import { useState } from "react";
 import { Button, CheckBox } from "react-native-elements";
 import { useAppDispatch } from "../../store/hook";
 import { setTypeDeal } from "../../store/dealSettings";
 
-type TProps = NativeStackScreenProps<RootStackParamList>;
+type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 export default function TestPage({ navigation }: TProps) {
     const [firstCheckBox, setFirstCheckBox] = useState<boolean>(true);

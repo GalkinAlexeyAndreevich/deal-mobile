@@ -5,7 +5,7 @@ import {
     ScrollView,
     Alert,
 } from "react-native";
-import { RootStackParamList } from "../../routes/routes";
+import { AddTaskParamList } from "../../routes/routes";
 import { Button, Input } from "@rneui/themed";
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hook";
@@ -17,7 +17,7 @@ import DateTimePicker, {
 import RNPickerSelect from "react-native-picker-select";
 import { ITask } from "interfaces";
 
-type TProps = NativeStackScreenProps<RootStackParamList>;
+type TProps = NativeStackScreenProps<AddTaskParamList>;
 interface ITypeTask {
     label: string;
     value: string;

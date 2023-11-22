@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable, Text, View } from "react-native";
-import { RootStackParamList } from "../../routes/routes";
+import { AddTaskParamList } from "../../routes/routes";
 import DealSettingModal from "../../components/DealSettingModal";
 
-type TProps = NativeStackScreenProps<RootStackParamList>;
+type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 export default function TestPage3({ navigation }: TProps) {
     const loadPage = () => {

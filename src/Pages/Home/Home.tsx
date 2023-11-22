@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { StyleSheet, View, Image, Pressable, Text } from "react-native";
-import { RootStackParamList } from "../../routes/routes";
+import { AddTaskParamList } from "../../routes/routes";
 import { Button } from "react-native-elements";
-type TProps = NativeStackScreenProps<RootStackParamList>;
+type TProps = NativeStackScreenProps<AddTaskParamList>;
 export default function Home({ navigation }: TProps) {
     const foundAlly = () => {
         navigation.navigate("TestPage1");
@@ -17,12 +17,12 @@ export default function Home({ navigation }: TProps) {
                 height: "100%",
                 backgroundColor: "white",
             }}>
-            <View style={{ marginTop: 20 }}>
+            {/* <View style={{ marginTop: 20 }}>
                 <Image
                     style={{ width: 300, height: 160 }}
                     source={require("../../assets/deal.jpg")}
                 />
-            </View>
+            </View> */}
             <View
                 style={{
                     paddingTop: 50,
