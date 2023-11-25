@@ -6,7 +6,11 @@ import TestPage3 from "../Pages/TestPage3";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createDrawerNavigator } from "@react-navigation/drawer";
+import {
+    DrawerContentScrollView,
+    createDrawerNavigator,
+    useDrawerStatus,
+} from "@react-navigation/drawer";
 import TaskOnDayPage from "../Pages/TaskOnDayPage";
 import CalendarPage from "../Pages/CalendarPage";
 import { Image } from "react-native-elements/dist/image/Image";
@@ -14,7 +18,7 @@ import { Platform, Pressable, SafeAreaView, Text, View } from "react-native";
 import Header from "../components/Header";
 import About from "../Pages/About";
 import { Button } from "@rneui/base";
-import {Ionicons} from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 export type AddTaskParamList = {
     TestPage1: undefined;
@@ -37,10 +41,11 @@ const MainStack = createNativeStackNavigator<MainStack>();
 const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator<RootStackParamList>();
 const Stack = createNativeStackNavigator<AddTaskParamList>();
+
 const AddTaskNavigator = () => {
     return (
         <Stack.Navigator
-            initialRouteName="HomePage"
+            initialRouteName="TestPage2"
             screenOptions={{
                 headerShown: false,
             }}>
@@ -60,27 +65,36 @@ const AddTaskNavigator = () => {
 
 function DrawerView({ navigation }) {
     return (
-        <SafeAreaView>
-            <Text style={{ paddingBottom: 20 }}>Настройки</Text>
-            <Text style={{ marginBottom: 20, textAlign: "center" }}>
-                Настройки
-            </Text>
-            <View style={{ display: "flex", gap: 10 }}>
-                <Button onPress={() => navigation.navigate("About")}>
-                    About
-                </Button>
-                <Button onPress={() => navigation.navigate("TabNavigator")}>
-                    Основное приложение
-                </Button>
-            </View>
-        </SafeAreaView>
+        <DrawerContentScrollView>
+            {useDrawerStatus() === "open" ? (
+                <View
+                    style={{
+                        display: useDrawerStatus() === "open" ? "flex" : "none",
+                    }}>
+                    <Text style={{ marginBottom: 20, textAlign: "center" }}>
+                        Настройки
+                    </Text>
+                    <View style={{ display: "flex", gap: 10 }}>
+                        <Button onPress={() => navigation.navigate("About")}>
+                            About
+                        </Button>
+                        <Button
+                            onPress={() => navigation.navigate("TestPage2")}>
+                            Основное приложение
+                        </Button>
+                    </View>
+                </View>
+            ) : (
+                <View></View>
+            )}
+            {/* <Text style={{ paddingBottom: 20 }}>Настройки</Text> */}
+        </DrawerContentScrollView>
     );
 }
 function MyDrawer() {
     return (
         <Drawer.Navigator
-        drawerContent={props => <DrawerView  {...props}/>}
-        
+            drawerContent={(props) => <DrawerView {...props} />}
             screenOptions={({ route, navigation }) => ({
                 headerRight: () => (
                     <Pressable onPress={() => navigation.openDrawer()}>
@@ -96,11 +110,21 @@ function MyDrawer() {
                         />
                     </Pressable>
                 ),
-                headerStyle: { height: 140 },
+                headerStyle: {
+                    height: 140,
+                    // marginTop: 30,
+                },
                 headerTitle: () => <Header />,
+                drawerStyle: {
+                    width: "50%",
+                    // marginLeft : "20%",
+                    // right:10
+                },
                 headerTitleAlign: "center",
                 drawerPosition: "right",
-                headerLeft:false
+                // headerShown:false
+                // drawerPosition: "right",
+                headerLeft: () => <View />,
             })}>
             <Drawer.Screen name="TabNavigator" component={TabNavigator} />
             <Drawer.Screen name="About" component={About} />

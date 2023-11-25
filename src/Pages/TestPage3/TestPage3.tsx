@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable, Text, View } from "react-native";
-import { AddTaskParamList } from "../../routes/routes";
-import DealSettingModal from "../../components/DealSettingModal";
+import { AddTaskParamList } from "../../routes";
+import DealSettingModal from "@components/DealSettingModal";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 

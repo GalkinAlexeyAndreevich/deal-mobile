@@ -6,7 +6,12 @@
         "jsx": "react-native",
         "outDir":"./dist",
         "paths": {
-            "@components/*": ["src/components/*"]
+            "@components/*": ["src/components/*"],
+            "@assets/*": ["src/assets/*"],
+            "@Pages/*": ["src/Pages/*"],
+            "@store/*": ["src/store/*"],
+            "@utils/*": ["src/utils/*"],
+            "@interfaces": ["src/interfaces.ts"],
         }
     },
     "exclude": ["node_modules"]

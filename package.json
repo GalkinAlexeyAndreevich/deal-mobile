@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@babel/plugin-proposal-export-namespace-from": "^7.18.9",
     "@expo/vector-icons": "^13.0.0",
     "@expo/webpack-config": "^18.0.1",
     "@react-native-async-storage/async-storage": "^1.17.11",
@@ -26,6 +27,7 @@
     "@types/react-native": "^0.72.3",
     "@types/react-redux": "^7.1.27",
     "axios": "^1.5.0",
+    "babel-plugin-module-resolver": "^5.0.0",
     "babel-preset-expo": "^9.5.2",
     "expo": "^48.0.0",
     "expo-location": "~15.1.1",

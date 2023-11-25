@@ -1,7 +1,7 @@
 import "react-native-get-random-values";
 import { nanoid } from "nanoid";
 import { View, Text } from "react-native";
-import { AppNavigator } from "./src/routes/routes";
+import { AppNavigator } from "./src/routes";
 import { Provider } from "react-redux";
 import store from "./src/store";
 

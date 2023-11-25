@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { StyleSheet, View, Image, Pressable, Text } from "react-native";
-import { AddTaskParamList } from "../../routes/routes";
+import { AddTaskParamList } from "../../routes";
 import { Button } from "react-native-elements";
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 export default function Home({ navigation }: TProps) {

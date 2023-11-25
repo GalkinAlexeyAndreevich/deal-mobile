@@ -1,5 +1,5 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import { ITask } from "interfaces";
+import { ITask } from "@interfaces";
 
 
 interface TypeState extends ITask  {

@@ -4,8 +4,9 @@ import {
     View,
     ScrollView,
     Alert,
+    StyleSheet,
 } from "react-native";
-import { AddTaskParamList } from "../../routes/routes";
+import { AddTaskParamList } from "../../routes";
 import { Button, Input } from "@rneui/themed";
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hook";
@@ -15,7 +16,7 @@ import DateTimePicker, {
     DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
-import { ITask } from "interfaces";
+import { ITask } from "../../interfaces";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 interface ITypeTask {
@@ -78,21 +79,11 @@ export default function TestPage({ navigation }: TProps) {
                 <View
                     style={{
                         display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        flexDirection: "row",
+                        flexDirection: "column",
                         gap: 10,
+                        flexWrap:"wrap"
                     }}>
-                    <View style={{ alignSelf: "center" }}>
-                        <RNPickerSelect
-                            onValueChange={(value) => changeTypeTask(value)}
-                            items={typeTask}
-                            placeholder={{}}
-                            // defaultValue={typeTask[0].value}
-                        />
-                    </View>
-
-                    <View style={{ width: 300 }}>
+                    <View style={{ width: 200 }}>
                         <Input
                             value={selectedData.nameTask}
                             placeholder="введите цель"
@@ -100,6 +91,17 @@ export default function TestPage({ navigation }: TProps) {
                             onChangeText={(text) => changeNameTask(text)}
                         />
                     </View>
+                    <View style={{ width: 100, paddingLeft:10 }}>
+                        <RNPickerSelect
+                            onValueChange={(value) => changeTypeTask(value)}
+                            items={typeTask}
+                            placeholder={{}}
+                            style={pickerSelectStyles}
+                            // defaultValue={typeTask[0].value}
+                        />
+                    </View>
+
+
                 </View>
 
                 <View style={{ marginTop: 60, maxWidth: 350 }}>
@@ -140,3 +142,26 @@ export default function TestPage({ navigation }: TProps) {
         </View>
     );
 }
+
+const pickerSelectStyles = StyleSheet.create({
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30 // to ensure the text is never behind the icon
+    },
+    inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30 // to ensure the text is never behind the icon
+    }
+});

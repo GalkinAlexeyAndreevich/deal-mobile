@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable, Text, View, StyleSheet, Alert } from "react-native";
-import { AddTaskParamList } from "../../routes/routes";
+import { AddTaskParamList } from "../../routes";
 import { useState } from "react";
 import { Button, CheckBox } from "react-native-elements";
 import { useAppDispatch } from "../../store/hook";
