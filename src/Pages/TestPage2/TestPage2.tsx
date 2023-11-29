@@ -1,16 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import {
-    Text,
-    View,
-    ScrollView,
-    Alert,
-    StyleSheet,
-} from "react-native";
+import { Text, View, ScrollView, Alert, StyleSheet } from "react-native";
 import { AddTaskParamList } from "../../routes";
 import { Button, Input } from "@rneui/themed";
 import { useState } from "react";
 import { useAppDispatch } from "../../store/hook";
-import { addTask} from "../../store/dealSettings";
+import { addTask } from "../../store/dealSettings";
 import { typeTasks } from "../../utils/dataNoFetch";
 import DateTimePicker, {
     DateTimePickerEvent,
@@ -29,7 +23,9 @@ export default function TestPage({ navigation }: TProps) {
     const [timeTask, setTimeTask] = useState(
         new Date(new Date().setHours(0, 0, 0, 0))
     );
-    const [selectedData, setSelectedData] = useState<ITask>({nameTask:''} as ITask);
+    const [selectedData, setSelectedData] = useState<ITask>({
+        nameTask: "",
+    } as ITask);
 
     const [showTimer, setShowTimer] = useState(false);
 
@@ -45,7 +41,7 @@ export default function TestPage({ navigation }: TProps) {
     };
     const changeNameTask = (task: string) => {
         console.log(task);
-        
+
         setSelectedData((prev) => ({ ...prev, nameTask: task }));
     };
     const changeTypeTask = (typeTask: string) => {
@@ -80,8 +76,7 @@ export default function TestPage({ navigation }: TProps) {
                     style={{
                         display: "flex",
                         flexDirection: "column",
-                        gap: 10,
-                        flexWrap:"wrap"
+                        flexWrap: "wrap",
                     }}>
                     <View style={{ width: 200 }}>
                         <Input
@@ -89,19 +84,24 @@ export default function TestPage({ navigation }: TProps) {
                             placeholder="введите цель"
                             // onChange={(e)=>{changeNameTask(e.target.value)}}
                             onChangeText={(text) => changeNameTask(text)}
+                            // containerStyle={{borderWidth:1, borderRadius:10}}
+                            inputStyle={{
+                                borderWidth: 1,
+                                borderRadius: 10,
+                                paddingLeft: 7,
+                            }}
+                            inputContainerStyle={{ borderBottomWidth: 0 }}
                         />
                     </View>
-                    <View style={{ width: 100, paddingLeft:10 }}>
+                    <View style={{maxWidth: 200, paddingLeft: 10}}>
                         <RNPickerSelect
                             onValueChange={(value) => changeTypeTask(value)}
                             items={typeTask}
                             placeholder={{}}
+                            useNativeAndroidPickerStyle={false}
                             style={pickerSelectStyles}
-                            // defaultValue={typeTask[0].value}
                         />
                     </View>
-
-
                 </View>
 
                 <View style={{ marginTop: 60, maxWidth: 350 }}>
@@ -146,22 +146,38 @@ export default function TestPage({ navigation }: TProps) {
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontSize: 16,
-        paddingVertical: 12,
-        paddingHorizontal: 10,
+        // paddingVertical: 12,
+        // paddingHorizontal: 10,
         borderWidth: 1,
-        borderColor: 'gray',
+        borderColor: "gray",
         borderRadius: 4,
-        color: 'black',
-        paddingRight: 30 // to ensure the text is never behind the icon
+        color: "black",
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    placeholder: {
+        color: "red",
+        
     },
     inputAndroid: {
         fontSize: 16,
-        paddingHorizontal: 10,
-        paddingVertical: 8,
-        borderWidth: 0.5,
-        borderColor: 'purple',
+        // paddingHorizontal: 10,
+        // paddingVertical: 8,
+        paddingLeft:10,
+        borderWidth: 1,
+        borderColor: "black",
         borderRadius: 8,
-        color: 'black',
-        paddingRight: 30 // to ensure the text is never behind the icon
-    }
+        color: "black",
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
+    inputWeb: {
+        fontSize: 16,
+        // paddingHorizontal: 10,
+        // paddingVertical: 8,
+        paddingLeft:10,
+        borderWidth: 1,
+        borderColor: "black",
+        borderRadius: 8,
+        color: "black",
+        paddingRight: 30, // to ensure the text is never behind the icon
+    },
 });

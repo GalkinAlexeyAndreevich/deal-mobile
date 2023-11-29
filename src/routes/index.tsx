@@ -137,7 +137,9 @@ function TabNavigator() {
             screenOptions={{
                 // tabBarStyle: { position: "absolute" },
                 headerShown: false,
-            }}>
+            }}
+            initialRouteName="CalendarPage"
+            >
             <Tab.Screen name="AddTask" component={AddTaskNavigator} />
             <Tab.Screen name="MainPage" component={Main} />
             <Tab.Screen name="TaskOnDayPage" component={TaskOnDayPage} />
