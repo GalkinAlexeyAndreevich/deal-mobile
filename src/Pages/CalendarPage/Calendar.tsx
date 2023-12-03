@@ -2,12 +2,18 @@ import {
     View,
     Text,
     Pressable,
-    TouchableOpacity,
     ScrollView,
+    // FlatList,
+    TouchableOpacity,
+    LogBox,
 } from "react-native";
 import React, { FunctionComponent, useEffect, useState } from "react";
 import { Calendar, Agenda, LocaleConfig } from "react-native-calendars";
 import { MarkedDates, Theme } from "react-native-calendars/src/types";
+import { useAppDispatch, useAppSelector } from "@store/hook";
+import { setCurrentDate } from "@store/tasksDatesSlice";
+import { FlatList } from "react-native-gesture-handler";
+// import { ScrollView } from 'react-native-virtualized-view'
 const timeToString = (time: any): string => {
     const date = new Date(time);
     return date.toISOString().split("T")[0];
@@ -15,19 +21,18 @@ const timeToString = (time: any): string => {
 
 interface Props {
     markedDates: MarkedDates;
-    currentDate: Date;
-    setCurrentDate: (date: Date) => void;
     setOpenModal: (open: boolean) => void;
 }
 
-export default function CustomCalendar({
-    markedDates,
-    currentDate,
-    setCurrentDate,
-    setOpenModal,
-}: Props) {
-    const [selected, setSelected] = useState("");
-    // const [currentDate, setCurrentDate] = useState(new Date())
+export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
+    const currentDate = useAppSelector((state) => state.tasksDates.currentDate);
+    const dispatch = useAppDispatch();
+    const [selected, setSelected] = useState<string>(currentDate);
+
+    useEffect(() => {
+        setSelected(currentDate);
+    }, [currentDate]);
+
     LocaleConfig.locales["ru"] = {
         monthNames: [
             "Январь",
@@ -69,6 +74,7 @@ export default function CustomCalendar({
         dayNamesShort: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
         today: "Сегодня",
     };
+    LocaleConfig.defaultLocale = "ru";
     const calendarTheme: Theme = {
         backgroundColor: "#ffffff",
         calendarBackground: "#ffffff",
@@ -92,7 +98,10 @@ export default function CustomCalendar({
         //     },
         // },
     };
-    LocaleConfig.defaultLocale = "ru";
+    useEffect(() => {
+        LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
+    }, []);
+
     return (
         <View>
             <ScrollView
@@ -102,10 +111,11 @@ export default function CustomCalendar({
                 // }
                 horizontal={false}
                 stickyHeaderIndices={[1]}
-                invertStickyHeaders={true}
-            >
+                invertStickyHeaders={true}>
                 <View>
+                    <Text>{currentDate}</Text>
                     <Calendar
+                        key={currentDate}
                         style={{
                             borderWidth: 1,
                             borderColor: "gray",
@@ -114,11 +124,12 @@ export default function CustomCalendar({
                         // scrollEnabled={true}
                         // pagingEnabled={true}
                         // horizontal={false}
+                        current={currentDate}
                         firstDay={1}
                         // enableSwipeMonths={true}
                         theme={calendarTheme}
                         // hideExtraDays={true}
-                        monthFormat="MMM/yyyy"
+                        // monthFormat="MMM/yyyy"
                         customHeaderTitle={
                             <View>
                                 <Pressable
@@ -126,10 +137,13 @@ export default function CustomCalendar({
                                         setOpenModal(true);
                                     }}>
                                     <Text>
-                                        {currentDate.toLocaleString("default", {
-                                            year: "numeric",
-                                            month: "long",
-                                        })}
+                                        {new Date(currentDate).toLocaleString(
+                                            "default",
+                                            {
+                                                year: "numeric",
+                                                month: "long",
+                                            }
+                                        )}
                                     </Text>
                                 </Pressable>
                             </View>
@@ -137,7 +151,8 @@ export default function CustomCalendar({
                         markingType="multi-dot"
                         onDayPress={(day) => {
                             console.log(day);
-
+                            dispatch(setCurrentDate(day.dateString));
+                            // setCurrentDate(new Date(day.dateString))
                             setSelected(day.dateString);
                         }}
                         dayComponent={({ date, state, marking }) => {
@@ -160,47 +175,61 @@ export default function CustomCalendar({
                                         // backgroundColor:"orange"
                                         backgroundColor:
                                             selected == date.dateString
-                                                ? "orange"
+                                                ? "#e4f7fe"
                                                 : "white",
                                     }}>
-                                    <Text
-                                        style={{
-                                            textAlign: "center",
-                                            color: "black",
-                                            fontSize: 15,
-                                            paddingLeft: 3,
-                                        }}>
-                                        {date.day}{" "}
-                                    </Text>
+                                    {!marking?.dots && (
+                                        <Text
+                                            style={{
+                                                textAlign: "center",
+                                                color: "black",
+                                                fontSize: 15,
+                                                paddingLeft: 3,
+                                            }}>
+                                            {date.day}{" "}
+                                        </Text>
+                                    )}
 
-                                    <ScrollView
-                                        showsVerticalScrollIndicator={true}>
-                                        {marking?.dots?.map((item, index) => (
-                                            <View key={item.key}>
-                                                {
-                                                    // index<3 &&
+                                    {marking?.dots && (
+                                        <FlatList
+                                            data={marking.dots}
+                                            keyExtractor={(item) => item.key}
+                                            showsVerticalScrollIndicator={true}
+                                            ListHeaderComponent={() => {
+                                                return (
                                                     <Text
                                                         style={{
-                                                            backgroundColor:
-                                                                item?.color,
-                                                            color: item?.selectedDotColor,
-                                                            paddingVertical: 3,
-                                                            marginVertical: 3,
-                                                            fontSize: 10,
-                                                            borderRadius: 50,
                                                             textAlign: "center",
-                                                            flex: 1,
+                                                            color: "black",
+                                                            fontSize: 15,
+                                                            paddingLeft: 3,
                                                         }}>
-                                                        {item.key}
+                                                        {date.day}{" "}
                                                     </Text>
-                                                }
-                                                {index == 3 && <Text>...</Text>}
-                                            </View>
-                                        ))}
-                                        {/* <Text>{marking?.dots.length > 2? "...":""}</Text> */}
-                                    </ScrollView>
-                                    {/* <Text style={{fontSize:15}}>Дело 1</Text>
-                            <Text>Дело 3</Text> */}
+                                                );
+                                            }}
+                                            renderItem={({ item, index }) => {
+                                                return (
+                                                    <View key={item.key}>
+                                                        <Text
+                                                            style={{
+                                                                backgroundColor:
+                                                                    item?.color,
+                                                                color: item?.selectedDotColor,
+                                                                paddingVertical: 3,
+                                                                marginVertical: 3,
+                                                                fontSize: 10,
+                                                                borderRadius: 50,
+                                                                textAlign:
+                                                                    "center",
+                                                                flex: 1,
+                                                            }}>
+                                                            {item.key}
+                                                        </Text>
+                                                    </View>
+                                                );
+                                            }}></FlatList>
+                                    )}
                                 </Pressable>
                             );
                         }}
@@ -213,9 +242,9 @@ export default function CustomCalendar({
                             },
                         }}
                         onMonthChange={(date) =>
-                            setCurrentDate(new Date(date.dateString))
+                            dispatch(setCurrentDate(date.dateString))
                         }
-                        date={timeToString(currentDate)}
+                        date={currentDate}
                     />
                 </View>
             </ScrollView>

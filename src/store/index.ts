@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import dealSettingsSlice from './dealSettings'
+import tasksDatesSlice from './tasksDatesSlice'
 
 const store = configureStore({
   reducer: {
-    dealSettings:dealSettingsSlice
+    dealSettings:dealSettingsSlice,
+    tasksDates:tasksDatesSlice,
   },
 })
 

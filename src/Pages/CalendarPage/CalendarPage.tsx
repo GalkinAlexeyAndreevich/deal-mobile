@@ -5,22 +5,36 @@ import RNDateTimePicker, {
 } from "@react-native-community/datetimepicker";
 import CustomCalendar from "./Calendar";
 import { MarkedDates } from "react-native-calendars/src/types";
+import { setCurrentDate } from "@store/tasksDatesSlice";
+import { useAppDispatch, useAppSelector } from "@store/hook";
+
+const timeToString = (time: any): string => {
+    const date = new Date(time);
+    return date.toISOString().split("T")[0];
+};
 
 export default function CalendarPage() {
     const [selected, setSelected] = useState("");
-    const [currentDate, setCurrentDate] = useState(new Date());
+    const currentDate = useAppSelector(state=>state.tasksDates.currentDate)
+    const dispatch = useAppDispatch()
+    // const [currentDate, setCurrentDate] = useState(new Date());
     const [openModal, setOpenModal] = useState(false);
+
+    useEffect(()=>{
+        console.log("тест",currentDate);
+        
+    },[currentDate])
 
     let markedDates: MarkedDates = {
         "2023-11-20": {
             marked: true, selectedColor: 'blue',
             textColor:"white",
             dots: [
-                { key: "workout", color: "green", selectedDotColor:"aqua",  },
-                { key: "massage", color: "yellow",  },
-                { key: "test1", color: "yellow",  },
-                { key: "test3", color: "yellow",  },
-                { key: "test", color: "yellow",  },
+                { key: "workout", color: "#a6fcaa", selectedDotColor:"#000000", },
+                { key: "massage", color: "#fff272",  },
+                { key: "test1", color: "#ffc4c4",  },
+                { key: "test3", color: "#ffcdfc",  },
+                { key: "test", color: "#dbd1fe",  },
             ],
             customStyles: {
                 container: {
@@ -48,7 +62,12 @@ export default function CalendarPage() {
     ) => {
         if (type === "set") {
             setOpenModal(!openModal);
-            setCurrentDate(selectedData);
+            console.log("set",selectedData);
+            
+            dispatch(setCurrentDate(timeToString(selectedData)));
+            console.log(currentDate);
+            
+
         } else {
             setOpenModal(!openModal);
         }
@@ -57,13 +76,11 @@ export default function CalendarPage() {
         <ScrollView style={{ flex: 1, backgroundColor: "white" }}>
             <CustomCalendar
                 markedDates={markedDates}
-                currentDate={currentDate}
-                setCurrentDate={setCurrentDate}
                 setOpenModal={setOpenModal}
             />
             {openModal && (
                 <RNDateTimePicker
-                    value={currentDate}
+                    value={new Date(currentDate)}
                     onChange={changeMonthPicker}
                 />
             )}

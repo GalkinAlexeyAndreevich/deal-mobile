@@ -14,7 +14,7 @@ const initialState:TypeState = {
 
 
 const dealSettingsSlice = createSlice({
-    name:"tasks",
+    name:"dealSettings",
     initialState,
     reducers:{
         setTypeDeal(state,actions:PayloadAction<string>){

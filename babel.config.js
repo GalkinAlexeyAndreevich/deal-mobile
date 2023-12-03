@@ -33,7 +33,7 @@ module.exports = (api) => {
           "@components": "./src/components",
           "@assets": "./src/assets",
           "@Pages": "./src/Pages",
-          "@store": "./src/sore",
+          "@store": "./src/store",
           "@utils": "./src/utils",
           "@interfaces":"./src/interfaces.ts"
         }
