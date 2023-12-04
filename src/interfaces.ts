@@ -26,7 +26,8 @@ export interface SubTasks{
 	id:number,
 	name:string,
 	level:number,
-	parentId:number,
+	mainParentId:number
+	subParentId:number,
 	done:boolean
 }
 

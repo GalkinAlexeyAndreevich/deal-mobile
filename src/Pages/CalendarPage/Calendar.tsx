@@ -13,6 +13,9 @@ import { MarkedDates, Theme } from "react-native-calendars/src/types";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { setCurrentDate } from "@store/tasksDatesSlice";
 import { FlatList } from "react-native-gesture-handler";
+import AddTask from "./AddTask";
+import DayComponent from "./DayComponent";
+import moment from "moment";
 // import { ScrollView } from 'react-native-virtualized-view'
 const timeToString = (time: any): string => {
     const date = new Date(time);
@@ -102,137 +105,142 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
         LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     }, []);
 
+    const getMarkedDatesForWeek = (selectedDate) => {
+        const selectedWeek = moment(selectedDate).week();
+        const selectedMonth = moment(selectedDate).format("MM")
+        const selectedYear = moment(selectedDate).format("YYYY")
+        console.log(selectedWeek,selectedMonth,selectedYear);
+        
+        const markedDatesForWeek = {};
+        
+        Object.entries(markedDates).forEach(([date, marked]) => {
+            const week = moment(date).week();
+            const month = moment(date).format("MM")
+            const year = moment(date).format("YYYY")
+          if (week === selectedWeek && month==selectedMonth && year ==selectedYear) {
+            markedDatesForWeek[date] = marked;
+          }
+        });
+    
+        return markedDatesForWeek;
+      };
+
+      const getMaxCountMarkedDatesPerDayOfWeek = () => {
+        const counts = {};
+        const maxCounts = {};
+    
+        Object.entries(markedDates).forEach(([date]) => {
+          const week = moment(date).week()
+          const dayOfWeek = new Date(date).getDay();
+    
+          if (!counts[week]) {
+            counts[week] = {};
+          }
+    
+          if (!counts[week][dayOfWeek]) {
+            counts[week][dayOfWeek] = 0;
+          }
+    
+          counts[week][dayOfWeek]++;
+          maxCounts[week] = Math.max(
+            maxCounts[week] || 0,
+            counts[week][dayOfWeek]
+          );
+        });
+    
+        return maxCounts;
+      };
+      console.log("Кол-во на неделю: ", getMaxCountMarkedDatesPerDayOfWeek());
+      
+
+      const getMaxCountMarkedDatesOnWeek = () => {
+        const counts = {};
+        let maxCount = 0;
+    
+        Object.entries(markedDates).forEach(([date]) => {
+          const week = moment(date).week();
+          if (!counts[week]) {
+            counts[week] = 0;
+          }
+          counts[week]++;
+          maxCount = Math.max(maxCount, counts[week]);
+        });
+    
+        return maxCount;
+      };
+
+     
+
+    const renderDay = (day) => {
+        let height = 50; // Default height for days
+        const weekNumber = Math.ceil(parseInt(day.day) / 7);
+
+        // Calculate the height based on the week number
+        if (weekNumber === 1) {
+            height = 50;
+        } else if (weekNumber === 2) {
+            height = 70;
+        } else if (weekNumber === 3) {
+            height = 90;
+        } // Add more conditions for additional weeks
+
+        return (
+            <View style={{ height }}>
+                <Text>{day.day}</Text>
+            </View>
+        );
+    };
+    const customHeaderTitle = () => {
+        return (
+            <View>
+                <Pressable
+                    onPress={() => {
+                        setOpenModal(true);
+                    }}>
+                    <Text>
+                        {new Date(currentDate).toLocaleString("default", {
+                            year: "numeric",
+                            month: "long",
+                        })}
+                    </Text>
+                </Pressable>
+            </View>
+        );
+    };
+
     return (
         <View>
             <ScrollView
-                style={{ marginBottom: 10, height: 580 }}
-                // StickyHeaderComponent={
-
-                // }
+                style={{
+                    marginBottom: 10,
+                     height: 580
+                }}
                 horizontal={false}
                 stickyHeaderIndices={[1]}
                 invertStickyHeaders={true}>
-                <View>
-                    <Text>{currentDate}</Text>
                     <Calendar
                         key={currentDate}
+                        date={currentDate}
+                        current={currentDate}
                         style={{
                             borderWidth: 1,
                             borderColor: "gray",
                             // maxHeight: 500,
                         }}
-                        // scrollEnabled={true}
-                        // pagingEnabled={true}
-                        // horizontal={false}
-                        current={currentDate}
+                        
                         firstDay={1}
-                        // enableSwipeMonths={true}
                         theme={calendarTheme}
-                        // hideExtraDays={true}
-                        // monthFormat="MMM/yyyy"
-                        customHeaderTitle={
-                            <View>
-                                <Pressable
-                                    onPress={() => {
-                                        setOpenModal(true);
-                                    }}>
-                                    <Text>
-                                        {new Date(currentDate).toLocaleString(
-                                            "default",
-                                            {
-                                                year: "numeric",
-                                                month: "long",
-                                            }
-                                        )}
-                                    </Text>
-                                </Pressable>
-                            </View>
-                        }
-                        markingType="multi-dot"
-                        onDayPress={(day) => {
-                            console.log(day);
-                            dispatch(setCurrentDate(day.dateString));
-                            // setCurrentDate(new Date(day.dateString))
-                            setSelected(day.dateString);
-                        }}
+                        customHeaderTitle={customHeaderTitle()}
                         dayComponent={({ date, state, marking }) => {
                             return (
-                                <Pressable
-                                    onPress={() => {
-                                        console.log(
-                                            "selected day",
-                                            date.dateString
-                                        );
-                                        setSelected(date.dateString);
-                                    }}
-                                    style={{
-                                        width: 55,
-                                        height: 120,
-                                        borderWidth: 0.2,
-                                        borderColor: "#a0a0a0",
-                                        margin: 0,
-                                        paddingVertical: 5,
-                                        // backgroundColor:"orange"
-                                        backgroundColor:
-                                            selected == date.dateString
-                                                ? "#e4f7fe"
-                                                : "white",
-                                    }}>
-                                    {!marking?.dots && (
-                                        <Text
-                                            style={{
-                                                textAlign: "center",
-                                                color: "black",
-                                                fontSize: 15,
-                                                paddingLeft: 3,
-                                            }}>
-                                            {date.day}{" "}
-                                        </Text>
-                                    )}
-
-                                    {marking?.dots && (
-                                        <FlatList
-                                            data={marking.dots}
-                                            keyExtractor={(item) => item.key}
-                                            showsVerticalScrollIndicator={true}
-                                            ListHeaderComponent={() => {
-                                                return (
-                                                    <Text
-                                                        style={{
-                                                            textAlign: "center",
-                                                            color: "black",
-                                                            fontSize: 15,
-                                                            paddingLeft: 3,
-                                                        }}>
-                                                        {date.day}{" "}
-                                                    </Text>
-                                                );
-                                            }}
-                                            renderItem={({ item, index }) => {
-                                                return (
-                                                    <View key={item.key}>
-                                                        <Text
-                                                            style={{
-                                                                backgroundColor:
-                                                                    item?.color,
-                                                                color: item?.selectedDotColor,
-                                                                paddingVertical: 3,
-                                                                marginVertical: 3,
-                                                                fontSize: 10,
-                                                                borderRadius: 50,
-                                                                textAlign:
-                                                                    "center",
-                                                                flex: 1,
-                                                            }}>
-                                                            {item.key}
-                                                        </Text>
-                                                    </View>
-                                                );
-                                            }}></FlatList>
-                                    )}
-                                </Pressable>
+                                <DayComponent
+                                    selected={selected}
+                                    date={date}
+                                    marking={marking}
+                                />
                             );
                         }}
+                        markingType="multi-dot"
                         markedDates={{
                             ...markedDates,
                             [selected]: {
@@ -244,48 +252,10 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                         onMonthChange={(date) =>
                             dispatch(setCurrentDate(date.dateString))
                         }
-                        date={currentDate}
-                    />
-                </View>
-            </ScrollView>
 
-            <TouchableOpacity
-                style={{
-                    alignSelf: "stretch",
-                    justifyContent: "flex-end",
-                    backgroundColor: "#3390ee",
-                    paddingVertical: 5,
-                }}>
-                <Text
-                    style={{
-                        textAlign: "center",
-                        color: "white",
-                        fontSize: 20,
-                    }}>
-                    Добавить цель
-                </Text>
-            </TouchableOpacity>
+                    />
+            </ScrollView>
+            <AddTask />
         </View>
     );
 }
-
-const stickyComponent: FunctionComponent = () => {
-    return (
-        <TouchableOpacity
-            style={{
-                alignSelf: "stretch",
-                alignContent: "flex-end",
-                backgroundColor: "#3390ee",
-                paddingVertical: 5,
-            }}>
-            <Text
-                style={{
-                    textAlign: "center",
-                    color: "white",
-                    fontSize: 20,
-                }}>
-                Добавить цель
-            </Text>
-        </TouchableOpacity>
-    );
-};
