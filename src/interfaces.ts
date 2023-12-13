@@ -22,6 +22,18 @@ export interface Tasks{
 	subtasks:SubTasks[]
 }
 
+export interface SubTask{
+	id:number,
+	name:string,
+	done:boolean,
+}
+export interface Task{
+	id:number,
+	name:string,
+	done:boolean,
+	subtasks?: SubTask[]
+}
+
 export interface SubTasks{
 	id:number,
 	name:string,

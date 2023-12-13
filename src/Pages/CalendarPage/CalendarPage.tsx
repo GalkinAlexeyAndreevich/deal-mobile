@@ -25,12 +25,48 @@ export default function CalendarPage() {
         
     },[currentDate])
 
-    let markedDates: MarkedDates = {
+    let markedDates: MarkedDates = { 
+        "2023-10-31": {
+            dots: [
+                { key: "workout", color: "#a6fcaa" },
+                { key: "massage", color: "#fff272",  },
+            ],
+        },       
+        "2023-10-10": {
+            dots: [
+                { key: "workout", color: "#a6fcaa" },
+                { key: "massage", color: "#fff272",  },
+            ],
+        },
+        "2023-10-12": {
+            dots: [
+                { key: "workout", color: "#a6fcaa" },
+                { key: "massage", color: "#fff272",  },
+            ],
+        },
+        "2023-11-10": {
+            dots: [
+                { key: "workout", color: "#a6fcaa" },
+                { key: "massage", color: "#fff272",  },
+            ],
+        },
+        "2023-11-11": {
+            dots: [
+                { key: "workout", color: "#a6fcaa" },
+                { key: "massage", color: "#fff272",  },
+            ],
+        },
+        "2023-11-15": {
+            dots: [
+                { key: "workout", color: "#a6fcaa" },
+                { key: "massage", color: "#fff272",  },
+            ],
+        },
         "2023-11-20": {
             marked: true, selectedColor: 'blue',
             textColor:"white",
             dots: [
-                { key: "workout", color: "#a6fcaa", selectedDotColor:"#000000", },
+                { key: "workout", color: "#a6fcaa" },
                 { key: "massage", color: "#fff272",  },
                 { key: "test1", color: "#ffc4c4",  },
                 { key: "test3", color: "#ffcdfc",  },
@@ -50,8 +86,8 @@ export default function CalendarPage() {
         },
         "2023-11-21": {
             dots: [
-                { key: "workout", color: "green" },
-                { key: "massage", color: "yellow" },
+                { key: "workout", color: "#a6fcaa" },
+                { key: "massage", color: "#fff272",  },
             ],
         },
     };

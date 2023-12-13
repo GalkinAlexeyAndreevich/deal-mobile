@@ -1,27 +1,27 @@
-import { View, Text } from "react-native";
+import { View, Text,TextInput } from "react-native";
 import React, { useState } from "react";
 import moment from "moment";
 import "moment/locale/ru";
 import { Button, CheckBox } from "react-native-elements";
 import { defaultTasks } from "@utils/dataNoFetch";
-import { SubTasks, Tasks } from "@interfaces";
+import { SubTask, Task } from "@interfaces";
 import { useAppSelector } from "@store/hook";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 
 moment().locale("ru");
 
-
 const paddingOnLevel = {
-    0:10,
-    1:25,
-    2:40
-}
+    0: 10,
+    1: 25,
+    2: 40,
+};
 
 export default function TaskOnDayPage() {
-    const [tasks, setTasks] = useState<Tasks[]>(defaultTasks);
-    const currentDate = useAppSelector(state=>state.tasksDates.currentDate)
+    const [tasks, setTasks] = useState<Task[]>(defaultTasks);
+    const currentDate = useAppSelector((state) => state.tasksDates.currentDate);
     // const [currentDate, setCurrentDate] = useState(new Date());
-    
-    const changeTask = (task: Tasks) => {
+
+    const changeTask = (task: Task) => {
         const found = tasks.find((element) => element.id === task.id);
         const newState = tasks.map((el) =>
             el.id === task.id ? { ...el, done: !el.done } : el
@@ -31,50 +31,45 @@ export default function TaskOnDayPage() {
         setTasks(newState);
     };
 
-    /*
-    Должны быть рассчитано:
-    1. Если Выполнены все подзадания 0 уровня, закрываем задания  и 
-    2. Если Выполнено подзадания, закрываем подзадания высокого уровня
-    3. Если Выполнены все дозадания высокого уровня закрываем уровень level-1 
+    const changeSub = (sub: SubTask, task: Task) => {
+        console.log("change sub");
 
-    */
-
-    const changeSub = (sub: SubTasks, task: Tasks) => {
         let found = tasks.find((element) => element.id === task.id);
+        let subtasks = found.subtasks.find((element) => element.id === sub.id);
+        console.log(found, subtasks);
 
-       found.subtasks.map((item) => {
-            if (item.id === sub.id) {
-                item.done = !item.done;
-                if(item.done){
-                    // Находим все элементы на этом уровне
-                    let test = found.subtasks.filter((element) => element.parentId === item.parentId && element.level === item.level);
-                    console.log(test);
-                    // Проверяем что на этом уровне все задания сделаны
-                    let check = true
-                    for(let item of test){
-                        if(item.done ===false)check=false
-                    }
-                    // Если Выполнены все подзадания 0 уровня, закрываем задания
-                    if(check && item.level === 0){
-                        found.done = true
-                    }
-                    // Если нет то подзадания
-                    else if(check){
-                        let test1 = found.subtasks.filter((element) => element.parentId === item.parentId && element.level >1 );
-                        found.done = true
-                    }
-                    if(item.level ===0){
-                        // let found2 = foundfilter((element) => element.parentId === item.parentId && element.level !=0);
-                        found.done = true
-                    }
-                    let found1 = found.subtasks.filter((element) => element.parentId === item.parentId && element.level !=0);
-                }
+        subtasks.done = !subtasks.done;
+        // Если хоть задание было выполнено, но мы отменили выполнение подзадания, задание будет отменено
+        if (found.done && !subtasks.done) {
+            found.done = false;
+        } else {
+            // Если вы подзадания будут выполнены, задание будет выполнено
+            let checkOnDone = true;
+            for (let item of found.subtasks) {
+                if (!item.done) checkOnDone = false;
             }
-            
-            return item;
-        });
-        console.log(found);
-        const newState = tasks.map((el) => (el.id === found.id ? found : el));
+            if (checkOnDone) {
+                found.done = true;
+            }
+        }
+        const newState = tasks.map((el) => (el.id === task.id ? found : el));
+        setTasks(newState);
+    };
+
+    const changeNameTask = (text: string, task: Task, subtask:SubTask= null) => {
+        console.log(text, task);
+        if (!text) return;
+        let found = tasks.find((element) => element.id === task.id);
+        if(subtask){
+            let sub = found.subtasks.find((element) => element.id === subtask.id)
+            sub.name = text
+        }
+        else{
+            found.name=text
+        }
+        console.log("Chnage sub",found.subtasks.find((element) => element.id === subtask.id));
+        
+        const newState = tasks.map((el) => (el.id === task.id ? found : el));
         setTasks(newState);
     };
 
@@ -94,33 +89,41 @@ export default function TaskOnDayPage() {
                         <CheckBox
                             size={20}
                             checked={task.done}
+                            disabled={task.subtasks?.length > 0}
                             onPress={() => changeTask(task)}
                             checkedColor="red"
                         />
-                        <Text
+                        <TextInput
                             style={{
+                                margin: 0,
+                                padding: 0,
                                 textDecorationLine: task.done
                                     ? "line-through"
                                     : "none",
-                            }}>
-                            {task.name}
-                        </Text>
+                            }}
+                            value={task.name}
+                            // multiline={true}
+                            onChangeText={(text) => changeNameTask(text, task)}
+                        />
+                        <View>
+                            <Icon name="delete" size={15}/> 
+                        </View>
                     </View>
 
                     <View
                         style={{
                             display: "flex",
                             flexDirection: "column",
-                            
+
                             // alignItems: "center",
                         }}>
-                        {task.subtasks.map((sub) => (
+                        {task?.subtasks.length && task.subtasks.map((sub) => (
                             <View
                                 style={{
                                     display: "flex",
                                     flexDirection: "row",
                                     alignItems: "center",
-                                    paddingLeft:paddingOnLevel[sub.level]
+                                    paddingLeft: 15,
                                 }}
                                 key={sub.id}>
                                 <CheckBox
@@ -129,14 +132,20 @@ export default function TaskOnDayPage() {
                                     onPress={() => changeSub(sub, task)}
                                     checkedColor="red"
                                 />
-                                <Text
+                                <TextInput
                                     style={{
+                                        margin: 0,
+                                        padding: 0,
                                         textDecorationLine: sub.done
                                             ? "line-through"
                                             : "none",
-                                    }}>
-                                    {sub.name}
-                                </Text>
+                                    }}
+                                    value={sub.name}
+                                    // multiline={true}
+                                    onChangeText={(text) =>
+                                        changeNameTask(text,task, sub)
+                                    }
+                                />
                             </View>
                         ))}
                     </View>
