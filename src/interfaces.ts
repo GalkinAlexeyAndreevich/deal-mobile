@@ -8,20 +8,6 @@ export interface IMarkedDates{
 	date:string,
 	dots:{key:string, color:string}[]
 }
-// type Subtask = {
-// 	name:string,
-// 	done:boolean,
-	
-// }
-
-
-export interface Tasks{
-	id:number,
-	name:string,
-	done:boolean,
-	subtasks:SubTasks[]
-}
-
 export interface SubTask{
 	id:number,
 	name:string,
@@ -33,40 +19,14 @@ export interface Task{
 	done:boolean,
 	subtasks?: SubTask[],
 	color?:string,
-	date:string
+	date:string,
+	type:string
 }
 
-export interface SubTasks{
-	id:number,
-	name:string,
-	level:number,
-	parentId:number,
-	done:boolean
+export interface ITypeTask {
+	label: string;
+	value: string;
 }
 
-// export interface Tasks{
-// 	name:string,
-// 	done:boolean,
-// 	level:number
-// 	subtasks:{
-// 		name:string,
-// 		done:boolean,
-// 		level:number
-// 		subtasks?:{
-// 			name:string,
-// 			done:boolean,
-// 			level:number
-// 			subtasks?:{
-// 				name:string,
-// 				done:boolean,
-// 				level:number
-// 				subtasks?:{			
-// 					name:string,
-// 					done:boolean,
-// 					level:number
-// 					subtasks?:[]
-// 				}[]
-// 			}[]
-// 		}[]
-// 	}[]
-// }
+
+

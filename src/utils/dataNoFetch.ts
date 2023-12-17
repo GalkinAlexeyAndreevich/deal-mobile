@@ -1,4 +1,4 @@
-import { Tasks, Task } from "@interfaces";
+import { Task } from "@interfaces";
 
 export const typeTasks = [
     { label: "Другое", value: "Другое" },
@@ -62,6 +62,7 @@ export const defaultTasks:Task[] = [
 		name:"test1",
 		done:false,
 		date:"2023-11-10",
+        type:"Другое",
 		subtasks:[
 			{
 				id:1,
@@ -85,6 +86,7 @@ export const defaultTasks:Task[] = [
 		name:"test2",
 		done:false,
 		date:"2023-11-10",
+        type:"Другое",
 		subtasks:[
 			{
 				id:4,
@@ -98,12 +100,14 @@ export const defaultTasks:Task[] = [
 		name:"test3",
 		done:false,
 		date:"2023-11-11",
+        type:"Другое",
 		subtasks:[]
 	},
 	{
 		id:4,
 		name:"test3",
 		done:false,
+        type:"Другое",
 		date:"2023-11-11",
 		subtasks:[]
 	}
@@ -153,3 +157,71 @@ export const defaultTasks:Task[] = [
 //         ],
 //     },
 // ];
+
+
+    // let markedDates: MarkedDates = {
+    //     "2023-10-31": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272" },
+    //         ],
+    //     },
+    //     "2023-10-10": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-10-12": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-11-10": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-11-11": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-11-15": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-11-20": {
+    //         marked: true, selectedColor: 'blue',
+    //         textColor:"white",
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //             { key: "test1", color: "#ffc4c4",  },
+    //             { key: "test3", color: "#ffcdfc",  },
+    //             { key: "test", color: "#dbd1fe",  },
+    //         ],
+    //         customStyles: {
+    //             container: {
+    //               backgroundColor: 'green'
+    //             },
+    //             text: {
+    //               color: 'black',
+    //               fontWeight: 'bold'
+    //             }
+    //           },
+    //         selectedTextColor:"orange"
+    //         // selectedColor: 'orange'
+    //     },
+    //     "2023-11-21": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    // };

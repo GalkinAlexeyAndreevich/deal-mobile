@@ -21,7 +21,6 @@ export default function Tasks() {
             }
         }
         setFiltered(filteredArr)
-        // let filteredArr = tasks.map(task=>)
     },[tasks,currentDate])
 
     const changeTask = (task: Task) => {

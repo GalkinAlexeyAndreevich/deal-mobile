@@ -134,11 +134,15 @@ function MyDrawer() {
 function TabNavigator() {
     return (
         <Tab.Navigator
+
             screenOptions={{
-                // tabBarStyle: { position: "absolute" },
+                tabBarStyle: { position: "absolute" },
                 headerShown: false,
+                // tabBarStyle:{
+                //     marginTop:10
+                // }
             }}
-            initialRouteName="TaskOnDayPage"
+            initialRouteName="CalendarPage"
             >
             <Tab.Screen name="AddTask" component={AddTaskNavigator} />
             <Tab.Screen name="MainPage" component={Main} />
