@@ -3,23 +3,15 @@ import {
     Text,
     Pressable,
     ScrollView,
-    // FlatList,
     TouchableOpacity,
     LogBox,
 } from "react-native";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Calendar, Agenda, LocaleConfig } from "react-native-calendars";
 import { DateData, MarkedDates, Theme } from "react-native-calendars/src/types";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { setCurrentDate } from "@store/tasksDatesSlice";
-import { FlatList } from "react-native-gesture-handler";
 import moment from "moment";
-// import { ScrollView } from 'react-native-virtualized-view'
-const timeToString = (time: any): string => {
-    const date = new Date(time);
-    return date.toISOString().split("T")[0];
-};
-
 interface Props {
     markedDates: MarkedDates;
     setOpenModal: (open: boolean) => void;
@@ -30,27 +22,30 @@ type countOnWeek = {
 
 export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
     const currentDate = useAppSelector((state) => state.tasksDates.currentDate);
+    
     const dispatch = useAppDispatch();
     const [selected, setSelected] = useState<string>(currentDate);
     const [countOnWeek,setCountOnWeek] = useState({} as countOnWeek)
     const [loading, setLoading] = useState(false)
-    // console.log(markedDates);
 
+    
     useEffect(() => {
+        setLoading(false)
         setSelected(currentDate);
         getStartAndEndOfWeeks(currentDate);
-    }, [currentDate]);
+    }, [currentDate,markedDates]);
 
 
     const getStartAndEndOfWeeks = (month:string) => {
         console.log("getStartAndEndOfWeeks",month);
-        setLoading(false)
+        
         const startOfMonth = moment(month).startOf('month');
         const endOfMonth = moment(month).endOf('month');
 
         const startWeek = startOfMonth.isoWeek()
         const endWeek = endOfMonth.isoWeek()
-
+        console.log(startOfMonth, endOfMonth,startWeek, endWeek);
+        
         let filtered = {} as countOnWeek
         for (let i=startWeek; i<=endWeek; i++){
             filtered[i] = 0
@@ -58,30 +53,30 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
 
         const filteredMarkedDates = Object.keys(markedDates).reduce((filtered, date) => {
             const currentNumberWeek = moment(date).isoWeek()
-            if(moment(date).year() !== moment(month).year()) return
+            if(moment(date).year() !== moment(month).year()) return filtered
             if (currentNumberWeek >= startWeek && currentNumberWeek <= endWeek) {
                 filtered[currentNumberWeek] = Math.max(filtered[currentNumberWeek], markedDates[date]?.dots?.length) 
             }
             return filtered;
-          }, filtered);
+        }, filtered);
         
-        setCountOnWeek(filteredMarkedDates);
+        setCountOnWeek(filteredMarkedDates || {});
         setLoading(true)
         console.log(filteredMarkedDates);      
-      };
+    };
       const getHeightOnCount = (date:string)=>{
+        if(!loading)return 30
         const week = moment(date).isoWeek()
         console.log(countOnWeek[week], week, countOnWeek);
         
-        // let sum = 30 + 25 * countOnWeek[week]
-        // console.log(sum);
+        let sum = 30 + 25 * (countOnWeek[week] || 0)
         
-        // return sum
-        if(countOnWeek[week]<=1)return 50
-        if(countOnWeek[week]<=2)return 100
-        if(countOnWeek[week]<=4)return 150
-        if(countOnWeek[week]<=6)return 200
-        return 15
+        return sum
+        // if(countOnWeek[week]<=1)return 50
+        // if(countOnWeek[week]<=2)return 100
+        // if(countOnWeek[week]<=4)return 150
+        // if(countOnWeek[week]<=6)return 200
+        // return 15
       }
       
     LocaleConfig.locales["ru"] = {
@@ -146,14 +141,10 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                         style={{
                             borderWidth: 1,
                             borderColor: "gray",
-                            // maxHeight: 500,
                         }}
                         current={currentDate}
                         firstDay={1}
-                        // enableSwipeMonths={true}
                         theme={calendarTheme}
-                        // hideExtraDays={true}
-                        // monthFormat="MMM/yyyy"
                         customHeaderTitle={
                             <View>
                                 <Pressable
@@ -176,7 +167,6 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                         onDayPress={(day) => {
                             console.log(day);
                             dispatch(setCurrentDate(day.dateString));
-                            // setCurrentDate(new Date(day.dateString))
                             setSelected(day.dateString);
                         }}
                         dayComponent={({ date, state, marking }) => {
@@ -213,7 +203,7 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                                     </Text>
                                     {marking?.dots?.map((item, index) => {
                                         return (
-                                            <View key={item.key}>
+                                            <View key={index}>
                                                 <Text
                                                     style={{
                                                         backgroundColor:item?.color,
@@ -241,7 +231,6 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                             },
                         }}
                         onMonthChange={(date) => {
-                            // handleMonthChange(date.timestamp);
                             dispatch(setCurrentDate(date.dateString));
                         }}
                         date={currentDate}

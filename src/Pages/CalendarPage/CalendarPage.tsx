@@ -7,97 +7,101 @@ import CustomCalendar from "./Calendar";
 import { MarkedDates } from "react-native-calendars/src/types";
 import { setCurrentDate } from "@store/tasksDatesSlice";
 import { useAppDispatch, useAppSelector } from "@store/hook";
+import { timeToString } from "@utils/timeToString";
 
-const timeToString = (time: any): string => {
-    const date = new Date(time);
-    return date.toISOString().split("T")[0];
-};
 
 export default function CalendarPage() {
-    const [selected, setSelected] = useState("");
     const currentDate = useAppSelector(state=>state.tasksDates.currentDate)
     const dispatch = useAppDispatch()
-    // const [currentDate, setCurrentDate] = useState(new Date());
     const [openModal, setOpenModal] = useState(false);
-
+    const tasks = useAppSelector(state=>state.tasksDates.tasks)
+    const [markedDates, setMarkedDates] = useState<MarkedDates>({} as MarkedDates)
     useEffect(()=>{
-        console.log("тест",currentDate);
-        
-    },[currentDate])
+        let map = tasks.reduce((acc, cur)=>{
+            console.log(cur.date);
+            
+            acc[cur.date] = acc[cur.date] || { 
+                dots:[]
+            };
+            acc[cur.date].dots.push({key:cur.name, color:cur.color ||  "#a6fcaa"});
+            return acc;
+            },{})
+            setMarkedDates(map)
+            console.log("Объедиение по полю",map);
+    },[tasks])
+    // let markedDates: MarkedDates = { 
+    //     "2023-10-31": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272" },
+    //         ],
+    //     },       
+    //     "2023-10-10": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-10-12": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-11-10": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-11-11": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-11-15": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    //     "2023-11-20": {
+    //         marked: true, selectedColor: 'blue',
+    //         textColor:"white",
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //             { key: "test1", color: "#ffc4c4",  },
+    //             { key: "test3", color: "#ffcdfc",  },
+    //             { key: "test", color: "#dbd1fe",  },
+    //         ],
+    //         customStyles: {
+    //             container: {
+    //               backgroundColor: 'green'
+    //             },
+    //             text: {
+    //               color: 'black',
+    //               fontWeight: 'bold'
+    //             }
+    //           },
+    //         selectedTextColor:"orange"
+    //         // selectedColor: 'orange'
+    //     },
+    //     "2023-11-21": {
+    //         dots: [
+    //             { key: "workout", color: "#a6fcaa" },
+    //             { key: "massage", color: "#fff272",  },
+    //         ],
+    //     },
+    // };
 
-    let markedDates: MarkedDates = { 
-        "2023-10-31": {
-            dots: [
-                { key: "workout", color: "#a6fcaa" },
-                { key: "massage", color: "#fff272",  },
-            ],
-        },       
-        "2023-10-10": {
-            dots: [
-                { key: "workout", color: "#a6fcaa" },
-                { key: "massage", color: "#fff272",  },
-            ],
-        },
-        "2023-10-12": {
-            dots: [
-                { key: "workout", color: "#a6fcaa" },
-                { key: "massage", color: "#fff272",  },
-            ],
-        },
-        "2023-11-10": {
-            dots: [
-                { key: "workout", color: "#a6fcaa" },
-                { key: "massage", color: "#fff272",  },
-            ],
-        },
-        "2023-11-11": {
-            dots: [
-                { key: "workout", color: "#a6fcaa" },
-                { key: "massage", color: "#fff272",  },
-            ],
-        },
-        "2023-11-15": {
-            dots: [
-                { key: "workout", color: "#a6fcaa" },
-                { key: "massage", color: "#fff272",  },
-            ],
-        },
-        "2023-11-20": {
-            marked: true, selectedColor: 'blue',
-            textColor:"white",
-            dots: [
-                { key: "workout", color: "#a6fcaa" },
-                { key: "massage", color: "#fff272",  },
-                { key: "test1", color: "#ffc4c4",  },
-                { key: "test3", color: "#ffcdfc",  },
-                { key: "test", color: "#dbd1fe",  },
-            ],
-            customStyles: {
-                container: {
-                  backgroundColor: 'green'
-                },
-                text: {
-                  color: 'black',
-                  fontWeight: 'bold'
-                }
-              },
-            selectedTextColor:"orange"
-            // selectedColor: 'orange'
-        },
-        "2023-11-21": {
-            dots: [
-                { key: "workout", color: "#a6fcaa" },
-                { key: "massage", color: "#fff272",  },
-            ],
-        },
-    };
-
-    const changeMonthPicker = (
+    const changeDatePicker = (
         { type }: DateTimePickerEvent,
         selectedData: Date
     ) => {
         if (type === "set") {
-            setOpenModal(!openModal);
+            setOpenModal(false);
             console.log("set",selectedData);
             
             dispatch(setCurrentDate(timeToString(selectedData)));
@@ -105,7 +109,7 @@ export default function CalendarPage() {
             
 
         } else {
-            setOpenModal(!openModal);
+            setOpenModal(true);
         }
     };
     return (
@@ -117,7 +121,7 @@ export default function CalendarPage() {
             {openModal && (
                 <RNDateTimePicker
                     value={new Date(currentDate)}
-                    onChange={changeMonthPicker}
+                    onChange={changeDatePicker}
                 />
             )}
         </ScrollView>

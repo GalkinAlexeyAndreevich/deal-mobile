@@ -61,6 +61,7 @@ export const defaultTasks:Task[] = [
 		id:1,
 		name:"test1",
 		done:false,
+		date:"2023-11-10",
 		subtasks:[
 			{
 				id:1,
@@ -83,6 +84,7 @@ export const defaultTasks:Task[] = [
 		id:2,
 		name:"test2",
 		done:false,
+		date:"2023-11-10",
 		subtasks:[
 			{
 				id:4,
@@ -90,6 +92,20 @@ export const defaultTasks:Task[] = [
 				done:false,
 			},
 		]
+	},
+	{
+		id:3,
+		name:"test3",
+		done:false,
+		date:"2023-11-11",
+		subtasks:[]
+	},
+	{
+		id:4,
+		name:"test3",
+		done:false,
+		date:"2023-11-11",
+		subtasks:[]
 	}
 ]
 
