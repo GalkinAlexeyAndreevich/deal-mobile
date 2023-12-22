@@ -7,8 +7,8 @@ import {
     Dimensions,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import { Calendar, Agenda, LocaleConfig } from "react-native-calendars";
-import { DateData, MarkedDates, Theme } from "react-native-calendars/src/types";
+import { Calendar, LocaleConfig } from "react-native-calendars";
+import { MarkedDates, Theme } from "react-native-calendars/src/types";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { setCurrentDate } from "@store/tasksDatesSlice";
 import moment from "moment";
@@ -28,9 +28,14 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
     const [countOnWeek, setCountOnWeek] = useState({} as countOnWeek);
     const [loading, setLoading] = useState(true);
 
+    const [countMarkedDates, setCountMarkedDates] = useState(0)
+
     useEffect(() => {
+        console.log(countMarkedDates,Object.keys(markedDates).length);
+        
+        // if(countMarkedDates == Object.keys(markedDates).length)return
+        setCountMarkedDates(Object.keys(markedDates).length)
         setLoading(false);
-        setSelected(currentDate);
         getStartAndEndOfWeeks(currentDate);
     }, [markedDates]);
 
@@ -77,7 +82,7 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
         if (!loading) return 100;
         const week = moment(date).isoWeek();
         console.log(countOnWeek[week], week, countOnWeek);
-        let sum = 75 + 25 * (countOnWeek[week] || 0);
+        let sum = 75 + 40 * (countOnWeek[week] || 0);
         return sum;
     };
 
@@ -128,14 +133,16 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
         LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     }, []);
     if (!loading) return;
+    function getFirstCapitalize(word:string){
+        return word[0].toUpperCase() + word.slice(1);
+    }
+
     return (
         <View style={{ marginBottom: 10,height:windowHeight-130}}> 
         <ScrollView
-            
             horizontal={false}
             stickyHeaderIndices={[1]}
             invertStickyHeaders={true}>
-
                 <Calendar
                     key={currentDate}
                     style={{
@@ -145,20 +152,24 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                     current={currentDate}
                     firstDay={1}
                     theme={calendarTheme}
+                    // headerStyle={{backgroundColor:"#a6fcaa" }}
                     customHeaderTitle={
-                        <View>
+                        <View style={{backgroundColor:"#a6fcaa"}}>
                             <Pressable
                                 onPress={() => {
                                     setOpenModal(true);
                                 }}>
-                                <Text>
-                                    {new Date(currentDate).toLocaleString(
+                                <Text style={{fontSize:20}}>
+                                {
+                                   getFirstCapitalize(moment(currentDate).format("MMMM yyyy")) 
+                                }
+                                    {/* {new Date(currentDate).toLocaleString(
                                         "default",
                                         {
                                             year: "numeric",
                                             month: "long",
                                         }
-                                    )}
+                                    )} */}
                                 </Text>
                             </Pressable>
                         </View>
@@ -203,7 +214,7 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                                             <Text
                                                 style={{
                                                     backgroundColor:
-                                                        item?.color,
+                                                    item?.color,
                                                     color: item?.selectedDotColor,
                                                     paddingVertical: 3,
                                                     marginVertical: 3,

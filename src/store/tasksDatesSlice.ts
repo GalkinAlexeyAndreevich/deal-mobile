@@ -1,6 +1,6 @@
-import { Task } from "@interfaces";
+import { SubTask, Task } from "@interfaces";
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import { defaultTasks } from "@utils/dataNoFetch";
+import { defaultSubtasks, defaultTasks } from "@utils/dataNoFetch";
 
 const timeToString = (time: any): string => {
     const date = new Date(time);
@@ -9,12 +9,14 @@ const timeToString = (time: any): string => {
 
 interface TypeState{
     currentDate:string,
-    tasks:Task[]
+    tasks:Task[],
+    subtasks:SubTask[]
 }
 
 const initialState:TypeState = {
     currentDate:timeToString(new Date()),
-    tasks:defaultTasks
+    tasks:defaultTasks,
+    subtasks:defaultSubtasks
 }
 
 
@@ -27,10 +29,13 @@ const tasksDatesSlice = createSlice({
         },
         setTasks(state,actions:PayloadAction<Task[]>){
             state.tasks = actions.payload
+        },
+        setSubTasks(state,actions:PayloadAction<SubTask[]>){
+            state.subtasks = actions.payload
         }
     },
 })
 
-export const {setCurrentDate,setTasks} = tasksDatesSlice.actions
+export const {setCurrentDate,setTasks,setSubTasks} = tasksDatesSlice.actions
 
 export default tasksDatesSlice.reducer

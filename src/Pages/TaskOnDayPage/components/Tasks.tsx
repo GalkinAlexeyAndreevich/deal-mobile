@@ -24,6 +24,8 @@ export default function Tasks() {
     },[tasks,currentDate])
 
     const changeTask = (task: Task) => {
+        console.log(tasks);
+        
         let found = tasks.find((element) => element.id === task.id);
         found.done = !found.done
         if(found?.subtasks?.length){
@@ -72,7 +74,19 @@ export default function Tasks() {
         dispatch(setTasks(newState));
     };
     return (
-        <>
+        <View>
+            {filtered.length ==0 && (
+                <View style={{
+                    height:'80%',
+                    flexDirection: 'column',
+                    alignItems:"center",
+                    justifyContent:"center",
+
+                    }}>
+                    <Text style={{fontSize:20, color:"#a7ceff"}}>У вас не целей на этот день,</Text>
+                    <Text style={{fontSize:20, color:"#a7ceff"}}>но вы можете их добавить.</Text>
+                </View>
+            )}
             {filtered.map((task) => (
                 <View key={task.id}>
                     <View
@@ -95,7 +109,9 @@ export default function Tasks() {
                                 textDecorationLine: task.done
                                     ? "line-through"
                                     : "none",
+                                fontSize:20,
                             }}
+                            
                             value={task.name}
                             // multiline={true}
                             onChangeText={(text) => changeNameTask(text, task)}
@@ -122,6 +138,6 @@ export default function Tasks() {
                     </View>
                 </View>
             ))}
-        </>
+        </View>
     );
 }

@@ -13,7 +13,6 @@ import {
 } from "@react-navigation/drawer";
 import TaskOnDayPage from "../Pages/TaskOnDayPage";
 import CalendarPage from "../Pages/CalendarPage";
-import { Image } from "react-native-elements/dist/image/Image";
 import { Platform, Pressable, SafeAreaView, Text, View } from "react-native";
 import Header from "../components/Header";
 import About from "../Pages/About";
@@ -112,19 +111,14 @@ function MyDrawer() {
                 ),
                 headerStyle: {
                     height: 140,
-                    // marginTop: 30,
                 },
                 headerTitle: () => <Header />,
                 drawerStyle: {
                     width: "50%",
-                    // marginLeft : "20%",
-                    // right:10
                 },
                 headerTitleAlign: "center",
                 drawerPosition: "right",
-                // headerShown:false
-                // drawerPosition: "right",
-                headerLeft: () => <View />,
+                headerLeft: () => null,
             })}>
             <Drawer.Screen name="TabNavigator" component={TabNavigator} />
             <Drawer.Screen name="About" component={About} />
@@ -146,8 +140,9 @@ function TabNavigator() {
             >
             <Tab.Screen name="AddTask" component={AddTaskNavigator} />
             <Tab.Screen name="MainPage" component={Main} />
-            <Tab.Screen name="TaskOnDayPage" component={TaskOnDayPage} />
             <Tab.Screen name="CalendarPage" component={CalendarPage} />
+            <Tab.Screen name="TaskOnDayPage" component={TaskOnDayPage} />
+           
         </Tab.Navigator>
     );
 }

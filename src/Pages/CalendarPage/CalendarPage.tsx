@@ -8,7 +8,7 @@ import { MarkedDates } from "react-native-calendars/src/types";
 import { setCurrentDate } from "@store/tasksDatesSlice";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { timeToString } from "@utils/timeToString";
-import AddTask from "./AddTask";
+import AddTask from "@components/AddTask";
 
 export default function CalendarPage() {
     const currentDate = useAppSelector((state) => state.tasksDates.currentDate);
