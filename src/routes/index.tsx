@@ -1,5 +1,5 @@
 import Home from "../Pages/Home";
-import Main from "../Pages/Main";
+import History from "../Pages/History";
 import TestPage1 from "../Pages/TestPage1";
 import TestPage2 from "../Pages/TestPage2";
 import TestPage3 from "../Pages/TestPage3";
@@ -27,7 +27,7 @@ export type AddTaskParamList = {
 };
 export type RootStackParamList = {
     AddTask: undefined;
-    MainPage: undefined;
+    History: undefined;
     TaskOnDayPage: undefined;
     CalendarPage: undefined;
     Drawer: undefined;
@@ -63,32 +63,33 @@ const AddTaskNavigator = () => {
 };
 
 function DrawerView({ navigation }) {
+    let isOpen = useDrawerStatus()
     return (
         <DrawerContentScrollView>
-            {useDrawerStatus() === "open" ? (
-                <View
-                    style={{
-                        display: useDrawerStatus() === "open" ? "flex" : "none",
-                    }}>
-                    <Text style={{ marginBottom: 20, textAlign: "center" }}>
-                        Настройки
-                    </Text>
-                    <View style={{ display: "flex", gap: 10 }}>
-                        <Button onPress={() => navigation.navigate("About")}>
-                            About
-                        </Button>
-                        <Button
-                            onPress={() => navigation.navigate("TestPage2")}>
-                            Основное приложение
-                        </Button>
+                {isOpen?
+                    <View>
+                        <Text style={{ marginBottom: 20, textAlign: "center" }}>
+                            Настройки
+                        </Text>
+                        <View style={{ display: "flex", gap: 10 }}>
+                            <Button onPress={() => navigation.navigate("About")}>
+                                About
+                            </Button>
+                            <Button
+                                onPress={() => navigation.navigate("TestPage2")}>
+                                Основное приложение
+                            </Button>
+                        </View>
                     </View>
-                </View>
-            ) : (
-                <View></View>
-            )}
+                    :<View></View>
+            }
             {/* <Text style={{ paddingBottom: 20 }}>Настройки</Text> */}
         </DrawerContentScrollView>
     );
+}
+
+function HeaderLeft(){
+    return (<View></View>)
 }
 function MyDrawer() {
     return (
@@ -126,6 +127,8 @@ function MyDrawer() {
     );
 }
 function TabNavigator() {
+                // История
+            // Таймер
     return (
         <Tab.Navigator
 
@@ -138,10 +141,11 @@ function TabNavigator() {
             }}
             initialRouteName="CalendarPage"
             >
-            <Tab.Screen name="AddTask" component={AddTaskNavigator} />
-            <Tab.Screen name="MainPage" component={Main} />
-            <Tab.Screen name="CalendarPage" component={CalendarPage} />
-            <Tab.Screen name="TaskOnDayPage" component={TaskOnDayPage} />
+
+            <Tab.Screen name="History" options={{title:"История"}} component={History} />
+            <Tab.Screen name="AddTask" options={{title:"Таймер"}} component={AddTaskNavigator} />
+            <Tab.Screen name="CalendarPage" options={{title:"Задания на месяц"}}  component={CalendarPage} />
+            <Tab.Screen name="TaskOnDayPage" options={{title:"Задания на день"}} component={TaskOnDayPage} />
            
         </Tab.Navigator>
     );

@@ -48,7 +48,8 @@ export default function TaskOnDayPage() {
  
                 }}
                 onPress={() => setOpenModal(true)}>
-                <Text style={{ fontSize: 20,backgroundColor: "#dafffd",  
+                <Text style={{ 
+                    fontSize: 20,backgroundColor: "#dafffd",  
                     borderWidth:1,                
                     // borderTopWidth:1,
                     // borderBottomWidth:0.8,

@@ -5,7 +5,7 @@ interface User {
     id: number;
     name: string;
 }
-export default function Main() {
+export default function History() {
     const [data, setData] = useState<User[]>([]);
     useEffect(() => {
         (async () => {

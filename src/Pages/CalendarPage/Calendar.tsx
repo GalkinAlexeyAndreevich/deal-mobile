@@ -147,32 +147,35 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                     key={currentDate}
                     style={{
                         borderWidth: 1,
-                        borderColor: "gray",
+                        borderColor: "gray",borderTopWidth:0
                     }}
                     current={currentDate}
                     firstDay={1}
                     theme={calendarTheme}
                     // headerStyle={{backgroundColor:"#a6fcaa" }}
                     customHeaderTitle={
-                        <View style={{backgroundColor:"#a6fcaa"}}>
-                            <Pressable
-                                onPress={() => {
-                                    setOpenModal(true);
-                                }}>
-                                <Text style={{fontSize:20}}>
-                                {
-                                   getFirstCapitalize(moment(currentDate).format("MMMM yyyy")) 
-                                }
-                                    {/* {new Date(currentDate).toLocaleString(
-                                        "default",
-                                        {
-                                            year: "numeric",
-                                            month: "long",
-                                        }
-                                    )} */}
-                                </Text>
-                            </Pressable>
-                        </View>
+                        <Pressable
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            // justifyContent: "center",
+                            paddingVertical: 5,
+                            marginBottom:5
+         
+                        }}
+                        onPress={() => setOpenModal(true)}>
+                        <Text style={{ 
+                            fontSize: 20,backgroundColor: "#dafffd",  
+                            borderWidth:1,                
+                            // borderTopWidth:1,
+                            // borderBottomWidth:0.8,
+                            borderColor: "#a0f7ff",
+                            paddingHorizontal:35,
+                            paddingVertical:5
+                        }}>
+                            {getFirstCapitalize(moment(currentDate).format("MMMM yyyy")) }
+                        </Text>
+                    </Pressable>
                     }
                     markingType="multi-dot"
                     dayComponent={({ date, state, marking }) => {
@@ -188,7 +191,7 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                                 }}
                                 style={{
                                     width: 55,
-                                    height: getHeightOnCount(date.dateString),
+                                    height: 200,
                                     borderWidth: 0.2,
                                     borderColor: "#a0a0a0",
                                     margin: 0,
