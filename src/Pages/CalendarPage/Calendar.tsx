@@ -6,7 +6,7 @@ import {
     LogBox,
     Dimensions,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 import { MarkedDates, Theme } from "react-native-calendars/src/types";
 import { useAppDispatch, useAppSelector } from "@store/hook";
@@ -15,34 +15,23 @@ import moment from "moment";
 interface Props {
     markedDates: MarkedDates;
     setOpenModal: (open: boolean) => void;
+    countTask:number
 }
 type countOnWeek = {
     [key: number]: number;
 };
 
-export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
+export default function CustomCalendar({ markedDates, setOpenModal,countTask }: Props) {
     const currentDate = useAppSelector((state) => state.tasksDates.currentDate);
-
     const dispatch = useAppDispatch();
     const [selected, setSelected] = useState<string>(currentDate);
-    const [countOnWeek, setCountOnWeek] = useState({} as countOnWeek);
-    const [loading, setLoading] = useState(true);
-
-    const [countMarkedDates, setCountMarkedDates] = useState(0)
-
-    useEffect(() => {
-        console.log(countMarkedDates,Object.keys(markedDates).length);
-        
-        // if(countMarkedDates == Object.keys(markedDates).length)return
-        setCountMarkedDates(Object.keys(markedDates).length)
-        setLoading(false);
-        getStartAndEndOfWeeks(currentDate);
-    }, [markedDates]);
-
+    let monthYear = moment(currentDate).format("MM-yyyy")
+    useEffect(()=>{
+        setSelected(currentDate)
+    },[currentDate])
     // Функция оптимизация высоты для недели
-    const getStartAndEndOfWeeks = (month: string) => {
+    const getStartAndEndOfWeeks = (month: string|Date) => {
         console.log("getStartAndEndOfWeeks", month);
-
         const startOfMonth = moment(month).startOf("month");
         const endOfMonth = moment(month).endOf("month");
 
@@ -74,14 +63,20 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
             filtered
         );
 
-        setCountOnWeek(filteredMarkedDates || {});
-        setLoading(true);
+        // setCountOnWeek(filteredMarkedDates || {});
         console.log(filteredMarkedDates);
+        console.log("Снова вызвали функцию");
+        
+        return filteredMarkedDates || {};
     };
+    const countOnWeek = useMemo(
+        () => getStartAndEndOfWeeks(currentDate),
+        [countTask,monthYear]
+    );
+
     const getHeightOnCount = (date: string) => {
-        if (!loading) return 100;
+        if (!countOnWeek) return 100;
         const week = moment(date).isoWeek();
-        console.log(countOnWeek[week], week, countOnWeek);
         let sum = 75 + 40 * (countOnWeek[week] || 0);
         return sum;
     };
@@ -132,50 +127,53 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
     useEffect(() => {
         LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
     }, []);
-    if (!loading) return;
-    function getFirstCapitalize(word:string){
+    function getFirstCapitalize(word: string) {
         return word[0].toUpperCase() + word.slice(1);
     }
 
     return (
-        <View style={{ marginBottom: 10,height:windowHeight-130}}> 
-        <ScrollView
-            horizontal={false}
-            stickyHeaderIndices={[1]}
-            invertStickyHeaders={true}>
+        <View style={{ marginBottom: 10, height: windowHeight - 130 }}>
+            <ScrollView
+                horizontal={false}
+                stickyHeaderIndices={[1]}
+                invertStickyHeaders={true}>
                 <Calendar
                     key={currentDate}
                     style={{
                         borderWidth: 1,
-                        borderColor: "gray",borderTopWidth:0
+                        borderColor: "gray",
+                        borderTopWidth: 0,
                     }}
                     current={currentDate}
                     firstDay={1}
+                    date={currentDate}
                     theme={calendarTheme}
-                    // headerStyle={{backgroundColor:"#a6fcaa" }}
                     customHeaderTitle={
                         <Pressable
-                        style={{
-                            display: "flex",
-                            alignItems: "center",
-                            // justifyContent: "center",
-                            paddingVertical: 5,
-                            marginBottom:5
-         
-                        }}
-                        onPress={() => setOpenModal(true)}>
-                        <Text style={{ 
-                            fontSize: 20,backgroundColor: "#dafffd",  
-                            borderWidth:1,                
-                            // borderTopWidth:1,
-                            // borderBottomWidth:0.8,
-                            borderColor: "#a0f7ff",
-                            paddingHorizontal:35,
-                            paddingVertical:5
-                        }}>
-                            {getFirstCapitalize(moment(currentDate).format("MMMM yyyy")) }
-                        </Text>
-                    </Pressable>
+                            style={{
+                                display: "flex",
+                                alignItems: "center",
+                                // justifyContent: "center",
+                                paddingVertical: 5,
+                                marginBottom: 5,
+                            }}
+                            onPress={() => setOpenModal(true)}>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    backgroundColor: "#dafffd",
+                                    borderWidth: 1,
+                                    // borderTopWidth:1,
+                                    // borderBottomWidth:0.8,
+                                    borderColor: "#a0f7ff",
+                                    paddingHorizontal: 35,
+                                    paddingVertical: 5,
+                                }}>
+                                {getFirstCapitalize(
+                                    moment(currentDate).format("MMMM yyyy")
+                                )}
+                            </Text>
+                        </Pressable>
                     }
                     markingType="multi-dot"
                     dayComponent={({ date, state, marking }) => {
@@ -187,11 +185,11 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                                         date.dateString
                                     );
                                     dispatch(setCurrentDate(date.dateString));
-                                    setSelected(date.dateString);
+                                    // setSelected(date.dateString);
                                 }}
                                 style={{
                                     width: 55,
-                                    height: 200,
+                                    height: getHeightOnCount(date.dateString),
                                     borderWidth: 0.2,
                                     borderColor: "#a0a0a0",
                                     margin: 0,
@@ -217,7 +215,7 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                                             <Text
                                                 style={{
                                                     backgroundColor:
-                                                    item?.color,
+                                                        item?.color,
                                                     color: item?.selectedDotColor,
                                                     paddingVertical: 3,
                                                     marginVertical: 3,
@@ -244,10 +242,9 @@ export default function CustomCalendar({ markedDates, setOpenModal }: Props) {
                     onMonthChange={(date) => {
                         dispatch(setCurrentDate(date.dateString));
                     }}
-                    date={currentDate}
+
                 />
-         
-        </ScrollView>
+            </ScrollView>
         </View>
     );
 }

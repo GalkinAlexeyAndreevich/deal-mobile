@@ -1,8 +1,8 @@
 import Home from "../Pages/Home";
 import History from "../Pages/History";
-import TestPage1 from "../Pages/TestPage1";
-import TestPage2 from "../Pages/TestPage2";
-import TestPage3 from "../Pages/TestPage3";
+import TypeDealPage from "../Pages/TypeDealPage";
+import SettingsDealOnTimePage from "../Pages/SettingsDealOnTimePage";
+import DealWithTimerPage from "../Pages/DealWithTimerPage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -17,12 +17,12 @@ import { Platform, Pressable, SafeAreaView, Text, View } from "react-native";
 import Header from "../components/Header";
 import About from "../Pages/About";
 import { Button } from "@rneui/base";
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 
 export type AddTaskParamList = {
-    TestPage1: undefined;
-    TestPage2: undefined;
-    TestPage3: undefined;
+    TypeDealPage: undefined;
+    SettingsDealOnTimePage: undefined;
+    DealWithTimerPage: undefined;
     HomePage: undefined;
 };
 export type RootStackParamList = {
@@ -44,52 +44,52 @@ const Stack = createNativeStackNavigator<AddTaskParamList>();
 const AddTaskNavigator = () => {
     return (
         <Stack.Navigator
-            initialRouteName="TestPage2"
+            initialRouteName="SettingsDealOnTimePage"
             screenOptions={{
                 headerShown: false,
             }}>
+            <Stack.Screen name="TypeDealPage" component={TypeDealPage} />
             <Stack.Screen
-                name="TestPage1"
-                component={TestPage1}
-                options={{
-                    title: "TestPage1",
-                }}
+                name="SettingsDealOnTimePage"
+                component={SettingsDealOnTimePage}
             />
-            <Stack.Screen name="TestPage2" component={TestPage2} />
-            <Stack.Screen name="TestPage3" component={TestPage3} />
+            <Stack.Screen
+                name="DealWithTimerPage"
+                component={DealWithTimerPage}
+            />
             <Stack.Screen name="HomePage" component={Home} />
         </Stack.Navigator>
     );
 };
 
 function DrawerView({ navigation }) {
-    let isOpen = useDrawerStatus()
+    let isOpen = useDrawerStatus();
     return (
         <DrawerContentScrollView>
-                {isOpen?
-                    <View>
-                        <Text style={{ marginBottom: 20, textAlign: "center" }}>
-                            Настройки
-                        </Text>
-                        <View style={{ display: "flex", gap: 10 }}>
-                            <Button onPress={() => navigation.navigate("About")}>
-                                About
-                            </Button>
-                            <Button
-                                onPress={() => navigation.navigate("TestPage2")}>
-                                Основное приложение
-                            </Button>
-                        </View>
+            {isOpen ? (
+                <View>
+                    <Text style={{ marginBottom: 20, textAlign: "center" }}>
+                        Настройки
+                    </Text>
+                    <View style={{ display: "flex", gap: 10 }}>
+                        <Button onPress={() => navigation.navigate("About")}>
+                            About
+                        </Button>
+                        <Button
+                            onPress={() => navigation.navigate("TestPage2")}>
+                            Основное приложение
+                        </Button>
                     </View>
-                    :<View></View>
-            }
-            {/* <Text style={{ paddingBottom: 20 }}>Настройки</Text> */}
+                </View>
+            ) : (
+                <View></View>
+            )}
         </DrawerContentScrollView>
     );
 }
 
-function HeaderLeft(){
-    return (<View></View>)
+function HeaderLeft() {
+    return <View></View>;
 }
 function MyDrawer() {
     return (
@@ -112,6 +112,7 @@ function MyDrawer() {
                 ),
                 headerStyle: {
                     height: 140,
+                    borderWidth:0
                 },
                 headerTitle: () => <Header />,
                 drawerStyle: {
@@ -127,11 +128,10 @@ function MyDrawer() {
     );
 }
 function TabNavigator() {
-                // История
-            // Таймер
+    // История
+    // Таймер
     return (
         <Tab.Navigator
-
             screenOptions={{
                 tabBarStyle: { position: "absolute" },
                 headerShown: false,
@@ -139,14 +139,27 @@ function TabNavigator() {
                 //     marginTop:10
                 // }
             }}
-            initialRouteName="CalendarPage"
-            >
-
-            <Tab.Screen name="History" options={{title:"История"}} component={History} />
-            <Tab.Screen name="AddTask" options={{title:"Таймер"}} component={AddTaskNavigator} />
-            <Tab.Screen name="CalendarPage" options={{title:"Задания на месяц"}}  component={CalendarPage} />
-            <Tab.Screen name="TaskOnDayPage" options={{title:"Задания на день"}} component={TaskOnDayPage} />
-           
+            initialRouteName="CalendarPage">
+            <Tab.Screen
+                name="History"
+                options={{ title: "История" }}
+                component={History}
+            />
+            <Tab.Screen
+                name="AddTask"
+                options={{ title: "Таймер" }}
+                component={AddTaskNavigator}
+            />
+            <Tab.Screen
+                name="CalendarPage"
+                options={{ title: "Задания на месяц" }}
+                component={CalendarPage}
+            />
+            <Tab.Screen
+                name="TaskOnDayPage"
+                options={{ title: "Задания на день" }}
+                component={TaskOnDayPage}
+            />
         </Tab.Navigator>
     );
 }

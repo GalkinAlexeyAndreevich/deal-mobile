@@ -2,7 +2,7 @@ import { SubTask, Task } from "@interfaces";
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import { defaultSubtasks, defaultTasks } from "@utils/dataNoFetch";
 
-const timeToString = (time: any): string => {
+const timeToString = (time: Date | string): string => {
     const date = new Date(time);
     return date.toISOString().split("T")[0];
 };

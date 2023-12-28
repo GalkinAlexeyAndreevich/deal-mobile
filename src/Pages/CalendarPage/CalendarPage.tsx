@@ -1,5 +1,5 @@
 import { SafeAreaView, ScrollView, Text, View, Dimensions } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RNDateTimePicker, {
     DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -9,6 +9,7 @@ import { setCurrentDate } from "@store/tasksDatesSlice";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { timeToString } from "@utils/timeToString";
 import AddTask from "@components/AddTask";
+import moment from "moment";
 
 export default function CalendarPage() {
     const currentDate = useAppSelector((state) => state.tasksDates.currentDate);
@@ -18,11 +19,11 @@ export default function CalendarPage() {
     const [markedDates, setMarkedDates] = useState<MarkedDates>(
         {} as MarkedDates
     );
-
+    let countTask = useRef(0)
+    let monthYear = moment(currentDate).format("MM-yyyy")
     const windowHeight = Dimensions.get("window").height;
     useEffect(() => {
         let map = tasks.reduce((acc, cur) => {
-            console.log(cur.date);
 
             acc[cur.date] = acc[cur.date] || {
                 dots: [],
@@ -31,11 +32,13 @@ export default function CalendarPage() {
                 key: cur.name,
                 color: cur.color || "#a6fcaa",
             });
+            // countTask.current +=1
             return acc;
         }, {});
         setMarkedDates(map);
-        console.log("Объедиение по полю", map);
-    }, [currentDate, tasks]);
+        countTask.current = tasks.length
+        console.log("Объедиение по полю", map);   
+    }, [monthYear, tasks]);
 
     const changeDatePicker = (
         { type }: DateTimePickerEvent,
@@ -57,6 +60,7 @@ export default function CalendarPage() {
                 <CustomCalendar
                     markedDates={markedDates}
                     setOpenModal={setOpenModal}
+                    countTask={countTask.current}
                 />
 
                 <AddTask />

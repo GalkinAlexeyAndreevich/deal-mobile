@@ -17,7 +17,7 @@ interface ITypeTask {
     label: string;
     value: string;
 }
-export default function TestPage({ navigation }: TProps) {
+export default function SettingsDealOnTimePage({ navigation }: TProps) {
     const dispatch = useAppDispatch();
     const [typeTask, setTypeTask] = useState<ITypeTask[]>(typeTasks);
     const [timeTask, setTimeTask] = useState(
@@ -37,7 +37,7 @@ export default function TestPage({ navigation }: TProps) {
             return;
         }
         dispatch(addTask(selectedData));
-        navigation.navigate("TestPage3");
+        navigation.navigate("DealWithTimerPage");
     };
     const changeNameTask = (task: string) => {
         console.log(task);

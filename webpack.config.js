@@ -35,6 +35,11 @@ module.exports = async function (env, argv) {
                     },
                 ],
             },
+            devServer: {
+                contentBase: path.join(__dirname, 'public'),
+                compress: true,
+                port: 9000,
+            },
         },
         argv
     );

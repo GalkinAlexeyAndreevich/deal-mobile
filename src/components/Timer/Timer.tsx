@@ -35,9 +35,9 @@ export default function Timer({time, fontSize}:IProps) {
 	console.log(minutes,seconds);
 	
 	return (
-		<View>
+		<View style={{display:"flex"}}>
 			<Text style={{fontSize}}>{minutes<10?'0'+ minutes:minutes}:{seconds<10?'0'+ seconds:seconds}</Text>
-			{minutes===0 && seconds===0 && <Text style={{fontSize}}>Время вышло</Text>}
+			{minutes===0 && seconds===0 && <Text style={{fontSize, color:"red"}}>Время вышло</Text>}
 		</View>
 	)
 }

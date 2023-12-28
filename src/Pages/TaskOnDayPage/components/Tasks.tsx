@@ -7,45 +7,36 @@ import { setTasks } from "@store/tasksDatesSlice";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import Subtasks from "./Subtasks";
 
-
 export default function Tasks() {
-    const {tasks, currentDate} = useAppSelector((state) => state.tasksDates);
+    const { tasks, currentDate } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
-    const [filtered, setFiltered] = useState<Task[]>([])
+    const [filtered, setFiltered] = useState<Task[]>([]);
 
-    useEffect(()=>{
-        let filteredArr = []
-        for(let item of tasks){
-            if(item.date == currentDate){
-                filteredArr.push(item)
+    useEffect(() => {
+        let filteredArr = [];
+        for (let item of tasks) {
+            if (item.date == currentDate) {
+                filteredArr.push(item);
             }
         }
-        setFiltered(filteredArr)
-    },[tasks,currentDate])
+        setFiltered(filteredArr);
+    }, [tasks, currentDate]);
 
     const changeTask = (task: Task) => {
-        console.log(tasks);
-        
         let found = tasks.find((element) => element.id === task.id);
-        found.done = !found.done
-        if(found?.subtasks?.length){
-            if(found.done){
-                for(let item of found.subtasks){
-                    item.done = true
+        found.done = !found.done;
+        if (found?.subtasks?.length) {
+            if (found.done) {
+                for (let item of found.subtasks) {
+                    item.done = true;
                 }
-            }
-            else{
-                for(let item of found.subtasks){
-                    item.done = false
+            } else {
+                for (let item of found.subtasks) {
+                    item.done = false;
                 }
             }
         }
-        const newState = tasks.map((el) =>
-            el.id === task.id ? found: el
-        );
-
-        console.log(newState);
-
+        const newState = tasks.map((el) => (el.id === task.id ? found : el));
         dispatch(setTasks(newState));
     };
 
@@ -54,7 +45,6 @@ export default function Tasks() {
         task: Task,
         subtask: SubTask = null
     ) => {
-        console.log(text, task);
         if (!text) return;
         let found = tasks.find((element) => element.id === task.id);
         if (subtask) {
@@ -65,26 +55,25 @@ export default function Tasks() {
         } else {
             found.name = text;
         }
-        console.log(
-            "Change sub",
-            found.subtasks.find((element) => element.id === subtask.id)
-        );
-
         const newState = tasks.map((el) => (el.id === task.id ? found : el));
         dispatch(setTasks(newState));
     };
     return (
         <View>
-            {filtered.length ==0 && (
-                <View style={{
-                    height:'80%',
-                    flexDirection: 'column',
-                    alignItems:"center",
-                    justifyContent:"center",
-
+            {filtered.length == 0 && (
+                <View
+                    style={{
+                        height: "80%",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
                     }}>
-                    <Text style={{fontSize:20, color:"#a7ceff"}}>У вас не целей на этот день,</Text>
-                    <Text style={{fontSize:20, color:"#a7ceff"}}>но вы можете их добавить.</Text>
+                    <Text style={{ fontSize: 20, color: "#a7ceff" }}>
+                        У вас не целей на этот день,
+                    </Text>
+                    <Text style={{ fontSize: 20, color: "#a7ceff" }}>
+                        но вы можете их добавить.
+                    </Text>
                 </View>
             )}
             {filtered.map((task) => (
@@ -98,7 +87,6 @@ export default function Tasks() {
                         <CheckBox
                             size={20}
                             checked={task.done}
-                            // disabled={task.subtasks?.length > 0}
                             onPress={() => changeTask(task)}
                             checkedColor="red"
                         />
@@ -109,9 +97,8 @@ export default function Tasks() {
                                 textDecorationLine: task.done
                                     ? "line-through"
                                     : "none",
-                                fontSize:20,
+                                fontSize: 20,
                             }}
-                            
                             value={task.name}
                             // multiline={true}
                             onChangeText={(text) => changeNameTask(text, task)}
@@ -126,7 +113,7 @@ export default function Tasks() {
                             display: "flex",
                             flexDirection: "column",
                         }}>
-                        {task?.subtasks?.length>0 &&
+                        {task?.subtasks?.length > 0 &&
                             task.subtasks.map((sub) => (
                                 <Subtasks
                                     key={sub.id}

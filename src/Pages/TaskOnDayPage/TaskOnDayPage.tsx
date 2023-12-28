@@ -4,6 +4,7 @@ import moment from "moment";
 import "moment/locale/ru";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import Tasks from "./components/Tasks";
+import Ionicons  from "react-native-vector-icons/Ionicons";
 import RNDateTimePicker, {
     DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
@@ -30,6 +31,13 @@ export default function TaskOnDayPage() {
         }
     };
 
+    const addAndSubtractDay = (add:boolean)=>{
+        let newDate = ''        
+        if(add) {newDate = moment(currentDate).add(1, 'days').format('YYYY-MM-DD')}
+        else {newDate = moment(currentDate).subtract(1, 'days').format('YYYY-MM-DD')}
+        dispatch(setCurrentDate(newDate));
+    }
+
     return (
         <View
             style={{
@@ -38,28 +46,40 @@ export default function TaskOnDayPage() {
                 // opacity:0.8,
                
             }}>
-            <Pressable
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    // justifyContent: "center",
-                    paddingVertical: 5,
-                    marginBottom:5
- 
-                }}
-                onPress={() => setOpenModal(true)}>
-                <Text style={{ 
-                    fontSize: 20,backgroundColor: "#dafffd",  
-                    borderWidth:1,                
-                    // borderTopWidth:1,
-                    // borderBottomWidth:0.8,
-                    borderColor: "#a0f7ff",
-                    paddingHorizontal:35,
-                    paddingVertical:5
-                }}>
-                    {moment(currentDate).format("DD MMMM")}
-                </Text>
-            </Pressable>
+            <View style={{display:"flex", flexDirection:"row", justifyContent:"space-around", alignItems:"center"}}>
+                <Pressable style={{padding:10}} onPress={()=>addAndSubtractDay(false)}>
+                    <Ionicons name="caret-back-sharp" size={13} color={"#00adf5"}/>
+                </Pressable>
+                
+                
+                <Pressable
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        // justifyContent: "center",
+                        paddingVertical: 5,
+                        marginBottom:5
+    
+                    }}
+                    onPress={() => setOpenModal(true)}>
+                    <Text style={{ 
+                        fontSize: 21,backgroundColor: "#dafffd",  
+                        borderWidth:1,                
+                        // borderTopWidth:1,
+                        // borderBottomWidth:0.8,
+                        borderColor: "#a0f7ff",
+                        paddingHorizontal:35,
+                        paddingVertical:5
+                    }}>
+                        {moment(currentDate).format("DD MMMM")}
+                    </Text>
+                </Pressable>
+                <Pressable style={{padding:10}} onPress={()=>addAndSubtractDay(true)}>
+                    <Ionicons name="caret-forward-sharp" size={13} color={"#00adf5"}/>
+                </Pressable>
+               
+            </View>
+
             <View style={{
                 height:"81.5%",
                 borderWidth:1,

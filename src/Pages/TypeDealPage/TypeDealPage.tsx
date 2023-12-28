@@ -8,7 +8,7 @@ import { setTypeDeal } from "../../store/dealSettings";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
-export default function TestPage({ navigation }: TProps) {
+export default function TypeDealPage({ navigation }: TProps) {
     const [firstCheckBox, setFirstCheckBox] = useState<boolean>(true);
     const [secondCheckBox, setSecondCheckBox] = useState<boolean>(false);
     const changeCheckBox = () => {
@@ -21,7 +21,7 @@ export default function TestPage({ navigation }: TProps) {
             Alert.alert("Вы попытались сломать систему, выберите один вариант")
         }
         dispatch(setTypeDeal(firstCheckBox?"Малая сделка":"Крупная сделка"))
-        navigation.navigate("TestPage2");
+        navigation.navigate("SettingsDealOnTimePage");
     }
     return (
         <View style={styles.container}>
@@ -37,7 +37,7 @@ export default function TestPage({ navigation }: TProps) {
                 <View style={styles.checkbox}>
                     <CheckBox
 
-                        size={100}
+                        size={60}
                         // status={firstCheckBox ? 'checked' : 'unchecked'}
                         checked={firstCheckBox}
                         onPress={changeCheckBox}
@@ -46,10 +46,11 @@ export default function TestPage({ navigation }: TProps) {
                     />
                     <Text style={styles.checkText}>Мелкая</Text>
                     <Text style={styles.checkText}>сделка</Text>
+                    <Text style={styles.checkText}>0-20 минут</Text>
                 </View>
                 <View style={styles.checkbox}>
                     <CheckBox
-                        size={100}
+                        size={60}
                         checked={secondCheckBox}
                         // status={secondCheckBox ? 'checked' : 'unchecked'}
                         onPress={changeCheckBox}
@@ -57,6 +58,7 @@ export default function TestPage({ navigation }: TProps) {
                     />
                     <Text style={styles.checkText}>Крупная</Text>
                     <Text style={styles.checkText}>сделка</Text>
+                    <Text style={styles.checkText}>21 минуты до 2 часов</Text>
                 </View>
             </View>
             <Button
