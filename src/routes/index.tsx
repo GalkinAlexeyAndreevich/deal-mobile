@@ -111,7 +111,7 @@ function MyDrawer() {
                     </Pressable>
                 ),
                 headerStyle: {
-                    height: 140,
+                    height: '15%',
                     borderWidth:0
                 },
                 headerTitle: () => <Header />,
@@ -133,7 +133,7 @@ function TabNavigator() {
     return (
         <Tab.Navigator
             screenOptions={{
-                tabBarStyle: { position: "absolute" },
+                tabBarStyle: { position: "relative" },
                 headerShown: false,
                 // tabBarStyle:{
                 //     marginTop:10
