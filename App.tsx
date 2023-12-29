@@ -6,6 +6,9 @@ import { Provider } from "react-redux";
 import store from "./src/store";
 import * as Updates from "expo-updates"
 import { useEffect } from 'react';
+import moment from "moment";
+
+moment().locale("ru");
 
 export default function App() {
     async function onFetchUpdateAsync() {
@@ -22,7 +25,9 @@ export default function App() {
         }
       }
       useEffect(()=>{
-        onFetchUpdateAsync()
+        if (!__DEV__) {
+          onFetchUpdateAsync();
+        }
       },[])
     return (
         <Provider store={store}>

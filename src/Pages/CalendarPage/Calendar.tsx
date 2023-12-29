@@ -1,36 +1,32 @@
-import {
-    View,
-    Text,
-    Pressable,
-    ScrollView,
-    LogBox,
-    Dimensions,
-} from "react-native";
-import React, { useEffect, useMemo, useState } from "react";
-import { Calendar, LocaleConfig } from "react-native-calendars";
+import { View, ScrollView } from "react-native";
+import React, { useMemo } from "react";
+import { Calendar } from "react-native-calendars";
 import { MarkedDates, Theme } from "react-native-calendars/src/types";
-import { useAppDispatch, useAppSelector } from "@store/hook";
-import { setCurrentDate } from "@store/tasksDatesSlice";
 import moment from "moment";
+import DayComponent from "./DayComponent";
+import HeaderComponent from "./HeaderComponent";
+import defineLocale from "./localeConfig"
 interface Props {
     markedDates: MarkedDates;
     setOpenModal: (open: boolean) => void;
-    countTask:number
+    countTask: number;
+    currentDate: string;
+    setCurrentDate: (date: string) => void;
 }
 type countOnWeek = {
     [key: number]: number;
 };
 
-export default function CustomCalendar({ markedDates, setOpenModal,countTask }: Props) {
-    const currentDate = useAppSelector((state) => state.tasksDates.currentDate);
-    const dispatch = useAppDispatch();
-    const [selected, setSelected] = useState<string>(currentDate);
-    let monthYear = moment(currentDate).format("MM-yyyy")
-    useEffect(()=>{
-        setSelected(currentDate)
-    },[currentDate])
+export default function CustomCalendar({
+    markedDates,
+    setOpenModal,
+    countTask,
+    currentDate,
+    setCurrentDate,
+}: Props) {
+    let monthYear = moment(currentDate).format("MM-yyyy");
     // Функция оптимизация высоты для недели
-    const getStartAndEndOfWeeks = (month: string|Date) => {
+    const getStartAndEndOfWeeks = (month: string | Date) => {
         console.log("getStartAndEndOfWeeks", month);
         const startOfMonth = moment(month).startOf("month");
         const endOfMonth = moment(month).endOf("month");
@@ -62,187 +58,46 @@ export default function CustomCalendar({ markedDates, setOpenModal,countTask }: 
             },
             filtered
         );
-
-        // setCountOnWeek(filteredMarkedDates || {});
         console.log(filteredMarkedDates);
         console.log("Снова вызвали функцию");
-        
+
         return filteredMarkedDates || {};
     };
     const countOnWeek = useMemo(
         () => getStartAndEndOfWeeks(currentDate),
-        [countTask,monthYear]
+        [countTask, monthYear]
     );
-
-    const getHeightOnCount = (date: string) => {
-        if (!countOnWeek) return 100;
-        const week = moment(date).isoWeek();
-        let sum = 75 + 40 * (countOnWeek[week] || 0);
-        return sum;
-    };
-
-    LocaleConfig.locales["ru"] = {
-        monthNames: [
-            "Январь",
-            "Февраль",
-            "Март",
-            "Апрель",
-            "Май",
-            "Июнь",
-            "Июль",
-            "Август",
-            "Сентябрь",
-            "Октябрь",
-            "Ноябрь",
-            "Декабрь",
-        ],
-        monthNamesShort: [
-            "Янв",
-            "Фев",
-            "Мар",
-            "Апр",
-            "Май",
-            "Июн",
-            "Июл",
-            "Авг",
-            "Сен",
-            "Окт",
-            "Ноя",
-            "Дек",
-        ],
-        dayNames: [
-            "воскресенье",
-            "понедельник",
-            "вторник",
-            "среда",
-            "четверг",
-            "пятница",
-            "суббота",
-        ],
-        dayNamesShort: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-        today: "Сегодня",
-    };
-    LocaleConfig.defaultLocale = "ru";
-    const windowHeight = Dimensions.get("window").height;
-    useEffect(() => {
-        LogBox.ignoreLogs(["VirtualizedLists should never be nested"]);
-    }, []);
-    function getFirstCapitalize(word: string) {
-        return word[0].toUpperCase() + word.slice(1);
-    }
+    defineLocale()
 
     return (
-        <View style={{ marginBottom: 10, height: windowHeight - 130 }}>
-            <ScrollView
-                horizontal={false}
-                stickyHeaderIndices={[1]}
-                invertStickyHeaders={true}>
+        <View style={{ height: "85%" }}>
+            <ScrollView horizontal={false}>
                 <Calendar
                     key={currentDate}
-                    style={{
-                        borderWidth: 1,
-                        borderColor: "gray",
-                        borderTopWidth: 0,
-                    }}
                     current={currentDate}
                     firstDay={1}
                     date={currentDate}
                     theme={calendarTheme}
                     customHeaderTitle={
-                        <Pressable
-                            style={{
-                                display: "flex",
-                                alignItems: "center",
-                                // justifyContent: "center",
-                                paddingVertical: 5,
-                                marginBottom: 5,
-                            }}
-                            onPress={() => setOpenModal(true)}>
-                            <Text
-                                style={{
-                                    fontSize: 20,
-                                    backgroundColor: "#dafffd",
-                                    borderWidth: 1,
-                                    // borderTopWidth:1,
-                                    // borderBottomWidth:0.8,
-                                    borderColor: "#a0f7ff",
-                                    paddingHorizontal: 35,
-                                    paddingVertical: 5,
-                                }}>
-                                {getFirstCapitalize(
-                                    moment(currentDate).format("MMMM yyyy")
-                                )}
-                            </Text>
-                        </Pressable>
+                        <HeaderComponent
+                            currentDate={currentDate}
+                            setOpenModal={setOpenModal}
+                        />
                     }
                     markingType="multi-dot"
-                    dayComponent={({ date, state, marking }) => {
-                        return (
-                            <Pressable
-                                onPress={() => {
-                                    console.log(
-                                        "selected day",
-                                        date.dateString
-                                    );
-                                    dispatch(setCurrentDate(date.dateString));
-                                    // setSelected(date.dateString);
-                                }}
-                                style={{
-                                    width: 55,
-                                    height: getHeightOnCount(date.dateString),
-                                    borderWidth: 0.2,
-                                    borderColor: "#a0a0a0",
-                                    margin: 0,
-                                    paddingVertical: 5,
-                                    // backgroundColor:"orange"
-                                    backgroundColor:
-                                        selected == date.dateString
-                                            ? "#e4f7fe"
-                                            : "white",
-                                }}>
-                                <Text
-                                    style={{
-                                        textAlign: "center",
-                                        color: "black",
-                                        fontSize: 15,
-                                        paddingLeft: 3,
-                                    }}>
-                                    {date.day}{" "}
-                                </Text>
-                                {marking?.dots?.map((item, index) => {
-                                    return (
-                                        <View key={index}>
-                                            <Text
-                                                style={{
-                                                    backgroundColor:
-                                                        item?.color,
-                                                    color: item?.selectedDotColor,
-                                                    paddingVertical: 3,
-                                                    marginVertical: 3,
-                                                    fontSize: 10,
-                                                    borderRadius: 50,
-                                                    textAlign: "center",
-                                                }}>
-                                                {item.key}
-                                            </Text>
-                                        </View>
-                                    );
-                                })}
-                            </Pressable>
-                        );
-                    }}
-                    markedDates={{
-                        ...markedDates,
-                        [selected]: {
-                            selected: true,
-                            selectedColor: "orange",
-                            dots: markedDates[selected]?.dots,
-                        },
-                    }}
+                    dayComponent={({ date, marking }) => (
+                        <DayComponent
+                            date={date}
+                            marking={marking}
+                            currentDate={currentDate}
+                            setCurrentDate={setCurrentDate}
+                            countOnWeek={countOnWeek}
+                        />
+                    )}
+                    markedDates={markedDates}
                     onMonthChange={(date) => {
-                        dispatch(setCurrentDate(date.dateString));
+                        setCurrentDate(date.dateString);
                     }}
-
                 />
             </ScrollView>
         </View>

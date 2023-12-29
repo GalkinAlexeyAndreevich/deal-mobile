@@ -111,7 +111,8 @@ function MyDrawer() {
                     </Pressable>
                 ),
                 headerStyle: {
-                    height: '15%',
+                    height: 120,
+                    // paddingHorizontal:5,
                     borderWidth:0
                 },
                 headerTitle: () => <Header />,
@@ -133,11 +134,8 @@ function TabNavigator() {
     return (
         <Tab.Navigator
             screenOptions={{
-                tabBarStyle: { position: "relative" },
+                tabBarStyle: { position: "absolute" },
                 headerShown: false,
-                // tabBarStyle:{
-                //     marginTop:10
-                // }
             }}
             initialRouteName="CalendarPage">
             <Tab.Screen

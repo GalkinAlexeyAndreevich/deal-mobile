@@ -19,13 +19,14 @@ import { typeTasks } from "@utils/dataNoFetch";
 import { ITypeTask, SubTask, Task } from "@interfaces";
 import { Input } from "react-native-elements";
 import { setTasks } from "@store/tasksDatesSlice";
+import moment from "moment";
 // import { Modal } from "react-native-paper";
 
 
 
 
-export default function AddTask() {
-    const { currentDate, tasks, subtasks:allSubtasks } = useAppSelector((state) => state.tasksDates);
+export default function AddTask({currentDate}:{currentDate:string}) {
+    const { tasks, subtasks:allSubtasks } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
     const [openModal, setOpenModal] = useState(false);
     const [inputValue, setInputValue] = useState("");
@@ -83,7 +84,7 @@ export default function AddTask() {
             id: tasks.length + 1,
             name: inputValue,
             done: false,
-            date: currentDate,
+            date: moment(currentDate).format('YYYY-MM-DD'),
             type: chosenType.value,
             subtasks:finalArrSubtask
         };
@@ -100,9 +101,9 @@ export default function AddTask() {
                 }}
                 style={{
                     flex: 1,
-                    position: "absolute",
-                    bottom: 40,
-                    right: 10,
+                    // position: "absolute",
+                    // bottom: 1,
+                    // right: 10,
                     zIndex: 2,
                     padding:15,
                     borderRadius:100,
@@ -227,7 +228,7 @@ export default function AddTask() {
                                     paddingVertical: 10,
                                     paddingHorizontal: 13,
                                 }}
-                                onPress={inputValue.length > 1 && saveChange}>
+                                onPress={saveChange}>
                                 <FontAwesome
                                     name="location-arrow"
                                     size={25}
