@@ -24,6 +24,7 @@ export default function TaskOnDayPage() {
 
             <View
                 style={{
+                    // flex:1,
                     height: "81.5%",
                     borderWidth: 1,
                     marginHorizontal: 14,

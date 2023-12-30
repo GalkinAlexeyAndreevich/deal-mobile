@@ -20,7 +20,7 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
 	const getHeightOnCount = (date: string) => {
 		if (!countOnWeek) return 100;
 		const week = moment(date).isoWeek();
-		let sum = 75 + 40 * (countOnWeek[week] || 0);
+		let sum = 70 + 30 * (countOnWeek[week] || 0);
 		return sum;
 	};
     return (

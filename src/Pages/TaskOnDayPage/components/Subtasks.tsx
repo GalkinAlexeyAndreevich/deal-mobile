@@ -24,7 +24,7 @@ export default function Subtasks({ subtask, task, changeNameTask }:Props) {
             <CheckBox
                 size={20}
                 checked={subtask.done}
-                onPress={() => dispatch(setSubtask({subtask,task}))}
+                onPress={() => dispatch(setSubtask({subtaskId:subtask.id,taskId:task.id}))}
                 checkedColor="red"
                 checkedIcon='dot-circle-o' 
                 uncheckedIcon='circle-o' 

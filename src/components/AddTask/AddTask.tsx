@@ -1,26 +1,21 @@
 import {
     View,
-    Text,
     Pressable,
     TextInput,
     Modal,
     StyleSheet,
     TouchableHighlight,
-    ScrollView,
 } from "react-native";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
 import RNPickerSelect from "react-native-picker-select";
 import { typeTasks } from "@utils/dataNoFetch";
 import { ITypeTask, SubTask, Task } from "@interfaces";
-import { Input } from "react-native-elements";
 import { setTasks } from "@store/tasksDatesSlice";
 import moment from "moment";
-// import { Modal } from "react-native-paper";
 
 
 
@@ -32,16 +27,9 @@ export default function AddTask({currentDate}:{currentDate:string}) {
     const [inputValue, setInputValue] = useState("");
     const [typeTask, setTypeTask] = useState<ITypeTask[]>(typeTasks);
     const [chosenType, setChosenType] = useState<ITypeTask>(typeTask[0]);
-
-
     //отдельно есть массив подзадач которые уже создали и подзадачи которые появляются при добавлении на кнопку
-
-
     // Изменять можно все новые позадания на этот объект вешать обработчик
-
     const [subtasks,setSubtasks] = useState<SubTask[]>([])
-
-
     const addSubtask = ()=>{
         setSubtasks(prev=>[...prev,{
             id:subtasks.length+1,
@@ -65,7 +53,7 @@ export default function AddTask({currentDate}:{currentDate:string}) {
     }
     
     const saveChange = () => {
-        setOpenModal(false);
+        // setOpenModal(false);
         setInputValue('')
         setChosenType(typeTask[0])
 
@@ -101,9 +89,6 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                 }}
                 style={{
                     flex: 1,
-                    // position: "absolute",
-                    // bottom: 1,
-                    // right: 10,
                     zIndex: 2,
                     padding:15,
                     borderRadius:100,

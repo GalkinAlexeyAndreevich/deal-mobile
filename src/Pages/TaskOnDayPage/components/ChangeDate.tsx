@@ -47,7 +47,7 @@ export default function ChangeDate({ currentDate, setCurrentDate }: Props) {
                 marginVertical:2
             }}>
             <Pressable
-                // style={{ padding: 10 }}
+                style={{ padding: 5 }}
                 onPress={() => addAndSubtractDay(false)}>
                 <Ionicons name="caret-back-sharp" size={13} color={"#00adf5"} />
             </Pressable>

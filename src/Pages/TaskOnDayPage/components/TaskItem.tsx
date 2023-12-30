@@ -1,7 +1,7 @@
-import { View, TextInput } from "react-native";
+import { View, TextInput, Pressable } from "react-native";
 import React from "react";
 import { useAppDispatch } from "@store/hook";
-import { setStatusTask } from "@store/tasksDatesSlice";
+import { deleteTask, setStatusTask } from "@store/tasksDatesSlice";
 import { CheckBox } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SubTask, Task } from "@interfaces";
@@ -24,7 +24,7 @@ export default function TaskItem({ task, changeNameTask }: Props) {
             <CheckBox
                 size={20}
                 checked={task.done}
-                onPress={() => dispatch(setStatusTask(task))}
+                onPress={() => dispatch(setStatusTask(task.id))}
                 checkedColor="red"
             />
             <TextInput
@@ -37,9 +37,9 @@ export default function TaskItem({ task, changeNameTask }: Props) {
                 value={task.name}
                 onChangeText={(text) => changeNameTask(text, task)}
             />
-            <View>
+            <Pressable style={{padding:3}} onPress={()=>dispatch(deleteTask(task.id))}>
                 <Icon name="delete" size={15} />
-            </View>
+            </Pressable>
         </View>
     );
 }

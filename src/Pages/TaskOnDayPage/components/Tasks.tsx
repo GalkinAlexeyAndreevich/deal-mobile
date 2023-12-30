@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { SubTask, Task } from "@interfaces";
@@ -24,18 +24,18 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
         subtask: SubTask = null
     ) => {
         if (!text) return;
-        dispatch(setNameTask({ text, task, subtask }));
+        dispatch(setNameTask({ text, taskId:task.id, subtaskId:subtask.id }));
     };
 
     return (
-        <View>
+        <ScrollView style={{height:"100%"}}>
             {filtered.length == 0 && (
                 <View
                     style={{
-                        height: "80%",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        justifyContent: "center",
+                        flex:1,
+                        display:"flex",
+                        paddingTop:"50%",
+                        alignSelf: "center",
                     }}>
                     <Text style={{ fontSize: 20, color: "#a7ceff" }}>
                         У вас не целей на этот день,
@@ -65,6 +65,6 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                     </View>
                 </View>
             ))}
-        </View>
+        </ScrollView>
     );
 }

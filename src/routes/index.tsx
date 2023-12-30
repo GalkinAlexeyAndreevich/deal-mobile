@@ -129,12 +129,11 @@ function MyDrawer() {
     );
 }
 function TabNavigator() {
-    // История
-    // Таймер
     return (
         <Tab.Navigator
             screenOptions={{
                 tabBarStyle: { position: "absolute" },
+                // tabBarHideOnKeyboard: true,
                 headerShown: false,
             }}
             initialRouteName="CalendarPage">
