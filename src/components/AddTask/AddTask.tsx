@@ -114,7 +114,7 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                     <View style={styles.container}>
                         <View
                             style={{
-                                width: 370,
+                                width: "100%",
                                 marginVertical: 7,
                                 paddingLeft: 7,
                                 display:"flex",

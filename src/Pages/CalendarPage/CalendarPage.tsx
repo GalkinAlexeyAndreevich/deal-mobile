@@ -1,4 +1,4 @@
-import { ScrollView, View } from "react-native";
+import { View } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import RNDateTimePicker, {
     DateTimePickerEvent,

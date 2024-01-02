@@ -63,6 +63,7 @@ export default function CustomCalendar({
 
         return filteredMarkedDates || {};
     };
+    // Перерасчет произойдет если изменится месяц или год, а также количество заданий
     const countOnWeek = useMemo(
         () => getStartAndEndOfWeeks(currentDate),
         [countTask, monthYear]
@@ -70,7 +71,7 @@ export default function CustomCalendar({
     defineLocale()
 
     return (
-        <View style={{ height: "85%" }}>
+        <View style={{ height: "83%" }}>
             <ScrollView horizontal={false}>
                 <Calendar
                     key={currentDate}

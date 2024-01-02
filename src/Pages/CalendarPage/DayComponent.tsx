@@ -20,9 +20,10 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
 	const getHeightOnCount = (date: string) => {
 		if (!countOnWeek) return 100;
 		const week = moment(date).isoWeek();
-		let sum = 70 + 30 * (countOnWeek[week] || 0);
+		let sum = 70 + 75 * (countOnWeek[week] || 0);
 		return sum;
 	};
+    const maxWeek = Math.max.apply(null, Object.keys(countOnWeek));    
     return (
         <Pressable
             onPress={() => {
@@ -30,13 +31,11 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
                 setCurrentDate(date.dateString);
             }}
             style={{
-                width: 55,
+                width: "100%",
                 height: getHeightOnCount(date.dateString),
                 borderWidth: 0.2,
                 borderColor: "#a0a0a0",
-                marginBottom: 0,
-                borderBottomWidth: 1,
-                paddingVertical: 5,
+                borderBottomWidth: moment(date.dateString).isoWeek()===maxWeek?1:0.2,
                 backgroundColor:
                     currentDate == date.dateString ? "#e4f7fe" : "white",
             }}>
@@ -58,8 +57,8 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
                                 color: item?.selectedDotColor,
                                 paddingVertical: 3,
                                 marginVertical: 3,
+                                marginHorizontal:2,
                                 fontSize: 10,
-                                borderRadius: 50,
                                 textAlign: "center",
                             }}>
                             {item.key}

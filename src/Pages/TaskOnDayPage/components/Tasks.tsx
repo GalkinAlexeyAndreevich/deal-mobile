@@ -24,7 +24,9 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
         subtask: SubTask = null
     ) => {
         if (!text) return;
-        dispatch(setNameTask({ text, taskId:task.id, subtaskId:subtask.id }));
+        console.log(text,task.id);
+        
+        dispatch(setNameTask({ text, taskId:task.id, subtaskId:subtask?.id }));
     };
 
     return (

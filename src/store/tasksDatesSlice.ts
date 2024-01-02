@@ -95,12 +95,9 @@ const tasksDatesSlice = createSlice({
         },
         deleteSubtask(state,action:PayloadAction<{taskId:number, subtaskId:number}>){
             const {taskId,subtaskId} = action.payload
-
-            state.tasks.map(task=>)
-
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
-            state.tasks[taskIndex]
-            let foundTask = .subtasks.filter;
+            const newSubtask = state.tasks[taskIndex].subtasks.filter((subtask) => subtask.id !== subtaskId);
+            state.tasks[taskIndex].subtasks = newSubtask; 
         }
     },
 });

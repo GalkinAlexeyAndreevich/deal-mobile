@@ -1,10 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Pressable, Text, View, StyleSheet, Alert } from "react-native";
-import { AddTaskParamList } from "../../routes";
+import { Text, View, StyleSheet, Alert } from "react-native";
 import { useState } from "react";
 import { Button, CheckBox } from "react-native-elements";
-import { useAppDispatch } from "../../store/hook";
-import { setTypeDeal } from "../../store/dealSettings";
+import { useAppDispatch } from "@store/hook";
+import { setTypeDeal } from "@store/dealSettings";
+import { AddTaskParamList } from "@routes/AddTaskNavigator";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
@@ -17,48 +17,40 @@ export default function TypeDealPage({ navigation }: TProps) {
     };
     const dispatch = useAppDispatch()
     const saveChange = ()=>{
-        if(!firstCheckBox && !secondCheckBox){
-            Alert.alert("Вы попытались сломать систему, выберите один вариант")
-        }
         dispatch(setTypeDeal(firstCheckBox?"Малая сделка":"Крупная сделка"))
         navigation.navigate("SettingsDealOnTimePage");
     }
     return (
         <View style={styles.container}>
-            <Text style={{ fontSize: 40, textAlign: "center" }}>
-                Какую сделку вы желаете заключить
+            <Text style={{ fontSize: 30, textAlign: "center" }}>
+                Какую сделку вы желаете заключить?
             </Text>
             <View
                 style={{
                     display: "flex",
                     flexDirection: "row",
-                    gap: 20,
                 }}>
                 <View style={styles.checkbox}>
                     <CheckBox
-
                         size={60}
-                        // status={firstCheckBox ? 'checked' : 'unchecked'}
                         checked={firstCheckBox}
                         onPress={changeCheckBox}
-                        // style={{ paddingLeft:50 }}
+                        containerStyle={{ padding:0,margin:0 }}
                         checkedColor="red"
                     />
-                    <Text style={styles.checkText}>Мелкая</Text>
-                    <Text style={styles.checkText}>сделка</Text>
-                    <Text style={styles.checkText}>0-20 минут</Text>
+                    <Text style={styles.checkText}>Мелкая сделка</Text>
+                    <Text style={styles.checkText}>0-20 мин</Text>
                 </View>
                 <View style={styles.checkbox}>
                     <CheckBox
                         size={60}
                         checked={secondCheckBox}
-                        // status={secondCheckBox ? 'checked' : 'unchecked'}
+                        containerStyle={{ padding:0,margin:0 }}
                         onPress={changeCheckBox}
                         checkedColor="red"
                     />
-                    <Text style={styles.checkText}>Крупная</Text>
-                    <Text style={styles.checkText}>сделка</Text>
-                    <Text style={styles.checkText}>21 минуты до 2 часов</Text>
+                    <Text style={styles.checkText}>Крупная сделка</Text>
+                    <Text style={styles.checkText}>21 мин - 2 ч</Text>
                 </View>
             </View>
             <Button
@@ -71,8 +63,7 @@ export default function TypeDealPage({ navigation }: TProps) {
                     containerStyle={{
                         width: 200,
                         marginHorizontal: 30,
-                        marginVertical: 10,
-                        marginTop:20
+                        marginTop: 50,
                     }}
                     onPress={saveChange}
                 />
@@ -84,19 +75,19 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         display: "flex",
-        marginTop: 100,
-        alignItems: "center",       
+        paddingTop: 100,
+        alignItems: "center",   
+        backgroundColor:"white"    
     },
     checkbox: {
         flex: 1,
         paddingTop:30,
-        paddingLeft:17
+        display:"flex",
+        alignItems:"center"
     },
     checkText:{
         display:"flex",
-        fontSize:30,
-        paddingLeft:17,
-        textAlign:"left",
-        flexWrap:'wrap'
+        fontSize:25,
+        textAlign:"center"
     }
 });

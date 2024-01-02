@@ -1,16 +1,16 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, View, ScrollView, Alert, StyleSheet } from "react-native";
-import { AddTaskParamList } from "../../routes";
+import { AddTaskParamList } from "@routes/AddTaskNavigator";
 import { Button, Input } from "@rneui/themed";
 import { useState } from "react";
-import { useAppDispatch } from "../../store/hook";
-import { addTask } from "../../store/dealSettings";
-import { typeTasks } from "../../utils/dataNoFetch";
+import { useAppDispatch } from "@store/hook";
+import { addTask } from "@store/dealSettings";
+import { typeTasks } from "@utils/dataNoFetch";
 import DateTimePicker, {
     DateTimePickerEvent,
 } from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
-import { ITask } from "../../interfaces";
+import { ITask } from "@interfaces";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 interface ITypeTask {
@@ -146,13 +146,11 @@ export default function SettingsDealOnTimePage({ navigation }: TProps) {
 const pickerSelectStyles = StyleSheet.create({
     inputIOS: {
         fontSize: 16,
-        // paddingVertical: 12,
-        // paddingHorizontal: 10,
         borderWidth: 1,
         borderColor: "gray",
         borderRadius: 4,
         color: "black",
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
     },
     placeholder: {
         color: "red",
@@ -160,24 +158,20 @@ const pickerSelectStyles = StyleSheet.create({
     },
     inputAndroid: {
         fontSize: 16,
-        // paddingHorizontal: 10,
-        // paddingVertical: 8,
         paddingLeft:10,
         borderWidth: 1,
         borderColor: "black",
         borderRadius: 8,
         color: "black",
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
     },
     inputWeb: {
         fontSize: 16,
-        // paddingHorizontal: 10,
-        // paddingVertical: 8,
         paddingLeft:10,
         borderWidth: 1,
         borderColor: "black",
         borderRadius: 8,
         color: "black",
-        paddingRight: 30, // to ensure the text is never behind the icon
+        paddingRight: 30,
     },
 });

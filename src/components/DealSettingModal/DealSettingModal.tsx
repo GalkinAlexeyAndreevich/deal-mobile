@@ -1,6 +1,6 @@
 import { View, Text } from 'react-native'
-import React, { useState,useEffect } from 'react'
-import { useAppSelector } from '../../store/hook'
+import React from 'react'
+import { useAppSelector } from '@store/hook'
 import Timer from '../Timer'
 
 

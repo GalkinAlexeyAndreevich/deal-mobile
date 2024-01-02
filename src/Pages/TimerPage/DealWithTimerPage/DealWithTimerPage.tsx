@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable, Text, View } from "react-native";
-import { AddTaskParamList } from "../../routes";
+import { AddTaskParamList } from "@routes/AddTaskNavigator";
 import { useAppSelector } from "@store/hook";
 import Timer from "@components/Timer";
 
