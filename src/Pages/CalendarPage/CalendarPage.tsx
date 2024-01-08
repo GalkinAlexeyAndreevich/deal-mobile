@@ -9,8 +9,9 @@ import { useAppSelector } from "@store/hook";
 import { timeToString } from "@utils/timeToString";
 import AddTask from "@components/AddTask";
 import moment from "moment";
+import MiniTimer from "@components/MiniTimer";
 
-export default function CalendarPage() {
+export default function CalendarPage({navigation}) {
     const [currentDate, setCurrentDate] = useState<string>(
         new Date().toISOString()
     );
@@ -62,6 +63,14 @@ export default function CalendarPage() {
                     right: 10,
                 }}>
                 <AddTask currentDate={currentDate} />
+            </View>
+            <View
+                style={{
+                    position: "absolute",
+                    bottom: "8%",
+                    left: 30,
+                }}>
+                <MiniTimer navigation={navigation}/>
             </View>
 
             {openModal && (

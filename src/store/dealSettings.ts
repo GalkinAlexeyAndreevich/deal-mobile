@@ -1,15 +1,18 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import { ITask } from "@interfaces";
+import { ITask, Task } from "@interfaces";
 
 
-interface TypeState extends ITask  {
+interface TypeState {
     typeDeal:string,
+    task:Task
+    nameTask:string,
+    time:number
 }
 const initialState:TypeState = {
     typeDeal: 'Мелкая сделка',
-    typeTask:"",
-    nameTask:'',
-    time:0
+    task:{} as Task,
+    nameTask:'Что-то сделать',
+    time:1000*60
 }
 
 
@@ -20,24 +23,24 @@ const dealSettingsSlice = createSlice({
         setTypeDeal(state,actions:PayloadAction<string>){
             state.typeDeal = actions.payload
         },
-        setTypeTask(state,actions:PayloadAction<string>){
-            state.typeTask = actions.payload
-        },
         setNameTask(state,actions:PayloadAction<string>){
             state.nameTask = actions.payload
         },
         setTime(state,actions:PayloadAction<number>){
             state.time = actions.payload
         },
-        addTask(state,actions:PayloadAction<ITask>){
-            const {typeTask, nameTask, time} = actions.payload
-            state.typeTask = typeTask
-            state.nameTask = nameTask
-            state.time = time
+        addTask(state,actions:PayloadAction<Task>){
+            const task = actions.payload
+            console.log("Меняю стор",actions.payload);
+            
+            console.log(task.name);
+            state.nameTask = task.name
+            console.log(state.nameTask);
+            state.task = task
         }
     },
 })
 
-export const {setTypeDeal,setTypeTask,setNameTask,setTime,addTask} = dealSettingsSlice.actions
+export const {setTypeDeal,setNameTask,setTime,addTask} = dealSettingsSlice.actions
 
 export default dealSettingsSlice.reducer

@@ -1,5 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Statistics from "@Pages/Statistics";
+import StatisticsPage from "@Pages/StatisticsPage";
 import TaskOnDayPage from "@Pages/TaskOnDayPage";
 import CalendarPage from "@Pages/CalendarPage";
 import { AddTaskNavigator } from "./AddTaskNavigator";
@@ -14,14 +14,14 @@ function TabNavigator() {
 	return (
 			<Tab.Navigator
 					screenOptions={{
-							tabBarStyle: { position: "absolute" },
+							// tabBarStyle: { position: "absolute" },
 							headerShown: false,
 					}}
-					initialRouteName="CalendarPage">
+					initialRouteName="AddTask">
 					<Tab.Screen
 							name="Statistics"
 							options={{ title: "Статистика" }}
-							component={Statistics}
+							component={StatisticsPage}
 					/>
 					<Tab.Screen
 							name="AddTask"

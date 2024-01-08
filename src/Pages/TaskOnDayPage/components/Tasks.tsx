@@ -40,7 +40,7 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                         alignSelf: "center",
                     }}>
                     <Text style={{ fontSize: 20, color: "#a7ceff" }}>
-                        У вас не целей на этот день,
+                        У вас нет целей на этот день,
                     </Text>
                     <Text style={{ fontSize: 20, color: "#a7ceff" }}>
                         но вы можете их добавить.

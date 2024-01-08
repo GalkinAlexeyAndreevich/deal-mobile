@@ -5,8 +5,9 @@ import "moment/locale/ru";
 import Tasks from "./components/Tasks";
 import AddTask from "@components/AddTask";
 import ChangeDate from "./components/ChangeDate";
+import MiniTimer from "@components/MiniTimer";
 
-export default function TaskOnDayPage() {
+export default function TaskOnDayPage({navigation}) {
     const [currentDate, setCurrentDate] = useState<string>(
         new Date().toISOString()
     );
@@ -41,6 +42,14 @@ export default function TaskOnDayPage() {
                     right: 10,
                 }}>
                 <AddTask currentDate={currentDate} />
+            </View>
+            <View
+                style={{
+                    position: "absolute",
+                    bottom: "8%",
+                    left: 30,
+                }}>
+                <MiniTimer navigation={navigation}/>
             </View>
         </View>
     );

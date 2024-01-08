@@ -26,6 +26,7 @@ export interface Task{
 export interface ITypeTask {
 	label: string;
 	value: string;
+	color:string
 }
 
 

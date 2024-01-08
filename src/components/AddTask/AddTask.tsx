@@ -16,6 +16,7 @@ import { typeTasks } from "@utils/dataNoFetch";
 import { ITypeTask, SubTask, Task } from "@interfaces";
 import { setTasks } from "@store/tasksDatesSlice";
 import moment from "moment";
+import ModalTypeTask from "@components/ModalTypeTask";
 
 
 
@@ -123,6 +124,7 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                             <TextInput
                                 style={{
                                     margin: 0,
+                                    marginHorizontal:10,
                                     padding: 0,
                                     borderWidth: 1,
                                     borderRadius: 10,
@@ -134,6 +136,7 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                                     fontSize: 20,
                                     fontWeight: "600",
                                 }}
+                                maxLength={50}
                                 placeholderTextColor="#98989a"
                                 placeholder="Введите цель"
                                 value={inputValue}
@@ -182,11 +185,11 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                                 display: "flex",
                                 flexDirection: "row",
                                 justifyContent: "space-between",
-                                paddingHorizontal: 10,
+                                // paddingHorizontal: 10,
                             }}>
                                 <View>
-                                    <View style={{ maxWidth: 180,marginRight:10 }}>
-                                        <RNPickerSelect
+                                    <View>
+                                        {/* <RNPickerSelect
                                             onValueChange={(value) =>
                                                 setChosenType(value)
                                             }
@@ -194,7 +197,8 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                                             placeholder={{}}
                                             useNativeAndroidPickerStyle={false}
                                             style={{...pickerSelectStyles}}
-                                        />
+                                        /> */}
+                                        <ModalTypeTask />
                                     </View>
                                     {/* <Pressable onPress={addSubtask}>
                                         <Text>Создать подзадачу</Text>

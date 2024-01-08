@@ -11,7 +11,7 @@ const Stack = createNativeStackNavigator<AddTaskParamList>();
 export function AddTaskNavigator(){
 	return (
 			<Stack.Navigator
-					initialRouteName="TypeDealPage"
+					initialRouteName="SettingsDealOnTimePage"
 					screenOptions={{
 							headerShown: false,
 					}}>

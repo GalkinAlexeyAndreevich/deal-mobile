@@ -1,12 +1,14 @@
 import "react-native-get-random-values";
 import { nanoid } from "nanoid";
-import { View, Text } from "react-native";
+import { View, Text, Alert } from "react-native";
 import { AppNavigator } from "./src/routes";
 import { Provider } from "react-redux";
 import store from "@store/index";
 import * as Updates from "expo-updates";
 import { useEffect } from "react";
 import moment from "moment";
+import "./ignoreWarnings";
+import { TimerProvider } from "src/TimerContext";
 
 moment().locale("ru");
 
@@ -14,14 +16,28 @@ export default function App() {
     async function onFetchUpdateAsync() {
         try {
             const update = await Updates.checkForUpdateAsync();
-
+            let confirmUpdate = false;
             if (update.isAvailable) {
-                await Updates.fetchUpdateAsync();
-                await Updates.reloadAsync();
+                Alert.alert(
+                    "",
+                    "Установить обновление?",
+                    [
+                        {
+                            text: "Cancel",
+                            onPress: () => (confirmUpdate = false),
+                            style: "cancel",
+                        },
+                        { text: "OK", onPress: () => (confirmUpdate = true) },
+                    ],
+                    { cancelable: false }
+                );
+                if (confirmUpdate) {
+                    await Updates.fetchUpdateAsync();
+                    await Updates.reloadAsync();
+                }
             }
         } catch (error) {
-            // You can also add an alert() to see the error message in case of an error when fetching updates.
-            alert(`Error fetching latest Expo update: ${error}`);
+            Alert.alert(`Обновление не было установлено по причине: ${error}`);
         }
     }
     useEffect(() => {
@@ -31,13 +47,15 @@ export default function App() {
     }, []);
     return (
         <Provider store={store}>
-            <View
-                style={{
-                    flex: 1,
-                    display: "flex",
-                }}>
-                <AppNavigator />
-            </View>
+            <TimerProvider>
+                <View
+                    style={{
+                        flex: 1,
+                        display: "flex",
+                    }}>
+                    <AppNavigator />
+                </View>
+            </TimerProvider>
         </Provider>
     );
 }

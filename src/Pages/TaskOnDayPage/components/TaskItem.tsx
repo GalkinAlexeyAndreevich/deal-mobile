@@ -2,7 +2,7 @@ import { View, TextInput, Pressable } from "react-native";
 import React from "react";
 import { useAppDispatch } from "@store/hook";
 import { deleteTask, setStatusTask } from "@store/tasksDatesSlice";
-import { CheckBox } from "react-native-elements";
+import { CheckBox, Image } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SubTask, Task } from "@interfaces";
 
@@ -29,6 +29,8 @@ export default function TaskItem({ task, changeNameTask }: Props) {
                     onPress={() => dispatch(setStatusTask(task.id))}
                     checkedColor="red"
                     containerStyle={{margin:0,paddingHorizontal:0}}
+                    checkedIcon={<Image source={require('@assets/galochka.jpg')} style={{ height: 30, width:30 }}/>}
+                    uncheckedIcon={<Image source={require('@assets/uncheckedGalochka.jpg')} style={{height: 30, width: 30 }} />}
                 />
                 {/* <View> */}
                 <TextInput

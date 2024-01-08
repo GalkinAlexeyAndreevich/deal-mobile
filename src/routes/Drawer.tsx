@@ -50,6 +50,7 @@ export function MyDrawer() {
             drawerContent={(props) => <DrawerView {...props}/>}
             initialRouteName="TabNavigator"
             screenOptions={({ navigation }) => ({
+                
                 headerRight: () => (
                     <Pressable onPress={() => navigation.openDrawer()}>
                         <Ionicons
