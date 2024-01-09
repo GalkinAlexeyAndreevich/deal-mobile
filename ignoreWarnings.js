@@ -1,8 +1,8 @@
 import { LogBox } from "react-native";
 
 if (__DEV__) {
-	console.log("Off warnings");
   const ignoreWarns = [
+    'new NativeEventEmitter()',
     "EventEmitter.removeListener",
     "[fuego-swr-keys-from-collection-path]",
     "Setting a timer for a long period of time",

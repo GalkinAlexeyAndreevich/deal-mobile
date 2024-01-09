@@ -7,9 +7,6 @@ const clockify = (secondsLeft:number) => {
     let hours = Math.floor(secondsLeft / 60 / 60)
     let mins = Math.floor((secondsLeft / 60) % 60)
     let seconds = Math.floor(secondsLeft % 60)
-    // let displayHours = hours < 10 ? `0${hours}` : hours
-    // let displayMins = mins < 10 ? `0${mins}` : mins
-    // let displaySecs = seconds < 10 ? `0${seconds}` : seconds
     return {
         hours,
         mins,
@@ -26,7 +23,7 @@ export default function MiniTimer({navigation}) {
     }
     return (
         <Pressable onPress={()=>{navigation.navigate("AddTask")}} style={{borderWidth:1, zIndex:2, padding:10, backgroundColor:"white"}}>
-            <Text>
+            <Text style={{fontSize:17}}>
                 {hours > 0 && (hours > 10 ? hours : "0" + hours) + ":"}
                 {mins < 10 ? "0" + mins : mins}:
                 {seconds < 10 ? "0" + seconds : seconds}

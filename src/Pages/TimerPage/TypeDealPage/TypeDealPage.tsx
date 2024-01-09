@@ -1,16 +1,15 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, View, StyleSheet, Image, Pressable } from "react-native";
-import { useState } from "react";
-import { Button, CheckBox } from "react-native-elements";
 import { useAppDispatch } from "@store/hook";
 import { setTypeDeal } from "@store/dealSettings";
 import { AddTaskParamList } from "@routes/AddTaskNavigator";
+import { TypeDeal } from "@src/interfaces";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 export default function TypeDealPage({ navigation }: TProps) {
     const dispatch = useAppDispatch()
-    const nextPage = (typeDeal:"Мелкая сделка"|"Крупная сделка")=>{
+    const nextPage = (typeDeal:TypeDeal)=>{
         dispatch(setTypeDeal(typeDeal))
         navigation.navigate("SettingsDealOnTimePage");
     }
@@ -31,11 +30,11 @@ export default function TypeDealPage({ navigation }: TProps) {
                 }}>
                 <Pressable onPress={()=>{nextPage("Крупная сделка")}} style={styles.button}>
                     <Text style={{fontSize:29}}>Крупная сделка</Text> 
-                    <Text>от 21 мин до 2 ч</Text>  
+                    <Text>от 25 мин до 2 ч</Text>  
                 </Pressable>
                 <Pressable onPress={()=>{nextPage("Мелкая сделка")}} style={styles.button}>
                     <Text style={{fontSize:29}}>Мелкая сделка</Text>
-                    <Text >от 1 мин  до 20 мин</Text>
+                    <Text>от 5 мин  до 20 мин</Text>
                 </Pressable>
             </View>
         </View>

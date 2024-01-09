@@ -1,11 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { AddTaskParamList } from "@routes/AddTaskNavigator";
-import { useAppDispatch, useAppSelector } from "@store/hook";
-import Timer from "@components/Timer";
+import { useAppSelector } from "@store/hook";
 import Icon from "react-native-vector-icons/Ionicons";
-import { useEffect, useState } from "react";
-import { setTime } from "@store/dealSettings";
 import { useBackgroundTimer } from "@src/TimerContext";
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 

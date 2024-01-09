@@ -38,15 +38,15 @@ export default function TaskOnDayPage({navigation}) {
             <View
                 style={{
                     position: "absolute",
-                    bottom: "8%",
-                    right: 10,
+                    bottom: "6%",
+                    right: 8,
                 }}>
                 <AddTask currentDate={currentDate} />
             </View>
             <View
                 style={{
                     position: "absolute",
-                    bottom: "8%",
+                    bottom: "7%",
                     left: 30,
                 }}>
                 <MiniTimer navigation={navigation}/>

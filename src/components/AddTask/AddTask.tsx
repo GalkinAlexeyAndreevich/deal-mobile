@@ -8,10 +8,8 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
-import AntIcon from "react-native-vector-icons/AntDesign";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import RNPickerSelect from "react-native-picker-select";
 import { typeTasks } from "@utils/dataNoFetch";
 import { ITypeTask, SubTask, Task } from "@interfaces";
 import { setTasks } from "@store/tasksDatesSlice";

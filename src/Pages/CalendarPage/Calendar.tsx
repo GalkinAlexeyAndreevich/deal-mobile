@@ -58,8 +58,7 @@ export default function CustomCalendar({
             },
             filtered
         );
-        console.log(filteredMarkedDates);
-        console.log("Снова вызвали функцию");
+        console.log("Снова вызвали функцию",filteredMarkedDates);
 
         return filteredMarkedDates || {};
     };

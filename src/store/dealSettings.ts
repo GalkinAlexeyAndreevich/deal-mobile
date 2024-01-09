@@ -1,10 +1,10 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
-import { ITask, Task } from "@interfaces";
+import { Task, TypeDeal } from "@interfaces";
 import { getArrMinutes } from "@utils/dataNoFetch";
 
 const arrMinutes = getArrMinutes()
 interface TypeState {
-    typeDeal:string,
+    typeDeal:TypeDeal,
     task:Task
     nameTask:string,
     time:number,
@@ -23,7 +23,7 @@ const dealSettingsSlice = createSlice({
     name:"dealSettings",
     initialState,
     reducers:{
-        setTypeDeal(state,actions:PayloadAction<string>){
+        setTypeDeal(state,actions:PayloadAction<TypeDeal>){
             state.typeDeal = actions.payload
         },
         setNameTask(state,actions:PayloadAction<string>){
@@ -34,9 +34,6 @@ const dealSettingsSlice = createSlice({
         },
         addTask(state,actions:PayloadAction<Task>){
             const task = actions.payload
-            console.log("Меняю стор",actions.payload);
-            
-            console.log(task.name);
             state.nameTask = task.name
             console.log(state.nameTask);
             state.task = task

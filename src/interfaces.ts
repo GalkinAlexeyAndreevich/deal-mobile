@@ -1,9 +1,3 @@
-export interface ITask{
-	typeTask: string,
-	nameTask:string,
-	time:number
-}
-
 export interface IMarkedDates{
 	date:string,
 	dots:{key:string, color:string}[]
@@ -29,5 +23,12 @@ export interface ITypeTask {
 	color:string
 }
 
+export interface SelectItem {
+	value: string;
+	key: number;
+	label: number;
+	disabled?: boolean;
+}
 
 
+export type TypeDeal = "Мелкая сделка" | "Крупная сделка"
