@@ -18,7 +18,11 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.dealmobile",
       "infoPlist": {
-        "UIBackgroundModes": ["location", "fetch", "remote-notification"]
+        "UIBackgroundModes": [
+          "location",
+          "fetch",
+          "remote-notification"
+        ]
       }
     },
     "android": {
@@ -39,6 +43,10 @@
     "runtimeVersion": "1.0.0",
     "updates": {
       "url": "https://u.expo.dev/0b903def-5325-4465-8f03-a857dd1fd628"
-    }
+    },
+    "plugins": [
+      "@config-plugins/react-native-ble-plx",
+      "react-native-ble-plx"
+    ]
   }
 }
