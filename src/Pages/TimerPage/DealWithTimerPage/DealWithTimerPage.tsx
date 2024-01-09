@@ -6,46 +6,30 @@ import Timer from "@components/Timer";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useEffect, useState } from "react";
 import { setTime } from "@store/dealSettings";
+import { useBackgroundTimer } from "@src/TimerContext";
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
-const secondToCombineTime = (time: number) => {
+const clockify = (secondsLeft: number) => {
+    let hours = Math.floor(secondsLeft / 60 / 60);
+    let mins = Math.floor((secondsLeft / 60) % 60);
+    let seconds = Math.floor(secondsLeft % 60);
     return {
-        hour: Math.floor((time / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((time / 1000 / 60) % 60),
-        seconds: Math.floor((time / 1000) % 60),
+        hours,
+        mins,
+        seconds,
     };
 };
 
 export default function DealWithTimerPage({ navigation }: TProps) {
-    const { nameTask, time } = useAppSelector((state) => state.dealSettings);
-    const dispatch = useAppDispatch();
-    const { hour, minutes, seconds } = secondToCombineTime(time);
-    const [status, setStatus] = useState(1);
-
-    useEffect(() => {
-        let timerID: ReturnType<typeof setInterval>;
-        if (status === 1 && time>0) {
-            timerID = setInterval(() => {
-                dispatch(setTime(time - 1000));
-            }, 1000);
-        } else {
-            clearInterval(timerID);
-            if (status === -1) dispatch(setTime(0));
-        }
-        if(time===0){
-            navigation.navigate("TypeDealPage")
-            setStatus(-1)
-        }
-        return () => {
-            clearInterval(timerID);
-        };
-    }, [status, time]);
-
+    const { timerOn,setTimerOn, secondsLeft, setSecondsLeft } = useBackgroundTimer();
+    const { nameTask } = useAppSelector((state) => state.dealSettings);
+    const { hours, mins, seconds } = clockify(secondsLeft);
     const handlePause = () => {
-        setStatus((prev) => (prev === 0 ? 1 : 0));
+        setTimerOn(prev=>!prev);
     };
     const handleStop = () => {
-        setStatus(-1);
+        setTimerOn(false);
+        setSecondsLeft(0);
     };
 
     return (
@@ -57,42 +41,66 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                     justifyContent: "center",
                     alignItems: "center",
                 }}>
-                <View style={{
-                    display: "flex", 
-                    alignItems: "center",
-                    borderWidth: 1 ,
-                    paddingVertical: 20,
-                    paddingHorizontal: 30,
-                }}>
+                <View
+                    style={{
+                        display: "flex",
+                        alignItems: "center",
+                        borderWidth: 1,
+                        paddingVertical: 20,
+                        paddingHorizontal: 30,
+                    }}>
                     <Text style={{ fontSize: 30 }}>
-                        {hour >0 && (hour > 10 ?hour : "0" + hour) + ":"}
-                        {minutes < 10 ? "0" + minutes : minutes}:
+                        {hours > 0 && (hours > 10 ? hours : "0" + hours) + ":"}
+                        {mins < 10 ? "0" + mins : mins}:
                         {seconds < 10 ? "0" + seconds : seconds}
                     </Text>
-                    {time === 0 && (
+                    {secondsLeft === 0 && (
                         <Text style={{ fontSize: 30, color: "red" }}>
                             Время вышло
                         </Text>
                     )}
                 </View>
             </View>
-            <View style={{ flex: 2, justifyContent: "center" }}>
-                <Pressable onPress={handlePause}>
-                    <Icon name="pause-circle-outline" size={140} />
-                </Pressable>
+            {secondsLeft === 0 ? (
                 <Pressable
                     style={{
-                        borderWidth: 1,
-                        marginTop: 30,
-                        paddingHorizontal: 10,
-                        paddingVertical: 5,
+                        flex: 2,
+                        justifyContent: "center",
                     }}
-                    onPress={handleStop}>
-                    <Text style={{ fontSize: 20, textAlign: "center" }}>
-                        Сбросить
+                    onPress={()=>navigation.navigate("TypeDealPage")}
+                    >
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            textAlign: "center",
+                            paddingHorizontal: 20,
+                            paddingVertical: 20,
+                            borderWidth: 1,
+                            marginTop: 30,
+                        }}>
+                        Выйти
                     </Text>
                 </Pressable>
-            </View>
+            ) : (
+                <View style={{ flex: 2, justifyContent: "center" }}>
+                    <Pressable onPress={handlePause}>
+                    {timerOn && <Icon name="pause-circle-outline" size={140} />}
+                    {!timerOn && <Icon name="play-circle-outline" size={140} />}
+                    </Pressable>
+                    <Pressable
+                        style={{
+                            borderWidth: 1,
+                            marginTop: 30,
+                            paddingHorizontal: 10,
+                            paddingVertical: 5,
+                        }}
+                        onPress={handleStop}>
+                        <Text style={{ fontSize: 20, textAlign: "center" }}>
+                            Сбросить
+                        </Text>
+                    </Pressable>
+                </View>
+            )}
         </View>
     );
 }

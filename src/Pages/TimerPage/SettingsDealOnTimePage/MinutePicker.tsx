@@ -1,24 +1,14 @@
 import { View, Text, FlatList, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { getArrMinutes } from "@utils/dataNoFetch";
-import { useAppDispatch } from "@store/hook";
-import { setTime } from "@store/dealSettings";
 
-export default function MinutePicker() {
+interface Props{
+    selected:number
+    setSelected:Dispatch<SetStateAction<number>>
+}
+
+export default function MinutePicker({selected, setSelected}:Props) {
     const arrMinutes = getArrMinutes();
-    const dispatch = useAppDispatch();
-    const [selected, setSelected] = useState(arrMinutes[0]);
-		console.log("render");
-		
-		useEffect(()=>{
-			dispatch(setTime(selected * 60 * 1000));
-			console.log("test render1");
-		},[selected])
-		useEffect(()=>{
-			dispatch(setTime(selected * 60 * 1000));
-			console.log("test render");
-			
-		},[])
     const MinuteItem = ({ item }) => {
         return (
             <Pressable onPress={() => setSelected(item)}>

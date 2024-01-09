@@ -30,6 +30,7 @@ module.exports = (api) => {
           "."
         ],
         "alias": {
+          "@src":"./src",
           "@components": "./src/components",
           "@assets": "./src/assets",
           "@Pages": "./src/Pages",

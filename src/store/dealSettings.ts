@@ -1,18 +1,21 @@
 import { createSlice,PayloadAction } from "@reduxjs/toolkit";
 import { ITask, Task } from "@interfaces";
+import { getArrMinutes } from "@utils/dataNoFetch";
 
-
+const arrMinutes = getArrMinutes()
 interface TypeState {
     typeDeal:string,
     task:Task
     nameTask:string,
-    time:number
+    time:number,
+    prevTime:number
 }
 const initialState:TypeState = {
     typeDeal: 'Мелкая сделка',
     task:{} as Task,
-    nameTask:'Что-то сделать',
-    time:1000*60
+    nameTask:'',
+    time:0,
+    prevTime:arrMinutes[0] *1000 * 60
 }
 
 

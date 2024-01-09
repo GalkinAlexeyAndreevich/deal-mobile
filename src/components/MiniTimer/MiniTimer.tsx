@@ -1,25 +1,34 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { useAppSelector } from "@store/hook";
-const secondToCombineTime = (time: number) => {
+import {  useBackgroundTimer } from "@src/TimerContext";
+
+const clockify = (secondsLeft:number) => {
+    let hours = Math.floor(secondsLeft / 60 / 60)
+    let mins = Math.floor((secondsLeft / 60) % 60)
+    let seconds = Math.floor(secondsLeft % 60)
+    // let displayHours = hours < 10 ? `0${hours}` : hours
+    // let displayMins = mins < 10 ? `0${mins}` : mins
+    // let displaySecs = seconds < 10 ? `0${seconds}` : seconds
     return {
-        hour: Math.floor((time / (1000 * 60 * 60)) % 24),
-        minutes: Math.floor((time / 1000 / 60) % 60),
-        seconds: Math.floor((time / 1000) % 60),
-    };
-};
+        hours,
+        mins,
+        seconds,
+    }
+}
 
 export default function MiniTimer({navigation}) {
-    const { time } = useAppSelector((state) => state.dealSettings);
-    const { hour, minutes, seconds } = secondToCombineTime(time);
-    if(!time){
+    const {secondsLeft} = useBackgroundTimer()
+    const {hours, mins, seconds} = clockify(secondsLeft)
+
+    if(!secondsLeft){
         return <View></View>
     }
     return (
         <Pressable onPress={()=>{navigation.navigate("AddTask")}} style={{borderWidth:1, zIndex:2, padding:10, backgroundColor:"white"}}>
             <Text>
-                {hour > 0 && (hour > 10 ? hour : "0" + hour) + ":"}
-                {minutes < 10 ? "0" + minutes : minutes}:
+                {hours > 0 && (hours > 10 ? hours : "0" + hours) + ":"}
+                {mins < 10 ? "0" + mins : mins}:
                 {seconds < 10 ? "0" + seconds : seconds}
             </Text>
         </Pressable>
