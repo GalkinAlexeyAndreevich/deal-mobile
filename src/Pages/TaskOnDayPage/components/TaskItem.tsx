@@ -9,18 +9,27 @@ import { SubTask, Task } from "@interfaces";
 interface Props {
     task: Task;
     changeNameTask: (text: string, task: Task, subtask?: SubTask) => void;
+    drag:()=>void
+    isActive: boolean,
 }
 
-export default function TaskItem({ task, changeNameTask }: Props) {
+export default function TaskItem({ task, changeNameTask,drag,isActive }: Props) {
     const dispatch = useAppDispatch();
-
+    const longPress = ()=>{
+        console.log("long press");
+        
+        drag()
+    }
     return (
-        <View
+        <Pressable
+            onLongPress={longPress}
+            disabled={isActive}
             style={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
                 justifyContent: "space-between",
+                opacity:isActive?0.7:1,
             }}>
             <View style={{ display: "flex", flexDirection: "row",maxWidth: "79%",alignItems:"center" }}>
                 <CheckBox
@@ -39,22 +48,18 @@ export default function TaskItem({ task, changeNameTask }: Props) {
                         padding: 0,
                         textDecorationLine: task.done ? "line-through" : "none",
                         fontSize: 20,
-
-                        
                     }}
                     multiline={true}
                     maxLength={50}
                     value={task.name}
                     onChangeText={(text) => changeNameTask(text, task)}
                 />
-                {/* </View> */}
             </View>
-
             <Pressable
                 style={{ paddingHorizontal: 3}}
                 onPress={() => dispatch(deleteTask(task.id))}>
                 <Icon name="close" size={25} color="red"/>
             </Pressable>
-        </View>
+        </Pressable>
     );
 }

@@ -1,5 +1,4 @@
-import React, {createContext, useContext,useState, useEffect, Dispatch, SetStateAction, useRef} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, {createContext, useContext,useState, useEffect, Dispatch, SetStateAction} from 'react';
 import BackgroundTimer from 'react-native-background-timer';
 
 type contextType = {

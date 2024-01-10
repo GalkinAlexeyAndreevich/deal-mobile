@@ -1,11 +1,11 @@
 import { ITypeTask } from './../interfaces';
 import { SubTask, Task } from "@interfaces";
-export const typeTasks:ITypeTask[] = [
-    { label: "Другое", value: "Другое", color: "#a6fcaa" },
-    { label: "Работа", value: "Работа", color: "#dbd1fe" },
-    { label: "Учеба", value: "Учеба", color: "#ffcdfc" },
-    { label: "Спорт", value: "Спорт", color: "#ffc4c4" },
-    { label: "Работа по дому", value: "Работа по дому", color: "#fff272" },
+export const defaultTypeTasks:ITypeTask[] = [
+    { key: "Другое", value: "Другое", color: "#a6fcaa" },
+    { key: "Работа", value: "Работа", color: "#dbd1fe" },
+    { key: "Учеба", value: "Учеба", color: "#ffcdfc" },
+    { key: "Спорт", value: "Спорт", color: "#ffc4c4" },
+    { key: "Работа по дому", value: "Работа по дому", color: "#fff272" },
 ];
 
 
@@ -17,67 +17,6 @@ export const getArrMinutes = ()=>{
     return arrMinutes
 }
 
-
-
-
-// const arrMinutes = [
-//     { value: "5", label: "5" },
-//     { value: "10", label: "10" },
-//     { value: "20", label: "20" },
-//     { value: "25", label: "25" },
-//     { value: "30", label: "30" },
-//     { value: "35", label: "35" },
-//     { value: "40", label: "40" },
-//     { value: "45", label: "45" },
-//     { value: "50", label: "50" },
-//     { value: "55", label: "55" },
-//     { value: "100", label: "55" },
-// ];
-
-// export const defaultTasks:Tasks[] = [
-// 	{
-// 		id:1,
-// 		name:"test1",
-// 		done:false,
-// 		subtasks:[
-// 			{
-// 				id:1,
-// 				name:"test1_1",
-// 				level:0,
-// 				parentId:1,
-// 				done:false,
-// 			},
-// 			{
-// 				id:2,
-// 				name:"test1_2",
-// 				level:1,
-// 				parentId:1,
-// 				done:false,
-// 			},
-// 			{
-// 				id:3,
-// 				name:"test1_3",
-// 				level:2,
-// 				parentId:2,
-// 				done:false,
-// 			},
-// 		]
-// 	},
-// 	{
-// 		id:2,
-// 		name:"test2",
-// 		done:false,
-// 		subtasks:[
-// 			{
-// 				id:4,
-// 				name:"test2_1",
-// 				level:0,
-// 				parentId:2,
-// 				done:false,
-// 			},
-// 		]
-// 	}
-// ]
 
 
 export const defaultSubtasks:SubTask[] = [
@@ -108,46 +47,49 @@ export const defaultTasks: Task[] = [
         id: 1,
         name: "test1",
         done: false,
-        date: "2023-11-10",
-        type: "Другое",
+        date: "2024-01-10",
+        type: "Работа",
+        priorityId:1,
         subtasks: [
-            {
-                id: 1,
-                name: "test1_1",
-                done: false,
-            },
-            {
-                id: 2,
-                name: "test1_2",
-                done: false,
-            },
-            {
-                id: 3,
-                name: "test1_3",
-                done: false,
-            },
+            // {
+            //     id: 1,
+            //     name: "test1_1",
+            //     done: false,
+            // },
+            // {
+            //     id: 2,
+            //     name: "test1_2",
+            //     done: false,
+            // },
+            // {
+            //     id: 3,
+            //     name: "test1_3",
+            //     done: false,
+            // },
         ],
     },
     {
         id: 2,
         name: "test2",
         done: false,
-        date: "2023-11-10",
-        type: "Другое",
+        date: "2024-01-10",
+        type: "Учеба",
+        priorityId:2,
         subtasks: [
-            {
-                id: 4,
-                name: "test2_1",
-                done: false,
-            },
+            // {
+            //     id: 4,
+            //     name: "test2_1",
+            //     done: false,
+            // },
         ],
     },
     {
         id: 3,
         name: "test3",
         done: false,
-        date: "2023-11-11",
-        type: "Другое",
+        date: "2024-01-10",
+        type: "Спорт",
+        priorityId:3,
         subtasks: [],
     },
     {
@@ -155,8 +97,9 @@ export const defaultTasks: Task[] = [
         name: "test3",
         done: false,
         type: "Другое",
-        date: "2023-11-11",
+        date: "2024-01-10",
         subtasks: [],
+        priorityId:4,
     },
 ];
 

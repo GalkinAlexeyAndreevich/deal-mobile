@@ -15,10 +15,11 @@ export interface Task{
 	color?:string,
 	date:string,
 	type:string
+	priorityId?:number
 }
 
 export interface ITypeTask {
-	label: string;
+	key: string;
 	value: string;
 	color:string
 }

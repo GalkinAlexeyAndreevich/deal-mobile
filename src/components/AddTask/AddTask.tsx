@@ -10,22 +10,21 @@ import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import Fontisto from "react-native-vector-icons/Fontisto";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import { typeTasks } from "@utils/dataNoFetch";
 import { ITypeTask, SubTask, Task } from "@interfaces";
 import { setTasks } from "@store/tasksDatesSlice";
 import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
+import { defaultTypeTasks } from "@src/utils/dataNoFetch";
 
 
 
 
 export default function AddTask({currentDate}:{currentDate:string}) {
-    const { tasks, subtasks:allSubtasks } = useAppSelector((state) => state.tasksDates);
+    const { tasks, subtasks:allSubtasks,typesTask } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
     const [openModal, setOpenModal] = useState(false);
     const [inputValue, setInputValue] = useState("");
-    const [typeTask, setTypeTask] = useState<ITypeTask[]>(typeTasks);
-    const [chosenType, setChosenType] = useState<ITypeTask>(typeTask[0]);
+    const [chosenType, setChosenType] = useState<ITypeTask>({} as ITypeTask);
     //отдельно есть массив подзадач которые уже создали и подзадачи которые появляются при добавлении на кнопку
     // Изменять можно все новые позадания на этот объект вешать обработчик
     const [subtasks,setSubtasks] = useState<SubTask[]>([])
@@ -52,12 +51,8 @@ export default function AddTask({currentDate}:{currentDate:string}) {
     }
     
     const saveChange = () => {
-        // setOpenModal(false);
-        setInputValue('')
-        setChosenType(typeTask[0])
-
         let finalArrSubtask:SubTask[] = []
-
+        let typeTask = Object.keys(chosenType).length >0?chosenType.value:typesTask[0].value
         for(let i=0;i<subtasks.length;i++){
             if(!subtasks[i].name.length)continue
             finalArrSubtask.push({
@@ -66,15 +61,17 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                 done:false
             })
         }
-
         const object: Task = {
             id: tasks.length + 1,
             name: inputValue,
             done: false,
             date: moment(currentDate).format('YYYY-MM-DD'),
-            type: chosenType.value,
+            type: typeTask,
             subtasks:finalArrSubtask
         };
+        setInputValue('')
+        setChosenType({} as ITypeTask)
+
         dispatch(setTasks([...tasks, object]));
     };
 
@@ -187,16 +184,7 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                             }}>
                                 <View>
                                     <View>
-                                        {/* <RNPickerSelect
-                                            onValueChange={(value) =>
-                                                setChosenType(value)
-                                            }
-                                            items={typeTask}
-                                            placeholder={{}}
-                                            useNativeAndroidPickerStyle={false}
-                                            style={{...pickerSelectStyles}}
-                                        /> */}
-                                        <ModalTypeTask />
+                                        <ModalTypeTask selectedType={chosenType} setSelectedType={setChosenType}/>
                                     </View>
                                     {/* <Pressable onPress={addSubtask}>
                                         <Text>Создать подзадачу</Text>

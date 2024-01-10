@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import moment from "moment";
 import "./ignoreWarnings";
 import { TimerProvider } from "src/TimerContext";
+import { useAppSelector } from "@src/store/hook";
+import { SavedDataProvider } from "@src/SavedDataContext";
 
 moment().locale("ru");
 
@@ -48,13 +50,15 @@ export default function App() {
     return (
         <Provider store={store}>
             <TimerProvider>
-                <View
-                    style={{
-                        flex: 1,
-                        display: "flex",
-                    }}>
-                    <AppNavigator />
-                </View>
+                <SavedDataProvider>
+                    <View
+                        style={{
+                            flex: 1,
+                            display: "flex",
+                        }}>
+                        <AppNavigator />
+                    </View>
+                </SavedDataProvider>
             </TimerProvider>
         </Provider>
     );

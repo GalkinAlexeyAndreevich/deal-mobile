@@ -16,12 +16,16 @@ export default function CalendarPage({navigation}) {
         new Date().toISOString()
     );
     const [openModal, setOpenModal] = useState(false);
-    const tasks = useAppSelector((state) => state.tasksDates.tasks);
+    const {tasks,typesTask} = useAppSelector((state) => state.tasksDates);
     const [markedDates, setMarkedDates] = useState<MarkedDates>(
         {} as MarkedDates
     );
     let countTask = useRef(0);
     let monthYear = moment(currentDate).format("MM-yyyy");
+    const getTypeColor = (type:string)=>{
+        const findItem = typesTask.find(element=>element.key == type)
+        return findItem ?findItem.color:"white"
+    }
     useEffect(() => {
         let map = tasks.reduce((acc, cur) => {
             acc[cur.date] = acc[cur.date] || {
@@ -29,7 +33,7 @@ export default function CalendarPage({navigation}) {
             };
             acc[cur.date].dots.push({
                 key: cur.name,
-                color: cur.color || "#a6fcaa",
+                color: getTypeColor(cur.type),
             });
             return acc;
         }, {});

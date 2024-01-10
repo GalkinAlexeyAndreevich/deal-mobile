@@ -7,14 +7,12 @@ interface TypeState {
     typeDeal:TypeDeal,
     task:Task
     nameTask:string,
-    time:number,
     prevTime:number
 }
 const initialState:TypeState = {
     typeDeal: 'Мелкая сделка',
     task:{} as Task,
     nameTask:'',
-    time:0,
     prevTime:arrMinutes[0] *1000 * 60
 }
 
@@ -29,9 +27,6 @@ const dealSettingsSlice = createSlice({
         setNameTask(state,actions:PayloadAction<string>){
             state.nameTask = actions.payload
         },
-        setTime(state,actions:PayloadAction<number>){
-            state.time = actions.payload
-        },
         addTask(state,actions:PayloadAction<Task>){
             const task = actions.payload
             state.nameTask = task.name
@@ -41,6 +36,6 @@ const dealSettingsSlice = createSlice({
     },
 })
 
-export const {setTypeDeal,setNameTask,setTime,addTask} = dealSettingsSlice.actions
+export const {setTypeDeal,setNameTask,addTask} = dealSettingsSlice.actions
 
 export default dealSettingsSlice.reducer

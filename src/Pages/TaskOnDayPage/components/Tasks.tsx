@@ -2,12 +2,16 @@ import { View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { SubTask, Task } from "@interfaces";
-import { setNameTask } from "@store/tasksDatesSlice";
+import { setNameTask, setTasks } from "@store/tasksDatesSlice";
 import Subtasks from "./Subtasks";
 import TaskItem from "./TaskItem";
+import DraggableFlatList, {
+    ScaleDecorator,
+    RenderItemParams,
+} from "react-native-draggable-flatlist";
 
 export default function Tasks({ currentDate }: { currentDate: string }) {
-    const { tasks } = useAppSelector((state) => state.tasksDates);
+    const { tasks,typesTask } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
     const [filtered, setFiltered] = useState<Task[]>([]);
 
@@ -24,19 +28,62 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
         subtask: SubTask = null
     ) => {
         if (!text) return;
-        console.log(text,task.id);
-        
-        dispatch(setNameTask({ text, taskId:task.id, subtaskId:subtask?.id }));
+        console.log(text, task.id);
+        dispatch(
+            setNameTask({ text, taskId: task.id, subtaskId: subtask?.id })
+        );
+    };
+
+    const getTypeColor = (type:string)=>{
+        const findItem = typesTask.find(element=>element.key == type)
+        return findItem ?findItem.color:"white"
+    }
+
+    const renderTask = ({
+        item: task,
+        drag,
+        isActive,
+    }: RenderItemParams<Task>) => {
+        return (
+            <ScaleDecorator>
+                <View
+                    style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        backgroundColor:getTypeColor(task.type)
+                    }}>
+                    <TaskItem
+                        task={task}
+                        changeNameTask={changeNameTask}
+                        drag={drag}
+                        isActive={isActive}
+                    />
+
+                    {task?.subtasks?.length > 0 &&
+                        task.subtasks.map((subtask) => (
+                            <Subtasks
+                                key={subtask.id}
+                                subtask={subtask}
+                                task={task}
+                                changeNameTask={changeNameTask}
+                            />
+                        ))}
+                </View>
+            </ScaleDecorator>
+        );
+    };
+    const setTasksPosition = (data: Task[]) => {
+        data && dispatch(setTasks(data));
     };
 
     return (
-        <ScrollView style={{height:"100%"}}>
+        <View style={{ height: "100%" }}>
             {filtered.length == 0 && (
                 <View
                     style={{
-                        flex:1,
-                        display:"flex",
-                        paddingTop:"50%",
+                        flex: 1,
+                        display: "flex",
+                        paddingTop: "50%",
                         alignSelf: "center",
                     }}>
                     <Text style={{ fontSize: 20, color: "#a7ceff" }}>
@@ -47,26 +94,12 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                     </Text>
                 </View>
             )}
-            {filtered.map((task) => (
-                <View key={task.id}>
-                    <TaskItem task={task} changeNameTask={changeNameTask} />
-                    <View
-                        style={{
-                            display: "flex",
-                            flexDirection: "column",
-                        }}>
-                        {task?.subtasks?.length > 0 &&
-                            task.subtasks.map((subtask) => (
-                                <Subtasks
-                                    key={subtask.id}
-                                    subtask={subtask}
-                                    task={task}
-                                    changeNameTask={changeNameTask}
-                                />
-                            ))}
-                    </View>
-                </View>
-            ))}
-        </ScrollView>
+            <DraggableFlatList
+                data={filtered}
+                onDragEnd={({ data }) => setTasksPosition(data)}
+                keyExtractor={(item) => String(item.id)}
+                renderItem={renderTask}
+            />
+        </View>
     );
 }

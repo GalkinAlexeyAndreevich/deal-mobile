@@ -1,22 +1,17 @@
-import { SubTask, Task } from "@interfaces";
+import { ITypeTask, SubTask, Task } from "@interfaces";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { defaultSubtasks, defaultTasks } from "@utils/dataNoFetch";
-
-const timeToString = (time: Date | string): string => {
-    const date = new Date(time);
-    return date.toISOString().split("T")[0];
-};
 
 interface TypeState {
-    currentDate: string;
     tasks: Task[];
     subtasks: SubTask[];
+    typesTask: ITypeTask[];
 }
 
 const initialState: TypeState = {
-    currentDate: timeToString(new Date()),
-    tasks: defaultTasks,
-    subtasks: defaultSubtasks,
+    tasks: [],
+    subtasks: [],
+    typesTask: [],
 };
 
 interface ChangeNameProps {
@@ -29,11 +24,15 @@ const tasksDatesSlice = createSlice({
     name: "tasks",
     initialState,
     reducers: {
-        setCurrentDate(state, actions: PayloadAction<string>) {
-            state.currentDate = actions.payload;
-        },
         setTasks(state, actions: PayloadAction<Task[]>) {
             state.tasks = actions.payload;
+            console.log("изменили цели",state.tasks);
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
+        },
+        setType(state, action: PayloadAction<ITypeTask[]>) {
+            state.typesTask = action.payload;
+            console.log("изменили тип",state.typesTask);
+            AsyncStorage.setItem("savedTypesTask", JSON.stringify(state.typesTask));
         },
         setSubTasks(state, actions: PayloadAction<SubTask[]>) {
             state.subtasks = actions.payload;
@@ -47,6 +46,7 @@ const tasksDatesSlice = createSlice({
                 if (el.done) el.subtasks[i].done = true;
                 else el.subtasks[i].done = false;
             }
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         setNameTask(state, action: PayloadAction<ChangeNameProps>) {
             const { taskId, subtaskId, text } = action.payload;
@@ -61,6 +61,7 @@ const tasksDatesSlice = createSlice({
             } else {
                 foundTask.name = text;
             }
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         setSubtask(
             state,
@@ -87,24 +88,32 @@ const tasksDatesSlice = createSlice({
                     foundTask.done = true;
                 }
             }
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         deleteTask(state, action: PayloadAction<number>) {
             const taskId = action.payload;
             const newTasks = state.tasks.filter((task) => task.id !== taskId);
             state.tasks = newTasks;
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
-        deleteSubtask(state,action:PayloadAction<{taskId:number, subtaskId:number}>){
-            const {taskId,subtaskId} = action.payload
+        deleteSubtask(
+            state,
+            action: PayloadAction<{ taskId: number; subtaskId: number }>
+        ) {
+            const { taskId, subtaskId } = action.payload;
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
-            const newSubtask = state.tasks[taskIndex].subtasks.filter((subtask) => subtask.id !== subtaskId);
-            state.tasks[taskIndex].subtasks = newSubtask; 
-        }
+            const newSubtask = state.tasks[taskIndex].subtasks.filter(
+                (subtask) => subtask.id !== subtaskId
+            );
+            state.tasks[taskIndex].subtasks = newSubtask;
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
+        },
     },
 });
 
 export const {
-    setCurrentDate,
     setTasks,
+    setType,
     setSubTasks,
     setStatusTask,
     setNameTask,

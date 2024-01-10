@@ -7,14 +7,18 @@ import {
 	Text,
 	FlatList,
 } from "react-native";
-import React, { useEffect, useState } from "react";
-import { typeTasks } from "@utils/dataNoFetch";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { defaultTypeTasks } from "@utils/dataNoFetch";
 import { ITypeTask } from "@interfaces";
 
-export default function ModalTypeTask() {
+
+interface Props{
+	selectedType:ITypeTask
+	setSelectedType:Dispatch<SetStateAction<ITypeTask>>
+}
+
+export default function ModalTypeTask({selectedType, setSelectedType}:Props) {
 	const [openModal, setOpenModal] = useState(false);
-	const [selectedType,setSelectedType] = useState<ITypeTask>({} as ITypeTask)
-	
 	const TypeItem = ({item})=>{
 		return(
 			<Pressable style={{padding:10, display:"flex", flexDirection:"row", alignItems:"center"}} onPress={()=>{
@@ -66,7 +70,7 @@ export default function ModalTypeTask() {
 							</TouchableHighlight>
 							<View style={styles.outerContainer}>
 									<View style={styles.container}>
-											<FlatList data={typeTasks} renderItem={TypeItem} keyExtractor={(_,index)=>String(index)}/>
+											<FlatList data={defaultTypeTasks} renderItem={TypeItem} keyExtractor={(_,index)=>String(index)}/>
 									</View>
 							</View>
 					</Modal>
