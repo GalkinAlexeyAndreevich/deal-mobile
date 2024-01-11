@@ -14,7 +14,6 @@ import { ITypeTask, SubTask, Task } from "@interfaces";
 import { setTasks } from "@store/tasksDatesSlice";
 import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
-import { defaultTypeTasks } from "@src/utils/dataNoFetch";
 
 
 
@@ -28,27 +27,27 @@ export default function AddTask({currentDate}:{currentDate:string}) {
     //отдельно есть массив подзадач которые уже создали и подзадачи которые появляются при добавлении на кнопку
     // Изменять можно все новые позадания на этот объект вешать обработчик
     const [subtasks,setSubtasks] = useState<SubTask[]>([])
-    const addSubtask = ()=>{
-        setSubtasks(prev=>[...prev,{
-            id:subtasks.length+1,
-            name:"",
-            done:false
-        }])
-    }
+    // const addSubtask = ()=>{
+    //     setSubtasks(prev=>[...prev,{
+    //         id:subtasks.length+1,
+    //         name:"",
+    //         done:false
+    //     }])
+    // }
 
     // const saveNewSubtasks = ()=>{
     //     dispatch(setSubtasks())
     // }
 
-    const changeNameSubtask = (item:SubTask, name:string)=>{
-        setSubtasks(prev=>[...prev,{
-            id:subtasks.length+1,
-            name:"",
-            done:false
-        }])
-        const newState = tasks.map((el) => (el.id === item.id ? {...el, name} : el));
-        setSubtasks(newState)
-    }
+    // const changeNameSubtask = (item:SubTask, name:string)=>{
+    //     setSubtasks(prev=>[...prev,{
+    //         id:subtasks.length+1,
+    //         name:"",
+    //         done:false
+    //     }])
+    //     const newState = tasks.map((el) => (el.id === item.id ? {...el, name} : el));
+    //     setSubtasks(newState)
+    // }
     
     const saveChange = () => {
         let finalArrSubtask:SubTask[] = []
@@ -242,50 +241,3 @@ const styles = StyleSheet.create({
     },
 });
 
-const pickerSelectStyles = StyleSheet.create({
-    inputIOS: {
-        fontSize: 16,
-        // paddingVertical: 12,
-        // paddingHorizontal: 10,
-        marginVertical: 0,
-        paddingVertical: 0,
-        borderWidth: 0,
-        borderColor: "gray",
-        borderRadius: 4,
-        color: "#98989a",
-        backgroundColor: "#f2f2f2",
-        // marginRight: 10,
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-    placeholder: {
-        color: "red",
-    },
-    inputAndroid: {
-        fontSize: 16,
-        // paddingHorizontal: 10,
-        // paddingVertical: 8,
-        marginVertical: 0,
-        paddingVertical: 0,
-        paddingLeft: 10,
-        borderWidth: 0,
-        borderColor: "white",
-        borderRadius: 8,
-        color: "#98989a",
-        backgroundColor: "#f2f2f2",
-        // marginRight: 10,
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-    inputWeb: {
-        fontSize: 16,
-        // paddingHorizontal: 10,
-        // paddingVertical: 8,
-        paddingLeft: 10,
-        borderWidth: 0,
-        borderColor: "black",
-        borderRadius: 8,
-        color: "#98989a",
-        marginRight: 10,
-        backgroundColor: "#f2f2f2",
-        paddingRight: 30, // to ensure the text is never behind the icon
-    },
-});

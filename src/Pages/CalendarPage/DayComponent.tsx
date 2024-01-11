@@ -23,7 +23,7 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
 		let sum = 70 + 75 * (countOnWeek[week] || 0);
 		return sum;
 	};
-    const maxWeek = Math.max.apply(null, Object.keys(countOnWeek));    
+    const maxWeek = Math.max.apply(null, Object.keys(countOnWeek).map(Number));    
     return (
         <Pressable
             onPress={() => {

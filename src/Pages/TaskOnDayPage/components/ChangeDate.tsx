@@ -27,14 +27,12 @@ export default function ChangeDate({ currentDate, setCurrentDate }: Props) {
     };
     const changeDatePicker = (
         { type }: DateTimePickerEvent,
-        selectedData: Date
+        selectedData: Date | undefined
     ) => {
-        if (type === "set") {
-            setOpenModal(false);
+        setOpenModal(false);
+        if (type === "set" && selectedData) {  
             setCurrentDate(timeToString(selectedData));
-        } else {
-            setOpenModal(false);
-        }
+        } 
     };
 
     return (

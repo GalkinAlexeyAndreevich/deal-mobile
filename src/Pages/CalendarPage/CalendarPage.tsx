@@ -10,28 +10,34 @@ import { timeToString } from "@utils/timeToString";
 import AddTask from "@components/AddTask";
 import moment from "moment";
 import MiniTimer from "@components/MiniTimer";
+import { RootStackParamList } from "@src/routes/TabNavigator";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-export default function CalendarPage({navigation}) {
+interface IPageProps {
+    navigation: NativeStackNavigationProp<RootStackParamList, "CalendarPage">;
+}
+
+export default function CalendarPage({ navigation }: IPageProps) {
     const [currentDate, setCurrentDate] = useState<string>(
         new Date().toISOString()
     );
     const [openModal, setOpenModal] = useState(false);
-    const {tasks,typesTask} = useAppSelector((state) => state.tasksDates);
+    const { tasks, typesTask } = useAppSelector((state) => state.tasksDates);
     const [markedDates, setMarkedDates] = useState<MarkedDates>(
         {} as MarkedDates
     );
     let countTask = useRef(0);
     let monthYear = moment(currentDate).format("MM-yyyy");
-    const getTypeColor = (type:string)=>{
-        const findItem = typesTask.find(element=>element.key == type)
-        return findItem ?findItem.color:"white"
-    }
+    const getTypeColor = (type: string) => {
+        const findItem = typesTask.find((element) => element.key == type);
+        return findItem ? findItem.color : "white";
+    };
     useEffect(() => {
-        let map = tasks.reduce((acc, cur) => {
+        let map = tasks.reduce<MarkedDates>((acc, cur) => {
             acc[cur.date] = acc[cur.date] || {
                 dots: [],
             };
-            acc[cur.date].dots.push({
+            acc[cur.date].dots?.push({
                 key: cur.name,
                 color: getTypeColor(cur.type),
             });
@@ -44,10 +50,10 @@ export default function CalendarPage({navigation}) {
 
     const changeDatePicker = (
         { type }: DateTimePickerEvent,
-        selectedData: Date
+        selectedData: Date | undefined
     ) => {
         setOpenModal(false);
-        if (type === "set") {
+        if (type === "set" && selectedData) {
             setCurrentDate(timeToString(selectedData));
         }
     };
@@ -74,7 +80,7 @@ export default function CalendarPage({navigation}) {
                     bottom: "7%",
                     left: 30,
                 }}>
-                <MiniTimer navigation={navigation}/>
+                <MiniTimer navigation={navigation} />
             </View>
 
             {openModal && (

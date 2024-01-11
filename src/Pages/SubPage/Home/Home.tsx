@@ -1,13 +1,6 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
-import { StyleSheet, View, Image, Text } from "react-native";
-import { AddTaskParamList } from "@routes/AddTaskNavigator";
-import { Button } from "react-native-elements";
-type TProps = NativeStackScreenProps<AddTaskParamList>;
-export default function Home({ navigation }: TProps) {
-    const foundAlly = () => {
-        navigation.navigate("TypeDealPage");
-    };
+import { View, Image, Text } from "react-native";
+export default function Home() {
     return (
         <View
             style={{
@@ -30,17 +23,3 @@ export default function Home({ navigation }: TProps) {
         </View>
     );
 }
-
-const styles = StyleSheet.create({
-    button: {
-        display: "flex",
-        borderWidth: 1,
-        paddingHorizontal: 15,
-        paddingVertical: 20,
-        fontSize: 15,
-        width: 200,
-        justifyContent: "center",
-
-        backgroundColor: "white",
-    },
-});

@@ -11,7 +11,7 @@ export interface Task{
 	id:number,
 	name:string,
 	done:boolean,
-	subtasks?: SubTask[],
+	subtasks: SubTask[],
 	color?:string,
 	date:string,
 	type:string

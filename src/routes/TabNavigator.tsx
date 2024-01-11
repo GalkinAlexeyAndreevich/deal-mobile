@@ -14,11 +14,11 @@ const Tab = createBottomTabNavigator<RootStackParamList>();
 function TabNavigator() {
     return (
         <Tab.Navigator
-            screenOptions={({ route }) => ({
+            screenOptions={() => ({
                 // tabBarStyle: { position: "absolute" },
                 headerShown: false,
             })}
-            initialRouteName="AddTask">
+            initialRouteName="TaskOnDayPage">
             <Tab.Screen
                 name="Statistics"
                 options={{ title: "Статистика" }}
@@ -28,7 +28,7 @@ function TabNavigator() {
                 name="AddTask"
                 options={{
                     title: "Таймер",
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: () => (
                         <Image
                             style={{ width: 25, height: 25 }}
                             source={require("@assets/timer3.png")}
@@ -41,7 +41,7 @@ function TabNavigator() {
                 name="CalendarPage"
                 options={{
                     title: "Задания на месяц",
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: () => (
                         <Image
                             style={{ width: 40, height: 40 }}
                             source={require("@assets/taskOnMonth3.jpg")}
@@ -54,7 +54,7 @@ function TabNavigator() {
                 name="TaskOnDayPage"
                 options={{
                     title: "Задания на день",
-                    tabBarIcon: ({ color, size }) => (
+                    tabBarIcon: () => (
                         <Image
                             style={{ width: 20, height: 26 }}
                             source={require("@assets/taskOnDay1.jpg")}

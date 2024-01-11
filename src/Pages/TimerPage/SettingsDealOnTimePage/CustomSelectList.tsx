@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useAppSelector } from "@src/store/hook";
@@ -47,7 +47,7 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
         const findItem = filtered1.find((element) => element.id == key);
         console.log(findItem);
         
-        setSelectedTask(findItem);
+        setSelectedTask(prev=>findItem || prev);
     };
     return (
         <View

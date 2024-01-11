@@ -24,7 +24,7 @@ const getTimeOnType = (type:TypeDeal)=>{
 export default function MinutePicker({selected, setSelected}:Props) {
     const typeDeal = useAppSelector(state=>state.dealSettings.typeDeal)
     const arrMinutes = getTimeOnType(typeDeal)
-    const MinuteItem = ({ item }) => {
+    const MinuteItem = ({ item }:{item:number}) => {
         return (
             <Pressable onPress={() => setSelected(item)}>
                 <Text

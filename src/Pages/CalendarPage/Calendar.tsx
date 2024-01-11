@@ -5,7 +5,7 @@ import { MarkedDates, Theme } from "react-native-calendars/src/types";
 import moment from "moment";
 import DayComponent from "./DayComponent";
 import HeaderComponent from "./HeaderComponent";
-import defineLocale from "./localeConfig"
+import defineLocale from "./localeConfig";
 interface Props {
     markedDates: MarkedDates;
     setOpenModal: (open: boolean) => void;
@@ -49,16 +49,18 @@ export default function CustomCalendar({
                     currentNumberWeek >= startWeek &&
                     currentNumberWeek <= endWeek
                 ) {
-                    filtered[currentNumberWeek] = Math.max(
-                        filtered[currentNumberWeek],
-                        markedDates[date]?.dots?.length
-                    );
+                    if (markedDates[date]?.dots) {
+                        filtered[currentNumberWeek] = Math.max(
+                            filtered[currentNumberWeek],
+                            markedDates[date]!.dots!.length
+                        );
+                    }
                 }
                 return filtered;
             },
             filtered
         );
-        console.log("Снова вызвали функцию",filteredMarkedDates);
+        console.log("Снова вызвали функцию", filteredMarkedDates);
 
         return filteredMarkedDates || {};
     };
@@ -67,7 +69,7 @@ export default function CustomCalendar({
         () => getStartAndEndOfWeeks(currentDate),
         [countTask, monthYear]
     );
-    defineLocale()
+    defineLocale();
 
     return (
         <View style={{ height: "83%" }}>
@@ -85,15 +87,18 @@ export default function CustomCalendar({
                         />
                     }
                     markingType="multi-dot"
-                    dayComponent={({ date, marking }) => (
-                        <DayComponent
-                            date={date}
-                            marking={marking}
-                            currentDate={currentDate}
-                            setCurrentDate={setCurrentDate}
-                            countOnWeek={countOnWeek}
-                        />
-                    )}
+                    dayComponent={({ date, marking }) =>
+                        marking &&
+                        date && (
+                            <DayComponent
+                                date={date}
+                                marking={marking}
+                                currentDate={currentDate}
+                                setCurrentDate={setCurrentDate}
+                                countOnWeek={countOnWeek}
+                            />
+                        )
+                    }
                     markedDates={markedDates}
                     onMonthChange={(date) => {
                         setCurrentDate(date.dateString);

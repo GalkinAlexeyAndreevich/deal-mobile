@@ -5,7 +5,7 @@ import moment from "moment";
 
 interface Props{
 	currentDate:string,
-	setOpenModal:(open:Boolean)=>void
+	setOpenModal:(open:boolean)=>void
 }
 
 function getFirstCapitalize(word: string) {

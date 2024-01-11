@@ -6,8 +6,14 @@ import Tasks from "./components/Tasks";
 import AddTask from "@components/AddTask";
 import ChangeDate from "./components/ChangeDate";
 import MiniTimer from "@components/MiniTimer";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@src/routes/TabNavigator";
 
-export default function TaskOnDayPage({navigation}) {
+interface IPageProps {
+    navigation: NativeStackNavigationProp<RootStackParamList, 'TaskOnDayPage'>;
+ }
+
+export default function TaskOnDayPage({navigation}:IPageProps) {
     const [currentDate, setCurrentDate] = useState<string>(
         new Date().toISOString()
     );

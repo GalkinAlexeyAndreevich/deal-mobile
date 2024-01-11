@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { SubTask, Task } from "@interfaces";
@@ -11,7 +11,7 @@ import DraggableFlatList, {
 } from "react-native-draggable-flatlist";
 
 export default function Tasks({ currentDate }: { currentDate: string }) {
-    const { tasks,typesTask } = useAppSelector((state) => state.tasksDates);
+    const { tasks } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
     const [filtered, setFiltered] = useState<Task[]>([]);
 
@@ -25,7 +25,7 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
     const changeNameTask = (
         text: string,
         task: Task,
-        subtask: SubTask = null
+        subtask: SubTask = {} as SubTask
     ) => {
         if (!text) return;
         console.log(text, task.id);
@@ -33,11 +33,6 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
             setNameTask({ text, taskId: task.id, subtaskId: subtask?.id })
         );
     };
-
-    const getTypeColor = (type:string)=>{
-        const findItem = typesTask.find(element=>element.key == type)
-        return findItem ?findItem.color:"white"
-    }
 
     const renderTask = ({
         item: task,
@@ -50,7 +45,7 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                     style={{
                         display: "flex",
                         flexDirection: "column",
-                        backgroundColor:getTypeColor(task.type)
+                        backgroundColor:"white"
                     }}>
                     <TaskItem
                         task={task}
@@ -59,7 +54,7 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                         isActive={isActive}
                     />
 
-                    {task?.subtasks?.length > 0 &&
+                    {task.subtasks.length > 0 &&
                         task.subtasks.map((subtask) => (
                             <Subtasks
                                 key={subtask.id}

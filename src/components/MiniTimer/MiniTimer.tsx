@@ -1,7 +1,12 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
-import { useAppSelector } from "@store/hook";
 import {  useBackgroundTimer } from "@src/TimerContext";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@src/routes/TabNavigator";
+
+interface IPageProps {
+    navigation: NativeStackNavigationProp<RootStackParamList,'TaskOnDayPage' | 'CalendarPage'>;
+ }
 
 const clockify = (secondsLeft:number) => {
     let hours = Math.floor(secondsLeft / 60 / 60)
@@ -14,7 +19,7 @@ const clockify = (secondsLeft:number) => {
     }
 }
 
-export default function MiniTimer({navigation}) {
+export default function MiniTimer({navigation}:IPageProps) {
     const {secondsLeft} = useBackgroundTimer()
     const {hours, mins, seconds} = clockify(secondsLeft)
 
