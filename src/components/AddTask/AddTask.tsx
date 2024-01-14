@@ -5,6 +5,8 @@ import {
     Modal,
     StyleSheet,
     TouchableHighlight,
+    Text,
+    FlatList,
 } from "react-native";
 import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
@@ -15,63 +17,88 @@ import { setTasks } from "@store/tasksDatesSlice";
 import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
 
-
-
-
-export default function AddTask({currentDate}:{currentDate:string}) {
-    const { tasks, subtasks:allSubtasks,typesTask } = useAppSelector((state) => state.tasksDates);
+export default function AddTask({ currentDate }: { currentDate: string }) {
+    const {
+        tasks,
+        subtasks: allSubtasks,
+        typesTask,
+    } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
     const [openModal, setOpenModal] = useState(false);
     const [inputValue, setInputValue] = useState("");
     const [chosenType, setChosenType] = useState<ITypeTask>({} as ITypeTask);
     //отдельно есть массив подзадач которые уже создали и подзадачи которые появляются при добавлении на кнопку
     // Изменять можно все новые позадания на этот объект вешать обработчик
-    const [subtasks,setSubtasks] = useState<SubTask[]>([])
-    // const addSubtask = ()=>{
-    //     setSubtasks(prev=>[...prev,{
-    //         id:subtasks.length+1,
-    //         name:"",
-    //         done:false
-    //     }])
-    // }
+    const [subtasks, setSubtasks] = useState<SubTask[]>([]);
+    const addSubtask = () => {
+        setSubtasks((prev) => [
+            ...prev,
+            {
+                id: subtasks.length + 1,
+                name: "",
+                done: false,
+            },
+        ]);
+    };
 
-    // const saveNewSubtasks = ()=>{
-    //     dispatch(setSubtasks())
-    // }
+    const changeNameSubtask = (item: SubTask, name: string) => {
+        setSubtasks((prev) => [
+            ...prev,
+            {
+                id: item.id,
+                name: name,
+                done: item.done,
+            },
+        ]);
+    };
 
-    // const changeNameSubtask = (item:SubTask, name:string)=>{
-    //     setSubtasks(prev=>[...prev,{
-    //         id:subtasks.length+1,
-    //         name:"",
-    //         done:false
-    //     }])
-    //     const newState = tasks.map((el) => (el.id === item.id ? {...el, name} : el));
-    //     setSubtasks(newState)
-    // }
-    
     const saveChange = () => {
-        let finalArrSubtask:SubTask[] = []
-        let typeTask = Object.keys(chosenType).length >0?chosenType.value:typesTask[0].value
-        for(let i=0;i<subtasks.length;i++){
-            if(!subtasks[i].name.length)continue
+        setOpenModal(false);
+        let finalArrSubtask: SubTask[] = [];
+        let typeTask =
+            Object.keys(chosenType).length > 0
+                ? chosenType.value
+                : typesTask[0].value;
+        for (let i = 0; i < subtasks.length; i++) {
+            if (!subtasks[i].name.length) continue;
             finalArrSubtask.push({
-                id:allSubtasks.length + subtasks[i].id,
-                name:subtasks[i].name,
-                done:false
-            })
+                id: allSubtasks.length + subtasks[i].id,
+                name: subtasks[i].name,
+                done: false,
+            });
         }
         const object: Task = {
             id: tasks.length + 1,
             name: inputValue,
             done: false,
-            date: moment(currentDate).format('YYYY-MM-DD'),
+            date: moment(currentDate).format("YYYY-MM-DD"),
             type: typeTask,
-            subtasks:finalArrSubtask
+            subtasks: finalArrSubtask,
         };
-        setInputValue('')
-        setChosenType({} as ITypeTask)
+        setInputValue("");
+        setChosenType({} as ITypeTask);
 
         dispatch(setTasks([...tasks, object]));
+    };
+
+    const SubtaskItem = ({ item }: { item: SubTask }) => {
+        return (
+            <View
+                style={{
+                    width: 370,
+                    height: 15,
+                    marginVertical: 7,
+                    paddingLeft: 7,
+                }}>
+                <TextInput
+                    style={{}}
+                    placeholderTextColor="#98989a"
+                    placeholder="Введите подцель"
+                    value={item.name}
+                    onChangeText={(text) => changeNameSubtask(item, text)}
+                />
+            </View>
+        );
     };
 
     return (
@@ -79,15 +106,14 @@ export default function AddTask({currentDate}:{currentDate:string}) {
             <Pressable
                 onPress={() => {
                     console.log("open modal");
-
                     setOpenModal(true);
                 }}
                 style={{
                     flex: 1,
                     zIndex: 2,
-                    padding:15,
-                    borderRadius:100,
-                    backgroundColor:"#d9fcff"
+                    padding: 15,
+                    borderRadius: 100,
+                    backgroundColor: "#d9fcff",
                 }}>
                 <Fontisto name="plus-a" color={"black"} size={30} />
             </Pressable>
@@ -103,76 +129,37 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                     underlayColor={"transparent"}>
                     <View />
                 </TouchableHighlight>
-                <View style={{...styles.outerContainer, 
-                    height:(150 + subtasks.length*15)>300?300:(150 + subtasks.length*15)}}
-                    >
+                <View
+                    style={{
+                        ...styles.outerContainer,
+                        height:
+                            150 + subtasks.length * 15 > 300
+                                ? 300
+                                : 150 + subtasks.length * 15,
+                    }}>
                     <View style={styles.container}>
                         <View
                             style={{
                                 width: "100%",
                                 marginVertical: 7,
                                 paddingLeft: 7,
-                                display:"flex",
-                                flexDirection:"column"
+                                display: "flex",
+                                flexDirection: "column",
                             }}>
                             <TextInput
-                                style={{
-                                    margin: 0,
-                                    marginHorizontal:10,
-                                    padding: 0,
-                                    borderWidth: 1,
-                                    borderRadius: 10,
-                                    borderColor: "white",
-                                    backgroundColor: "rgb(240 240 242)",
-                                    color: "#98989a",
-                                    height: 65,
-                                    paddingLeft: 7,
-                                    fontSize: 20,
-                                    fontWeight: "600",
-                                }}
+                                style={styles.textInputTask}
                                 maxLength={50}
                                 placeholderTextColor="#98989a"
                                 placeholder="Введите цель"
                                 value={inputValue}
                                 onChangeText={(text) => setInputValue(text)}
                             />
-                            {/* <ScrollView style={{height:150}}>
-                            {
-                                subtasks.map(item=>{
-                                    return(
-                                        <View 
-                                            style={{
-                                                width: 370,
-                                                height:15,
-                                                marginVertical: 7,
-                                                paddingLeft: 7
-                                            }}>
-                                            <TextInput
-                                                style={{
-                                                    margin: 0,
-                                                    padding: 0,
-                                                    borderWidth: 1,
-                                                    borderRadius: 10,
-                                                    borderColor: "white",
-                                                    backgroundColor: "rgb(240 240 242)",
-                                                    color: "#98989a",
-                                                    height: 15,
-                                                    paddingLeft: 7,
-                                                    fontSize: 20,
-                                                    fontWeight: "600",
-                                                }}
-                                                placeholderTextColor="#98989a"
-                                                placeholder="Введите подцель"
-                                                value={item.name}
-                                                onChangeText={(text) => changeNameSubtask(item,text)}
-                                            />
-                                        </View>
-                                    )
-                                })
-                            }
-                            </ScrollView> */}
-                            
-
+                            {/* <FlatList
+                                style={{ height: 150 }}
+                                data={subtasks}
+                                renderItem={SubtaskItem}
+                                keyExtractor={(_, index) => String(index)}
+                            /> */}
                         </View>
                         <View
                             style={{
@@ -181,14 +168,17 @@ export default function AddTask({currentDate}:{currentDate:string}) {
                                 justifyContent: "space-between",
                                 // paddingHorizontal: 10,
                             }}>
+                            <View>
                                 <View>
-                                    <View>
-                                        <ModalTypeTask selectedType={chosenType} setSelectedType={setChosenType}/>
-                                    </View>
-                                    {/* <Pressable onPress={addSubtask}>
-                                        <Text>Создать подзадачу</Text>
-                                    </Pressable> */}
+                                    <ModalTypeTask
+                                        selectedType={chosenType}
+                                        setSelectedType={setChosenType}
+                                    />
                                 </View>
+                                {/* <Pressable onPress={addSubtask}>
+                                    <Text>Создать подзадачу</Text>
+                                </Pressable> */}
+                            </View>
 
                             <Pressable
                                 disabled={inputValue.length < 1}
@@ -221,8 +211,6 @@ const styles = StyleSheet.create({
         margin: 5,
         backgroundColor: "white",
         display: "flex",
-        // flexDirection: "row",
-        // alignItems: "center",
     },
     background: {
         flex: 1,
@@ -239,5 +227,31 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         bottom: 0,
     },
+    textInputTask: {
+        margin: 0,
+        marginHorizontal: 10,
+        padding: 0,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: "white",
+        backgroundColor: "rgb(240 240 242)",
+        color: "#98989a",
+        height: 65,
+        paddingLeft: 7,
+        fontSize: 20,
+        fontWeight: "600",
+    },
+    textInputSubtask: {
+        margin: 0,
+        padding: 0,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: "white",
+        backgroundColor: "rgb(240 240 242)",
+        color: "#98989a",
+        height: 15,
+        paddingLeft: 7,
+        fontSize: 20,
+        fontWeight: "600",
+    },
 });
-

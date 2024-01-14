@@ -6,7 +6,7 @@ import React, {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch } from "./store/hook";
 import { setTasks, setType } from "./store/tasksDatesSlice";
-import { defaultTypeTasks } from "./utils/dataNoFetch";
+import { defaultTasks, defaultTypeTasks } from "./utils/dataNoFetch";
 
 const SavedDataContext = createContext({});
 
@@ -22,6 +22,8 @@ export const SavedDataProvider = ({ children }: Props) => {
             let typesTask = await JSON.parse(
                 await AsyncStorage.getItem("savedTypesTask") || "[]"
             );
+            console.log(tasks);
+            
             if (!tasks || !tasks.length) {
                 AsyncStorage.setItem("savedTask", JSON.stringify([]));
             } else {

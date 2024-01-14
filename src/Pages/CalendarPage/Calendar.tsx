@@ -88,7 +88,6 @@ export default function CustomCalendar({
                     }
                     markingType="multi-dot"
                     dayComponent={({ date, marking }) =>
-                        marking &&
                         date && (
                             <DayComponent
                                 date={date}

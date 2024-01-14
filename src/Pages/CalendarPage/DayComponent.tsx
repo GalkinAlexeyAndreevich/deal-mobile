@@ -13,7 +13,7 @@ interface Props{
 	countOnWeek:countOnWeek;
 	setCurrentDate:(date:string)=>void
 	currentDate:string
-	marking:MarkingProps
+	marking:MarkingProps | undefined
 }
 
 export default function DayComponent({date,countOnWeek,setCurrentDate,currentDate,marking}:Props) {

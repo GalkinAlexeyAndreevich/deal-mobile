@@ -4,7 +4,7 @@
     "slug": "deal-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/deal.jpg",
+    "icon": "./src/assets/icon-app.jpg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./src/assets/deal.jpg",

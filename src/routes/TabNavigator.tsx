@@ -15,7 +15,7 @@ function TabNavigator() {
     return (
         <Tab.Navigator
             screenOptions={() => ({
-                // tabBarStyle: { position: "absolute" },
+                // tabBarStyle: { opacity:0.99, zIndex:10, backgroundColor:"white", borderWidth:0 },
                 headerShown: false,
             })}
             initialRouteName="TaskOnDayPage">
@@ -43,8 +43,8 @@ function TabNavigator() {
                     title: "Задания на месяц",
                     tabBarIcon: () => (
                         <Image
-                            style={{ width: 40, height: 40 }}
-                            source={require("@assets/taskOnMonth3.jpg")}
+                            style={{ width: 37, height: 33 }}
+                            source={require("@assets/taskOnMonth5.png")}
                         />
                     ),
                 }}

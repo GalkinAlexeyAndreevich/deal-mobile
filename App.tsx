@@ -9,7 +9,7 @@ import moment from "moment";
 import "./ignoreWarnings";
 import { TimerProvider } from "src/TimerContext";
 import { SavedDataProvider } from "@src/SavedDataContext";
-import { fetch } from "@react-native-community/netinfo";
+// import { fetch } from "@react-native-community/netinfo";
 
 moment().locale("ru");
 
@@ -51,9 +51,10 @@ export default function App() {
     }
     useEffect(() => {
         if (!__DEV__) {
-            fetch().then((state) => {
-                if (state.isConnected) onFetchUpdateAsync();
-            });
+            // fetch().then((state) => {
+            //     if (state.isConnected) onFetchUpdateAsync();
+            // });
+            onFetchUpdateAsync();
         }
     }, []);
     if (installStatus) {

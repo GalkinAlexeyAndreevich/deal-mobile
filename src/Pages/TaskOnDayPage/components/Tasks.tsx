@@ -2,13 +2,18 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { SubTask, Task } from "@interfaces";
-import { setNameTask, setTasks } from "@store/tasksDatesSlice";
+import {
+    setNameTask,
+    setTasks,
+    changeArrSubtaskInTask,
+} from "@store/tasksDatesSlice";
 import Subtasks from "./Subtasks";
 import TaskItem from "./TaskItem";
 import DraggableFlatList, {
     ScaleDecorator,
     RenderItemParams,
 } from "react-native-draggable-flatlist";
+import { DraggableTextEditor } from "expo-draggable-textfield";
 
 export default function Tasks({ currentDate }: { currentDate: string }) {
     const { tasks } = useAppSelector((state) => state.tasksDates);
@@ -34,6 +39,18 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
         );
     };
 
+    const checkDif = (
+        taskId: number,
+        prevData: SubTask[],
+        subtasks: SubTask[]
+    ) => {
+        console.log(prevData);
+
+        console.log(subtasks);
+
+        dispatch(changeArrSubtaskInTask({ taskId, subtasks }));
+    };
+
     const renderTask = ({
         item: task,
         drag,
@@ -45,7 +62,7 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                     style={{
                         display: "flex",
                         flexDirection: "column",
-                        backgroundColor:"white"
+                        backgroundColor: "white",
                     }}>
                     <TaskItem
                         task={task}
@@ -53,16 +70,21 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                         drag={drag}
                         isActive={isActive}
                     />
-
-                    {task.subtasks.length > 0 &&
-                        task.subtasks.map((subtask) => (
+                    <DraggableFlatList
+                        scrollEnabled={false}
+                        data={task.subtasks}
+                        onDragEnd={({ data }) => checkDif(task.id,task.subtasks,data)}
+                        keyExtractor={(item) => String(item.id)}
+                        renderItem={({ item,drag,isActive }: RenderItemParams<SubTask>) => (
                             <Subtasks
-                                key={subtask.id}
-                                subtask={subtask}
+                                subtask={item}
                                 task={task}
                                 changeNameTask={changeNameTask}
+                                drag={drag}
+                                isActive={isActive}
                             />
-                        ))}
+                        )}
+                    />
                 </View>
             </ScaleDecorator>
         );
@@ -89,6 +111,18 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                     </Text>
                 </View>
             )}
+            {/* <DraggableTextEditor
+                onChangeText={(text) => {
+                    console.log("Новый текст", text);
+                }}
+                onItemActive={()=>console.log("active")
+                }
+                
+                // onDragEnd={({ data }) => console.log("Перемещение", data)
+                // }
+                externalBorderStyles={{ backgroundColor:"yellow", borderWidth:1, borderColor:"green" }}
+                placeholder="тестовый текст"
+            /> */}
             <DraggableFlatList
                 data={filtered}
                 onDragEnd={({ data }) => setTasksPosition(data)}

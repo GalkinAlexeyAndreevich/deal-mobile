@@ -26,13 +26,16 @@ const tasksDatesSlice = createSlice({
     reducers: {
         setTasks(state, actions: PayloadAction<Task[]>) {
             state.tasks = actions.payload;
-            console.log("изменили цели",state.tasks);
+            console.log("изменили цели", state.tasks);
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         setType(state, action: PayloadAction<ITypeTask[]>) {
             state.typesTask = action.payload;
-            console.log("изменили тип",state.typesTask);
-            AsyncStorage.setItem("savedTypesTask", JSON.stringify(state.typesTask));
+            console.log("изменили тип", state.typesTask);
+            AsyncStorage.setItem(
+                "savedTypesTask",
+                JSON.stringify(state.typesTask)
+            );
         },
         setSubTasks(state, actions: PayloadAction<SubTask[]>) {
             state.subtasks = actions.payload;
@@ -90,6 +93,20 @@ const tasksDatesSlice = createSlice({
             }
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
+        changeArrSubtaskInTask(
+            state,
+            action: PayloadAction<{ taskId: number; subtasks: SubTask[] }>
+        ) {
+            const { taskId, subtasks } = action.payload;
+            const taskIndex = state.tasks.findIndex(
+                (element) => element.id === taskId
+            );
+            console.log("изменяю положение подзадач", subtasks);
+            console.log(taskIndex);
+
+            state.tasks[taskIndex].subtasks = subtasks;
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
+        },
         deleteTask(state, action: PayloadAction<number>) {
             const taskId = action.payload;
             const newTasks = state.tasks.filter((task) => task.id !== taskId);
@@ -119,6 +136,7 @@ export const {
     setNameTask,
     setSubtask,
     deleteTask,
+    changeArrSubtaskInTask,
 } = tasksDatesSlice.actions;
 
 export default tasksDatesSlice.reducer;

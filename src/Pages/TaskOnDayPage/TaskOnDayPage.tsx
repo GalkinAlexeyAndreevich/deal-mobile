@@ -28,10 +28,8 @@ export default function TaskOnDayPage({navigation}:IPageProps) {
                 currentDate={currentDate}
                 setCurrentDate={setCurrentDate}
             />
-
             <View
                 style={{
-                    // flex:1,
                     height: "81.5%",
                     borderWidth: 1,
                     marginHorizontal: 14,
