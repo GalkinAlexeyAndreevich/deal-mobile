@@ -2,9 +2,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { Text, View, Alert } from "react-native";
 import { AddTaskParamList } from "@routes/AddTaskNavigator";
 import { Button } from "@rneui/themed";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useAppDispatch } from "@store/hook";
-import { addTask} from "@store/dealSettings";
+import { addTask, setNameTask} from "@store/dealSettings";
 import { Task } from "@interfaces";
 import MinutePicker from "./MinutePicker";
 import { useBackgroundTimer } from "@src/TimerContext";
@@ -18,10 +18,15 @@ export default function SettingsDealOnTimePage({ navigation }: TProps) {
     const [selectedMinutes, setSelectedMinutes] = useState(5);
     const [selectedTask, setSelectedTask] = useState<Task>({} as Task)
 
+
+    useEffect(()=>{
+        dispatch(setNameTask(""))
+    },[])
+
     const saveChange = () => {
         console.log(selectedTask, selectedMinutes);
-        
-        if (!selectedTask || !selectedMinutes) {
+        const check = !selectedTask || Object.keys(selectedTask).length<1
+        if (check || !selectedMinutes) {
             Alert.alert("Неполные настройки","Вы не выбрали цель или время");
             return;
         }

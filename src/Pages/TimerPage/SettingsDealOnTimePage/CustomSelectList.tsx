@@ -31,9 +31,9 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
         setSelectData(onlyValue);
     }, [tasks]);
 
-    useEffect(()=>{
-        setSelectedTask(filtered1[0])
-    },[filtered1])
+    // useEffect(()=>{
+    //     setSelectedTask(filtered1[0])
+    // },[filtered1])
 
     const selectTask = (key: number) => {
         if (selectKey) {
@@ -68,7 +68,7 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
                     borderWidth: 0,
                 }}
                 setSelected={(key: number) => selectTask(key)}
-                inputStyles={{color:"grey"}}
+                inputStyles={{color:selectKey >=0?"black":"grey"}}
                 disabledTextStyles={{ fontWeight: "bold" }}
                 data={selectData}
                 save="key"

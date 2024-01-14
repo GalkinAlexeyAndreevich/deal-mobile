@@ -1,8 +1,4 @@
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-} from "react";
+import React, { createContext, useContext, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch } from "./store/hook";
 import { setTasks, setType } from "./store/tasksDatesSlice";
@@ -18,25 +14,27 @@ export const SavedDataProvider = ({ children }: Props) => {
     console.log("Достаю сохраненные данные");
     useEffect(() => {
         async function getSaveData() {
-            let tasks = await JSON.parse(await AsyncStorage.getItem("savedTask") || "[]");
+            let tasks = await JSON.parse(
+                (await AsyncStorage.getItem("savedTask")) || "[]"
+            );
             let typesTask = await JSON.parse(
-                await AsyncStorage.getItem("savedTypesTask") || "[]"
+                (await AsyncStorage.getItem("savedTypesTask")) || "[]"
             );
             console.log(tasks);
-            
+
             if (!tasks || !tasks.length) {
                 AsyncStorage.setItem("savedTask", JSON.stringify([]));
-            } else {
-              dispatch(setTasks(tasks));
             }
+            dispatch(setTasks(tasks));
+
             if (!typesTask || !typesTask.length) {
                 AsyncStorage.setItem(
                     "savedTypesTask",
                     JSON.stringify(defaultTypeTasks)
                 );
-            } else {
-                dispatch(setType(typesTask));
             }
+            dispatch(setType(typesTask));
+
             console.log("Сохраненные данные перенесены");
         }
         getSaveData();
