@@ -34,6 +34,7 @@ export default function App() {
                     { cancelable: false }
                 );
                 if (confirmUpdate) {
+                    setInstalStatus(1)
                     await Updates.fetchUpdateAsync().then((result) => {
                         if(result.isNew)setInstalStatus(2)
                     }).then(()=>{

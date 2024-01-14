@@ -68,6 +68,7 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
                     borderWidth: 0,
                 }}
                 setSelected={(key: number) => selectTask(key)}
+                inputStyles={{color:"grey"}}
                 disabledTextStyles={{ fontWeight: "bold" }}
                 data={selectData}
                 save="key"

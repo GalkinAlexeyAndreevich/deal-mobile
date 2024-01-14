@@ -16,6 +16,7 @@ import { ITypeTask, SubTask, Task } from "@interfaces";
 import { setTasks } from "@store/tasksDatesSlice";
 import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
+import { Button } from "react-native-elements";
 
 export default function AddTask({ currentDate }: { currentDate: string }) {
     const {
@@ -53,6 +54,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
     };
 
     const saveChange = () => {
+        if(inputValue.length <1)return
         setOpenModal(false);
         let finalArrSubtask: SubTask[] = [];
         let typeTask =
@@ -149,7 +151,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                             <TextInput
                                 style={styles.textInputTask}
                                 maxLength={50}
-                                placeholderTextColor="#98989a"
+                                // placeholderTextColor="#98989a"
                                 placeholder="Введите цель"
                                 value={inputValue}
                                 onChangeText={(text) => setInputValue(text)}
@@ -180,25 +182,37 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                 </Pressable> */}
                             </View>
 
-                            <Pressable
-                                disabled={inputValue.length < 1}
+                            <View
                                 style={{
-                                    marginRight: 10,
-                                    borderRadius: 50,
-                                    backgroundColor:
-                                        inputValue.length < 1
-                                            ? "#cfcdcd"
-                                            : "#6f699b",
-                                    paddingVertical: 10,
-                                    paddingHorizontal: 13,
-                                }}
-                                onPress={saveChange}>
-                                <FontAwesome
-                                    name="location-arrow"
-                                    size={25}
-                                    color={"white"}
+                                    // flex: 1,
+                                    display: "flex",
+                                    paddingHorizontal: 10,
+                                    // justifyContent: "flex-end",
+                                    // alignItems: "center",
+                                }}>
+                                <Button
+                                    title="Создать цель"
+                                    buttonStyle={{
+                                        borderColor:
+                                            inputValue.length < 1
+                                                ? "black"
+                                                : "#ff0000",
+                                        borderWidth: 2,
+                                    }}
+                                    type="outline"
+                                    titleStyle={{
+                                        color:
+                                            inputValue.length < 1
+                                                ? "black"
+                                                : "#ff0000",
+                                        fontSize: 20,
+                                    }}
+                                    containerStyle={{
+                                        width: 200,
+                                    }}
+                                    onPress={saveChange}
                                 />
-                            </Pressable>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -233,8 +247,8 @@ const styles = StyleSheet.create({
         padding: 0,
         borderWidth: 1,
         borderRadius: 10,
-        borderColor: "white",
-        backgroundColor: "rgb(240 240 242)",
+        // borderColor: "white",
+        backgroundColor: "white",
         color: "#98989a",
         height: 65,
         paddingLeft: 7,

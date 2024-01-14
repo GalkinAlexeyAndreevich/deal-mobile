@@ -10,12 +10,12 @@ interface Props{
 const getTimeOnType = (type:TypeDeal)=>{
     let resultArr:number[] = []
     if(type === "Мелкая сделка"){
-        for(let i=5;i<=20;i++){
+        for(let i=5;i<=30;i++){
             if(i%5==0)resultArr.push(i)
         }
     }
     else{
-        for(let i=25;i<=120;i++){
+        for(let i=35;i<=120;i++){
             if(i%5==0)resultArr.push(i)
         }
     }
@@ -31,7 +31,7 @@ export default function MinutePicker({selected, setSelected}:Props) {
                     style={{
                         borderRadius: 10,
                         backgroundColor: "#8ffb93",
-                        fontSize: 20,
+                        fontSize: 23,
                         padding: 10,
                         marginHorizontal: 5,
                         display: "flex",
@@ -45,7 +45,7 @@ export default function MinutePicker({selected, setSelected}:Props) {
         );
     };
     return (
-        <View style={{ paddingHorizontal: 10, height: 50, width: "100%" }}>
+        <View style={{ paddingHorizontal: 10, height: 50, width: "100%", display:"flex", alignItems:"center" }}>
             <FlatList
                 data={arrMinutes}
                 keyExtractor={(_, index) => String(index)}

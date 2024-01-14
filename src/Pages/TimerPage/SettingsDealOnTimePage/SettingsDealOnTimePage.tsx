@@ -38,15 +38,15 @@ export default function SettingsDealOnTimePage({ navigation }: TProps) {
                 backgroundColor: "white",
             }}>
             <CustomSelectList setSelectedTask={setSelectedTask}/>
-            <View style={{ display: "flex", alignItems: "flex-end" }}>
-                <Text style={{ fontSize: 20, padding: 10 }}>
+            <View style={{ flex:1,display: "flex", justifyContent:"flex-end" }}>
+                <Text style={{ fontSize: 22, paddingVertical: 10, textAlign:"center" }}>
                     Укажите временной промежуток:
                 </Text>
                 <MinutePicker selected={selectedMinutes} setSelected={setSelectedMinutes}/>
             </View>
             <View
                 style={{
-                    flex: 1,
+                    // flex: 1,
                     display: "flex",
                     justifyContent: "flex-end",
                     alignItems: "center",

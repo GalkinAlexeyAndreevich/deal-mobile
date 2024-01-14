@@ -30,11 +30,11 @@ export default function TypeDealPage({ navigation }: TProps) {
                 }}>
                 <Pressable onPress={()=>{nextPage("Крупная сделка")}} style={styles.button}>
                     <Text style={{fontSize:29}}>Крупная сделка</Text> 
-                    <Text>от 25 мин до 2 ч</Text>  
+                    <Text>от 35 мин до 2 ч</Text>  
                 </Pressable>
                 <Pressable onPress={()=>{nextPage("Мелкая сделка")}} style={styles.button}>
                     <Text style={{fontSize:29}}>Мелкая сделка</Text>
-                    <Text>от 5 мин  до 20 мин</Text>
+                    <Text>от 5 мин  до 30 мин</Text>
                 </Pressable>
             </View>
         </View>
