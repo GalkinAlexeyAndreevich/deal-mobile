@@ -4,7 +4,7 @@ import { AppNavigator } from "./src/routes";
 import { Provider } from "react-redux";
 import store from "@store/index";
 import * as Updates from "expo-updates";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import moment from "moment";
 import "./ignoreWarnings";
 import { TimerProvider } from "src/TimerContext";
@@ -65,9 +65,6 @@ export default function App() {
                     if (state.isConnected) await onFetchUpdateAsync();
                 })
             })
-              
-
-            // onFetchUpdateAsync();
         }
     }, []);
     if (check1.current > 0) {

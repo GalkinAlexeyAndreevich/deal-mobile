@@ -1,10 +1,9 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { SubTask, Task } from "@interfaces";
 import {
     setNameTask,
-    setTasks,
     changeArrSubtaskInTask,
     setPositionTasks,
 } from "@store/tasksDatesSlice";
@@ -14,12 +13,12 @@ import DraggableFlatList, {
     ScaleDecorator,
     RenderItemParams,
 } from "react-native-draggable-flatlist";
-import { DraggableTextEditor } from "expo-draggable-textfield";
 
 export default function Tasks({ currentDate }: { currentDate: string }) {
     const { tasks } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
     const [filtered, setFiltered] = useState<Task[]>([]);
+    const [changed,setChanged] = useState(false)
 
     useEffect(() => {
         let filteredArr = [];
@@ -65,18 +64,26 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                         flexDirection: "column",
                         backgroundColor: "white",
                     }}>
-                    <TaskItem
-                        task={task}
-                        changeNameTask={changeNameTask}
-                        drag={drag}
-                        isActive={isActive}
-                    />
+                        <TaskItem
+                            task={task}
+                            changeNameTask={changeNameTask}
+                            drag={drag}
+                            isActive={isActive}
+                            changed={changed}
+                            setChanged={setChanged}
+                        />
                     <DraggableFlatList
                         scrollEnabled={false}
                         data={task.subtasks}
-                        onDragEnd={({ data }) => checkDif(task.id,task.subtasks,data)}
+                        onDragEnd={({ data }) =>
+                            checkDif(task.id, task.subtasks, data)
+                        }
                         keyExtractor={(item) => String(item.id)}
-                        renderItem={({ item,drag,isActive }: RenderItemParams<SubTask>) => (
+                        renderItem={({
+                            item,
+                            drag,
+                            isActive,
+                        }: RenderItemParams<SubTask>) => (
                             <Subtasks
                                 subtask={item}
                                 task={task}
@@ -92,12 +99,16 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
     };
     const setTasksPosition = (data: Task[]) => {
         console.log("new position ", data);
-        
-        data && dispatch(setPositionTasks({newTasks:data, currentDate}));
+
+        data && dispatch(setPositionTasks({ newTasks: data, currentDate }));
     };
 
     return (
-        <View style={{ height: "100%" }}>
+        <TouchableOpacity style={{ height: "100%" }} onPress={()=>{
+            console.log("eee press")
+            setChanged(false)
+            
+        }}>
             {filtered.length == 0 && (
                 <View
                     style={{
@@ -114,24 +125,12 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                     </Text>
                 </View>
             )}
-            {/* <DraggableTextEditor
-                onChangeText={(text) => {
-                    console.log("Новый текст", text);
-                }}
-                onItemActive={()=>console.log("active")
-                }
-                
-                // onDragEnd={({ data }) => console.log("Перемещение", data)
-                // }
-                externalBorderStyles={{ backgroundColor:"yellow", borderWidth:1, borderColor:"green" }}
-                placeholder="тестовый текст"
-            /> */}
             <DraggableFlatList
                 data={filtered}
                 onDragEnd={({ data }) => setTasksPosition(data)}
                 keyExtractor={(item) => String(item.id)}
                 renderItem={renderTask}
             />
-        </View>
+        </TouchableOpacity>
     );
 }
