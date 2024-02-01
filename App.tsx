@@ -4,61 +4,73 @@ import { AppNavigator } from "./src/routes";
 import { Provider } from "react-redux";
 import store from "@store/index";
 import * as Updates from "expo-updates";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import "./ignoreWarnings";
 import { TimerProvider } from "src/TimerContext";
 import { SavedDataProvider } from "@src/SavedDataContext";
 import { fetch } from "@react-native-community/netinfo";
+import AlertAsync from "react-native-alert-async";
 
 moment().locale("ru");
 
 export default function App() {
-    const [installStatus, setInstalStatus] = useState(0);
+    const check1 = useRef(0)
     async function onFetchUpdateAsync() {
         try {
             const update = await Updates.checkForUpdateAsync();
-            let confirmUpdate = false;
             if (update.isAvailable) {
-                Alert.alert(
+                const confirmUpdate =  await AlertAsync(
                     "",
                     "Установить обновление?",
                     [
                         {
                             text: "Cancel",
-                            onPress: () => (confirmUpdate = false),
+                            onPress: () => false,
                             style: "cancel",
                         },
-                        { text: "OK", onPress: () => (confirmUpdate = true) },
+                        { text: "OK", onPress: () => true},
                     ],
                     { cancelable: false }
                 );
+                
                 if (confirmUpdate) {
-                    setInstalStatus(1)
-                    await Updates.fetchUpdateAsync().then((result) => {
-                        if(result.isNew)setInstalStatus(2)
+                    check1.current = 1
+                    // await AlertAsync(`соглашение на обновление: ${installStatus} и ${check1.current}`);
+                    
+                    await Updates.fetchUpdateAsync().then(async(result) => {
+                        if(result.isNew){
+                            check1.current = 2
+                        }
+                        // await AlertAsync(`Обновление скачено, статус: ${installStatus}`);
                     }).then(()=>{
-                        Updates.reloadAsync();
-                    }).finally(()=>{
-                        setInstalStatus(0)
+                        Updates.reloadAsync().then(async()=>{
+                            check1.current = 0
+                            await AlertAsync('Вы успешно установили обновление');
+                        });
+                       
                     })
                     
                 }
             }
         } catch (error) {
-            Alert.alert(`Обновление не было установлено по причине: ${error}`);
-            setInstalStatus(0)
+            Alert.alert("Обновление не было установлено по причине: ",`${error}`);
+            check1.current = 0
         }
     }
     useEffect(() => {
         if (!__DEV__) {
-            fetch().then((state) => {
-                if (state.isConnected) onFetchUpdateAsync();
-            });
-            onFetchUpdateAsync();
+            new Promise(async() => {
+                fetch().then(async(state) => {                    
+                    if (state.isConnected) await onFetchUpdateAsync();
+                })
+            })
+              
+
+            // onFetchUpdateAsync();
         }
     }, []);
-    if (installStatus>0) {
+    if (check1.current > 0) {
         return (
             <View
                 style={{
@@ -70,7 +82,7 @@ export default function App() {
                 }}>
                     <ActivityIndicator size={"large"} />
                     <Text style={{paddingBottom:10, fontSize:20}}>
-                        {installStatus===1?"Идет скачивание обновления":"Обновление скачено, установка обноления"}
+                        {check1.current ===1?"Идет скачивание обновления":"Обновление скачено, установка обноления"}
                     </Text>
             </View>
         );
