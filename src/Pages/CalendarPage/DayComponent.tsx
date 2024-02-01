@@ -5,7 +5,11 @@ import { DateData } from "react-native-calendars";
 import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
 
 type countOnWeek = {
-	[key: number]: number;
+    [key: number]: {
+        textLength:number,
+        countTask:number,
+        maxLength:number
+    };
 };
 
 interface Props{
@@ -18,9 +22,15 @@ interface Props{
 
 export default function DayComponent({date,countOnWeek,setCurrentDate,currentDate,marking}:Props) {
 	const getHeightOnCount = (date: string) => {
-		if (!countOnWeek) return 100;
+        
+		if (!countOnWeek) return 50;
+        
 		const week = moment(date).isoWeek();
-		let sum = 70 + 75 * (countOnWeek[week] || 0);
+        if(!countOnWeek[week]) return 50
+        if(countOnWeek[week].textLength < 10) return 50
+        let sum = 50 + countOnWeek[week].maxLength
+        console.log("sum ", sum);
+        
 		return sum;
 	};
     const maxWeek = Math.max.apply(null, Object.keys(countOnWeek).map(Number));    
@@ -60,6 +70,7 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
                                 marginHorizontal:2,
                                 fontSize: 10,
                                 textAlign: "center",
+                                borderWidth:item?.color == "white"?0.2:0
                             }}>
                             {item.key}
                         </Text>

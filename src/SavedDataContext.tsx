@@ -23,17 +23,20 @@ export const SavedDataProvider = ({ children }: Props) => {
             console.log(tasks);
 
             if (!tasks || !tasks.length) {
-                AsyncStorage.setItem("savedTask", JSON.stringify([]));
+                await AsyncStorage.setItem("savedTask", JSON.stringify(defaultTasks));
+                dispatch(setTasks(defaultTasks));
             }
-            dispatch(setTasks(tasks));
+            else dispatch(setTasks(tasks));
+            
 
             if (!typesTask || !typesTask.length) {
-                AsyncStorage.setItem(
+                await AsyncStorage.setItem(
                     "savedTypesTask",
                     JSON.stringify(defaultTypeTasks)
                 );
+                dispatch(setType(defaultTypeTasks));
             }
-            dispatch(setType(typesTask));
+            else dispatch(setType(typesTask));
 
             console.log("Сохраненные данные перенесены");
         }

@@ -60,7 +60,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
         let typeTask =
             Object.keys(chosenType).length > 0
                 ? chosenType.value
-                : typesTask[0].value;
+                : typesTask[0].value.length >0?typesTask[0].value:"Без категории";
         for (let i = 0; i < subtasks.length; i++) {
             if (!subtasks[i].name.length) continue;
             finalArrSubtask.push({
@@ -69,6 +69,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 done: false,
             });
         }
+        
         const object: Task = {
             id: tasks.length + 1,
             name: inputValue,

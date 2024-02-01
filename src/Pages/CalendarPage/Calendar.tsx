@@ -14,7 +14,11 @@ interface Props {
     setCurrentDate: (date: string) => void;
 }
 type countOnWeek = {
-    [key: number]: number;
+    [key: number]: {
+        textLength: number;
+        countTask: number;
+        maxLength: number;
+    };
 };
 
 export default function CustomCalendar({
@@ -37,7 +41,11 @@ export default function CustomCalendar({
 
         let filtered = {} as countOnWeek;
         for (let i = startWeek; i <= endWeek; i++) {
-            filtered[i] = 0;
+            filtered[i] = {
+                textLength: 0,
+                countTask: 0,
+                maxLength: 0,
+            };
         }
 
         const filteredMarkedDates = Object.keys(markedDates).reduce(
@@ -49,10 +57,39 @@ export default function CustomCalendar({
                     currentNumberWeek >= startWeek &&
                     currentNumberWeek <= endWeek
                 ) {
-                    if (markedDates[date]?.dots) {
-                        filtered[currentNumberWeek] = Math.max(
-                            filtered[currentNumberWeek],
-                            markedDates[date]!.dots!.length
+                    if (markedDates[date]?.dots !== undefined) {
+                        let textLength = 0;
+
+                        for (
+                            let i = 0;
+                            i < markedDates[date]?.dots!.length;
+                            i++
+                        ) {
+                            let count: number =
+                                markedDates[date]?.dots![i]?.key?.length || 0;
+                            textLength += count;
+                        }
+
+                        filtered[currentNumberWeek].textLength = Math.max(
+                            filtered[currentNumberWeek].textLength,
+                            textLength
+                        );
+                        filtered[currentNumberWeek].countTask = Math.max(
+                            filtered[currentNumberWeek].countTask,
+                            markedDates[date]?.dots!.length
+                        );
+                        const sum =
+                            (filtered[currentNumberWeek].countTask || 1) * 15 +
+                            filtered[currentNumberWeek].textLength * 1.5;
+                        filtered[currentNumberWeek].maxLength = Math.max(
+                            filtered[currentNumberWeek].maxLength,
+                            sum
+                        );
+
+                        console.log(
+                            "final lenght word ",
+                            textLength,
+                            filtered[currentNumberWeek]
                         );
                     }
                 }

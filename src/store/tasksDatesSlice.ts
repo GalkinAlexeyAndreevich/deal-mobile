@@ -107,6 +107,13 @@ const tasksDatesSlice = createSlice({
             state.tasks[taskIndex].subtasks = subtasks;
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
+        setPositionTasks(state, action:PayloadAction<{newTasks:Task[], currentDate:string}>){
+            const {newTasks, currentDate} = action.payload
+            // const newArr = [...state.tasks].concat(newTasks).unique(); 
+            // state.tasks = Array.from(new Set(state.tasks.concat(newTasks)))
+            state.tasks = state.tasks.filter(task=>task.date != currentDate)
+            state.tasks = state.tasks.concat(newTasks)
+        },
         deleteTask(state, action: PayloadAction<number>) {
             const taskId = action.payload;
             const newTasks = state.tasks.filter((task) => task.id !== taskId);
@@ -137,6 +144,7 @@ export const {
     setSubtask,
     deleteTask,
     changeArrSubtaskInTask,
+    setPositionTasks
 } = tasksDatesSlice.actions;
 
 export default tasksDatesSlice.reducer;

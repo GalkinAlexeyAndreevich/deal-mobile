@@ -6,6 +6,7 @@ import {
     setNameTask,
     setTasks,
     changeArrSubtaskInTask,
+    setPositionTasks,
 } from "@store/tasksDatesSlice";
 import Subtasks from "./Subtasks";
 import TaskItem from "./TaskItem";
@@ -90,7 +91,9 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
         );
     };
     const setTasksPosition = (data: Task[]) => {
-        data && dispatch(setTasks(data));
+        console.log("new position ", data);
+        
+        data && dispatch(setPositionTasks({newTasks:data, currentDate}));
     };
 
     return (
