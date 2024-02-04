@@ -46,14 +46,14 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                         paddingVertical: 20,
                         paddingHorizontal: 30,
                     }}>
-                    <Text style={{ fontSize: 30 }}>
+                    <Text style={{ fontSize: 30, color: secondsLeft==0?"red":"black"  }}>
                         {hours > 0 && (hours > 10 ? hours : "0" + hours) + ":"}
                         {mins < 10 ? "0" + mins : mins}:
                         {seconds < 10 ? "0" + seconds : seconds}
                     </Text>
                     {secondsLeft === 0 && (
-                        <Text style={{ fontSize: 30, color: "red" }}>
-                            Время вышло
+                        <Text style={{ fontSize: 30}}>
+                            Время истекло
                         </Text>
                     )}
                 </View>

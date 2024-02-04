@@ -30,7 +30,7 @@ export default function TaskOnDayPage({navigation}:IPageProps) {
             />
             <View
                 style={{
-                    height: "81.5%",
+                    height: "85.5%",
                     borderWidth: 1,
                     marginHorizontal: 14,
                     marginBottom: 0,
@@ -42,7 +42,7 @@ export default function TaskOnDayPage({navigation}:IPageProps) {
             <View
                 style={{
                     position: "absolute",
-                    bottom: "6%",
+                    bottom: "2%",
                     right: 8,
                 }}>
                 <AddTask currentDate={currentDate} />
@@ -50,7 +50,7 @@ export default function TaskOnDayPage({navigation}:IPageProps) {
             <View
                 style={{
                     position: "absolute",
-                    bottom: "7%",
+                    bottom: "3%",
                     left: 30,
                 }}>
                 <MiniTimer navigation={navigation}/>

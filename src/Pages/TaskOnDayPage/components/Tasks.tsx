@@ -90,6 +90,8 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                                 changeNameTask={changeNameTask}
                                 drag={drag}
                                 isActive={isActive}
+                                changed={changed}
+                                setChanged={setChanged}
                             />
                         )}
                     />

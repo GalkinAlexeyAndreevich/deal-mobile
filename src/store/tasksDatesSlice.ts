@@ -143,6 +143,7 @@ export const {
     setNameTask,
     setSubtask,
     deleteTask,
+    deleteSubtask,
     changeArrSubtaskInTask,
     setPositionTasks
 } = tasksDatesSlice.actions;

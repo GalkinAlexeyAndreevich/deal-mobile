@@ -1,7 +1,7 @@
 import { ITypeTask } from './../interfaces';
 import { SubTask, Task } from "@interfaces";
 export const defaultTypeTasks:ITypeTask[] = [
-    { key: "Без категории", value: "Без категории", color: "white" },
+    { key: "Без категории", value: "Без категории", color: "#ab4e4e" },
     { key: "Другое", value: "Другое", color: "#a6fcaa" },
     { key: "Работа", value: "Работа", color: "#dbd1fe" },
     { key: "Учеба", value: "Учеба", color: "#ffcdfc" },

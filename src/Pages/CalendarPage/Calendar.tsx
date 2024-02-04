@@ -80,10 +80,10 @@ export default function CustomCalendar({
                         );
                         const sum =
                             (filtered[currentNumberWeek].countTask || 1) * 15 +
-                            filtered[currentNumberWeek].textLength * 1.5;
+                            filtered[currentNumberWeek].textLength * 1.9;
                         filtered[currentNumberWeek].maxLength = Math.max(
                             filtered[currentNumberWeek].maxLength,
-                            sum
+                            Math.round(sum)
                         );
 
                         console.log(

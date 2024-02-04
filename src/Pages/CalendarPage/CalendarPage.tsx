@@ -30,7 +30,9 @@ export default function CalendarPage({ navigation }: IPageProps) {
     let monthYear = moment(currentDate).format("MM-yyyy");
     const getTypeColor = (type: string) => {
         const findItem = typesTask.find((element) => element.key == type);
-        return findItem ? findItem.color : "white";
+        console.log("color: ", findItem?.color);
+        
+        return findItem && findItem.color.length ? findItem.color : "white";
     };
     useEffect(() => {
         let map = tasks.reduce<MarkedDates>((acc, cur) => {
@@ -69,7 +71,7 @@ export default function CalendarPage({ navigation }: IPageProps) {
             <View
                 style={{
                     position: "absolute",
-                    bottom: "6%",
+                    bottom: "2%",
                     right: 8,
                 }}>
                 <AddTask currentDate={currentDate} />
@@ -77,7 +79,7 @@ export default function CalendarPage({ navigation }: IPageProps) {
             <View
                 style={{
                     position: "absolute",
-                    bottom: "7%",
+                    bottom: "3%",
                     left: 30,
                 }}>
                 <MiniTimer navigation={navigation} />

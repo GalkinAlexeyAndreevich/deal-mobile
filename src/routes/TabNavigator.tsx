@@ -17,7 +17,9 @@ function TabNavigator() {
             screenOptions={() => ({
                 // tabBarStyle: { opacity:0.99, zIndex:10, backgroundColor:"white", borderWidth:0 },
                 headerShown: false,
+                tabBarActiveTintColor:'#00bcfb'
             })}
+            
             initialRouteName="TaskOnDayPage">
             <Tab.Screen
                 name="Statistics"
@@ -27,11 +29,14 @@ function TabNavigator() {
             <Tab.Screen
                 name="AddTask"
                 options={{
-                    title: "Таймер",
+                    tabBarItemStyle: {padding:0, margin:0},//use This for Icon or image
+                    tabBarLabelStyle: {padding:0, margin:0},// use This for lable 
+                    tabBarLabel: 'Таймер',
+                    // title: "Таймер",
                     tabBarIcon: () => (
                         <Image
-                            style={{ width: 25, height: 25 }}
-                            source={require("@assets/timer3.png")}
+                            style={{ width: 25, height: 28 }}
+                            source={require("@assets/timer5.png")}
                         />
                     ),
                 }}
@@ -40,11 +45,11 @@ function TabNavigator() {
             <Tab.Screen
                 name="CalendarPage"
                 options={{
-                    title: "Задания на месяц",
+                    title: "Месяц",
                     tabBarIcon: () => (
                         <Image
-                            style={{ width: 37, height: 33 }}
-                            source={require("@assets/taskOnMonth5.png")}
+                            style={{ width: 40, height: 30 }}
+                            source={require("@assets/taskOnMonth6.png")}
                         />
                     ),
                 }}
@@ -53,10 +58,10 @@ function TabNavigator() {
             <Tab.Screen
                 name="TaskOnDayPage"
                 options={{
-                    title: "Задания на день",
+                    title: "День",
                     tabBarIcon: () => (
                         <Image
-                            style={{ width: 20, height: 26 }}
+                            style={{ width: 23, height: 30 }}
                             source={require("@assets/taskOnDay1.jpg")}
                         />
                     ),

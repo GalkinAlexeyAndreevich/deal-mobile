@@ -18,8 +18,8 @@ interface Props {
     changeNameTask: (text: string, task: Task, subtask?: SubTask) => void;
     drag: () => void;
     isActive: boolean;
-    changed:boolean,
-    setChanged:Dispatch<SetStateAction<boolean>>
+    changed: boolean;
+    setChanged: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function TaskItem({
@@ -28,7 +28,7 @@ export default function TaskItem({
     drag,
     isActive,
     changed,
-    setChanged
+    setChanged,
 }: Props) {
     const dispatch = useAppDispatch();
     const inputRef = useRef<TextInput>(null);
@@ -36,35 +36,31 @@ export default function TaskItem({
         console.log("long press");
         drag();
     };
-    const enableInput = ()=>{
+    const enableInput = () => {
         console.log("enable");
-        if(!isActiveInput){
-            inputRef.current && inputRef.current.focus()
+        if (!isActiveInput) {
+            inputRef.current && inputRef.current.focus();
         }
-        setChanged(true)
+        setChanged(true);
         setIsActiveInput(true);
-        
-    }
-    const blurInput = ()=>{
+    };
+    const blurInput = () => {
         console.log("unfocus");
         setIsActiveInput(false);
-        inputRef.current && inputRef.current.blur()
-    }
+        inputRef.current && inputRef.current.blur();
+    };
     const [isActiveInput, setIsActiveInput] = useState(false);
-
 
     return (
         <TouchableOpacity
-            onLongPress={longPress} 
+            onLongPress={longPress}
             onPress={enableInput}
             disabled={isActive}
             style={{
                 ...styles.mainContainer,
                 opacity: isActive ? 0.7 : 1,
             }}>
-            <View
-                style={styles.secondContainer}
-            >
+            <View style={styles.secondContainer}>
                 <CheckBox
                     size={23}
                     checked={task.done}
@@ -85,7 +81,9 @@ export default function TaskItem({
                         />
                     }
                 />
-                {isActiveInput && changed? <TextInput
+                {isActiveInput && changed ? (
+                    <TextInput
+                        underlineColorAndroid="transparent"
                         ref={inputRef}
                         style={{
                             ...styles.input,
@@ -99,11 +97,19 @@ export default function TaskItem({
                         value={task.name}
                         onChangeText={(text) => changeNameTask(text, task)}
                         onEndEditing={blurInput}
-                    />:
-                    <Text style={{fontSize:20}}>
+                    />
+                ) : (
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            width: "80%",
+                            textDecorationLine: task.done
+                                ? "line-through"
+                                : "none",
+                        }}>
                         {task.name}
                     </Text>
-                }
+                )}
             </View>
             <Pressable
                 style={{ paddingHorizontal: 3 }}
@@ -133,6 +139,8 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0,
         fontSize: 20,
-        // width: "80%",
+        borderBottomWidth: 0,
+        textDecorationLine: 'underline',
+        width: "80%",
     },
 });
