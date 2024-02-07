@@ -1,45 +1,86 @@
-import React, {createContext, useContext,useState, useEffect, Dispatch, SetStateAction} from 'react';
-import BackgroundTimer from 'react-native-background-timer';
+import moment from "moment";
+import React, {
+    createContext,
+    useContext,
+    useState,
+    useEffect,
+    Dispatch,
+    SetStateAction,
+    useRef,
+} from "react";
 
 type contextType = {
-		secondsLeft:number,
-		timerOn:boolean,
-		setSecondsLeft:Dispatch<SetStateAction<number>>
-    setTimerOn:Dispatch<SetStateAction<boolean>>;
-}
-const TimerContext = createContext<contextType>({secondsLeft:0,timerOn:false,setTimerOn:()=>{},setSecondsLeft:()=>{}});
+    timerOn: boolean;
+    setTimerOn: Dispatch<SetStateAction<boolean>>;
+    setTimeEnd: Dispatch<SetStateAction<string>>;
+    diff:number,
+    setDiff:Dispatch<SetStateAction<number>>
+};
+const TimerContext = createContext<contextType>({
+    timerOn: false,
+    setTimerOn: () => {},
+    setTimeEnd: () => {},
+    diff:0,
+    setDiff:()=>{},
+});
 
 interface Props {
     children: React.ReactNode;
 }
-export const TimerProvider = ({children}:Props) => {
-  const [secondsLeft, setSecondsLeft] = useState(0);
-  const [timerOn, setTimerOn] = useState(false);
-  useEffect(() => {
-    if (timerOn) startTimer();
-    else BackgroundTimer.stopBackgroundTimer();
-    return () => {
-      BackgroundTimer.stopBackgroundTimer();
+export const TimerProvider = ({ children }: Props) => {
+    const [timerOn, setTimerOn] = useState(false);
+    const [timeEnd, setTimeEnd] = useState("");
+    const [pausedBegin, setPausedBegin] = useState("");
+    const [diff,setDiff] = useState(0)
+    const diffRef = useRef(0)
+    const timer = useRef<ReturnType<typeof setInterval> | null>(null)
+    useEffect(() => {
+        if(!timerOn && diff){
+            setPausedBegin(moment().toISOString())
+        }
+        if(timerOn && pausedBegin.length){
+            diffRef.current += Math.abs(moment(moment()).diff(pausedBegin,'seconds'))
+            setPausedBegin("")
+        }
+        if (timerOn) startTimer();
+        else {
+            timer.current && clearInterval(timer.current)
+        }
+        return () => {
+            timer.current && clearInterval(timer.current)
+        };
+    }, [timerOn,timeEnd]);
+    useEffect(()=>{
+        diffRef.current = 0
+        setTimeEnd("")
+        setPausedBegin("")
+    },[])
+
+    const startTimer = () => {
+        timer.current = setInterval(()=>{            
+            const dif = moment(timeEnd).diff(moment(),'seconds') + diffRef.current;
+            if(dif>0) setDiff(dif);
+            else setDiff(0)
+            if(dif<=0) {
+                timer.current && clearInterval(timer.current)
+                diffRef.current = 0
+                setTimeEnd("")
+                setPausedBegin("")
+            }
+        },500)
     };
-  }, [timerOn]);
 
-	const startTimer = () => {
-		BackgroundTimer.runBackgroundTimer(() => {
-			setSecondsLeft(secs => {
-				if (secs > 0) return secs - 1
-				else return 0
-			})
-		}, 1000)
-	}
-  useEffect(() => {
-    console.log(secondsLeft);
-    if (secondsLeft === 0) BackgroundTimer.stopBackgroundTimer()
-  }, [secondsLeft])
-
-  return (
-    <TimerContext.Provider value={{secondsLeft,timerOn, setSecondsLeft,setTimerOn}}>
-      {children}
-    </TimerContext.Provider>
-  );
+    return (
+        <TimerContext.Provider
+            value={{
+                timerOn,
+                setTimerOn,
+                setTimeEnd,
+                diff,
+                setDiff,
+            }}>
+            {children}
+        </TimerContext.Provider>
+    );
 };
-export const useBackgroundTimer = ()=>useContext(TimerContext)
+export const useBackgroundTimer = () => useContext(TimerContext);

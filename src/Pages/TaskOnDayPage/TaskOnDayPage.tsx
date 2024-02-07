@@ -35,6 +35,7 @@ export default function TaskOnDayPage({navigation}:IPageProps) {
                     marginHorizontal: 14,
                     marginBottom: 0,
                     borderColor: "#acf9ff",
+                    paddingBottom:25
                 }}>
                 <Tasks currentDate={moment(currentDate).format("YYYY-MM-DD")} />
             </View>

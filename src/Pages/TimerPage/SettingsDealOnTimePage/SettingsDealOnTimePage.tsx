@@ -9,12 +9,13 @@ import { Task } from "@interfaces";
 import MinutePicker from "./MinutePicker";
 import { useBackgroundTimer } from "@src/TimerContext";
 import CustomSelectList from "./CustomSelectList";
+import moment from "moment";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 export default function SettingsDealOnTimePage({ navigation }: TProps) {
     const dispatch = useAppDispatch();
-    const { setSecondsLeft, setTimerOn } = useBackgroundTimer();
+    const { setTimerOn,setTimeEnd } = useBackgroundTimer();
     const [selectedMinutes, setSelectedMinutes] = useState(5);
     const [selectedTask, setSelectedTask] = useState<Task>({} as Task)
 
@@ -30,8 +31,10 @@ export default function SettingsDealOnTimePage({ navigation }: TProps) {
             Alert.alert("Неполные настройки","Вы не выбрали цель или время");
             return;
         }
-        setSecondsLeft(selectedMinutes * 60)
+        console.log(moment().add(selectedMinutes,'m').toISOString());
         setTimerOn(true);
+        setTimeEnd(moment().add(selectedMinutes,'m').toISOString())
+        
         dispatch(addTask(selectedTask));
         navigation.navigate("DealWithTimerPage");
     };

@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     secondContainer: {
         display: "flex",
         flexDirection: "row",
-        width: "77%",
+        width: "91.3%",
         alignItems: "center",
     },
     input: {

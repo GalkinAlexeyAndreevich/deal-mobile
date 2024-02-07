@@ -57,6 +57,7 @@
     "react-native-ble-plx": "^3.1.2",
     "react-native-calendar-events": "^2.2.0",
     "react-native-calendars": "^1.263.0",
+    "react-native-disable-battery-optimizations-android": "^1.0.7",
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-elements": "^3.4.3",

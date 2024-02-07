@@ -4,30 +4,32 @@ import { AddTaskParamList } from "@routes/AddTaskNavigator";
 import { useAppSelector } from "@store/hook";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useBackgroundTimer } from "@src/TimerContext";
+import moment from "moment";
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
-const clockify = (secondsLeft: number) => {
-    let hours = Math.floor(secondsLeft / 60 / 60);
-    let mins = Math.floor((secondsLeft / 60) % 60);
-    let seconds = Math.floor(secondsLeft % 60);
-    return {
-        hours,
-        mins,
-        seconds,
-    };
-};
+// const clockify = (secondsLeft: number) => {
+//     let hours = Math.floor(secondsLeft / 60 / 60);
+//     let mins = Math.floor((secondsLeft / 60) % 60);
+//     let seconds = Math.floor(secondsLeft % 60);
+//     return {
+//         hours,
+//         mins,
+//         seconds,
+//     };
+// };
 
 export default function DealWithTimerPage({ navigation }: TProps) {
-    const { timerOn,setTimerOn, secondsLeft, setSecondsLeft } = useBackgroundTimer();
+    const { timerOn,setTimerOn, diff,setDiff } = useBackgroundTimer();
     const { nameTask } = useAppSelector((state) => state.dealSettings);
-    const { hours, mins, seconds } = clockify(secondsLeft);
+    // const { hours, mins, seconds } = clockify(secondsLeft);
     const handlePause = () => {
         setTimerOn(prev=>!prev);
     };
     const handleStop = () => {
         setTimerOn(false);
-        setSecondsLeft(0);
+        setDiff(0)
     };
+    const time = `${moment.utc( diff*1000 ).format( 'mm:ss' )}`;
 
     return (
         <View style={styles.container}>
@@ -46,19 +48,21 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                         paddingVertical: 20,
                         paddingHorizontal: 30,
                     }}>
-                    <Text style={{ fontSize: 30, color: secondsLeft==0?"red":"black"  }}>
+                        
+                    <Text style={{fontSize: 30, color: diff==0?"red":"black" }}>{time}</Text>
+                    {/* <Text style={{ fontSize: 30, color: secondsLeft==0?"red":"black"  }}>
                         {hours > 0 && (hours > 10 ? hours : "0" + hours) + ":"}
                         {mins < 10 ? "0" + mins : mins}:
                         {seconds < 10 ? "0" + seconds : seconds}
-                    </Text>
-                    {secondsLeft === 0 && (
+                    </Text> */}
+                    {diff === 0 && !timerOn && (
                         <Text style={{ fontSize: 30}}>
                             Время истекло
                         </Text>
                     )}
                 </View>
             </View>
-            {secondsLeft === 0 ? (
+            {diff === 0 ? (
                 <Pressable
                     style={{
                         flex: 2,

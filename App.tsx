@@ -11,6 +11,7 @@ import { TimerProvider } from "src/TimerContext";
 import { SavedDataProvider } from "@src/SavedDataContext";
 import { fetch } from "@react-native-community/netinfo";
 import AlertAsync from "react-native-alert-async";
+// import RNDisableBatteryOptimizationsAndroid from 'react-native-disable-battery-optimizations-android';
 
 moment().locale("ru");
 
@@ -66,6 +67,35 @@ export default function App() {
                 })
             })
         }
+        // RNDisableBatteryOptimizationsAndroid.isBatteryOptimizationEnabled().then((isEnabled:boolean) => {
+        //     if (isEnabled) {
+        //       // Battery optimizations are enabled, prompt the user to whitelist
+        //       RNDisableBatteryOptimizationsAndroid.openBatteryModal();
+        //     }
+        // });
+
+        // const requestBatteryOptimizationPermission = async () => {
+        //     try {
+        //       const granted = await PermissionsAndroid.request(
+        //         PermissionsAndroid.PERMISSIONS.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+        //         {
+        //           title: 'Battery Optimization Permission',
+        //           message: 'This app needs to ignore battery optimizations to run in the background.',
+        //           buttonPositive: 'OK',
+        //         }
+        //       );
+        
+        //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        //         await AlertAsync('Battery optimization permission',' granted');
+        //       } else {
+        //         await AlertAsync('Battery optimization permission','denied');
+        //       }
+        //     } catch (error) {
+        //         await AlertAsync('Error requesting battery optimization permission:', `${error}`);
+        //     }
+        //   };
+
+        //   requestBatteryOptimizationPermission()
     }, []);
     if (check1.current > 0) {
         return (

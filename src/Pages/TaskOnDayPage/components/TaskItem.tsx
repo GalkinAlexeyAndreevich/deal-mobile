@@ -102,7 +102,7 @@ export default function TaskItem({
                     <Text
                         style={{
                             fontSize: 20,
-                            width: "80%",
+                            width: "77%",
                             textDecorationLine: task.done
                                 ? "line-through"
                                 : "none",
@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
     secondContainer: {
         display: "flex",
         flexDirection: "row",
-        width: "77%",
         alignItems: "center",
     },
     input: {
@@ -141,6 +140,6 @@ const styles = StyleSheet.create({
         fontSize: 20,
         borderBottomWidth: 0,
         textDecorationLine: 'underline',
-        width: "80%",
+        width: "77%",
     },
 });

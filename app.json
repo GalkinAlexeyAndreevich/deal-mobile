@@ -1,13 +1,13 @@
 {
   "expo": {
-    "name": "deal-mobile",
+    "name": "DEAL",
     "slug": "deal-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./src/assets/icon-clock.png",
+    "icon": "./src/assets/icon-app4.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./src/assets/icon-clock.png",
+      "image": "./src/assets/deal.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -26,10 +26,6 @@
       }
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./src/assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
-      },
       "package": "com.dealmobile",
       "permissions": [
         "android.permission.BLUETOOTH",
