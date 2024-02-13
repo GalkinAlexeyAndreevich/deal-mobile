@@ -7,21 +7,21 @@ import { useBackgroundTimer } from "@src/TimerContext";
 import moment from "moment";
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
-// const clockify = (secondsLeft: number) => {
-//     let hours = Math.floor(secondsLeft / 60 / 60);
-//     let mins = Math.floor((secondsLeft / 60) % 60);
-//     let seconds = Math.floor(secondsLeft % 60);
-//     return {
-//         hours,
-//         mins,
-//         seconds,
-//     };
-// };
+const clockify = (secondsLeft: number) => {
+    let hours = Math.floor(secondsLeft / 60 / 60);
+    let mins = Math.floor((secondsLeft / 60) % 60);
+    let seconds = Math.floor(secondsLeft % 60);
+    return {
+        hours,
+        mins,
+        seconds,
+    };
+};
 
 export default function DealWithTimerPage({ navigation }: TProps) {
     const { timerOn,setTimerOn, diff,setDiff } = useBackgroundTimer();
     const { nameTask } = useAppSelector((state) => state.dealSettings);
-    // const { hours, mins, seconds } = clockify(secondsLeft);
+    const { hours, mins, seconds } = clockify(diff);
     const handlePause = () => {
         setTimerOn(prev=>!prev);
     };
@@ -29,8 +29,8 @@ export default function DealWithTimerPage({ navigation }: TProps) {
         setTimerOn(false);
         setDiff(0)
     };
-    const time = `${moment.utc( diff*1000 ).format( 'mm:ss' )}`;
-
+    // const time = diff==0?'00:00:00':`${moment.utc( diff*1000 ).format( 'hh:mm:ss' )}`;
+    const time = `${hours > 0?(hours > 10 ? hours:"0"+hours + ' :'):''}${mins > 10 ? mins:"0"+mins} : ${seconds > 10 ? seconds:"0"+seconds}`
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{nameTask}</Text>

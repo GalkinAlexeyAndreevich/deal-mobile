@@ -11,21 +11,28 @@ import AddTask from "@components/AddTask";
 import moment from "moment";
 import MiniTimer from "@components/MiniTimer";
 import { RootStackParamList } from "@src/routes/TabNavigator";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-interface IPageProps {
-    navigation: NativeStackNavigationProp<RootStackParamList, "CalendarPage">;
-}
-
-export default function CalendarPage({ navigation }: IPageProps) {
+// interface IPageProps {
+//     navigation: NativeStackNavigationProp<RootStackParamList, "CalendarPage">;
+// }
+type Props = NativeStackScreenProps<RootStackParamList, 'CalendarPage'>;
+export default function CalendarPage({ navigation,route }: Props) {
     const [currentDate, setCurrentDate] = useState<string>(
         new Date().toISOString()
     );
+    const {dateNow} = route.params
+    console.log("route param", dateNow);
+    
     const [openModal, setOpenModal] = useState(false);
     const { tasks, typesTask } = useAppSelector((state) => state.tasksDates);
     const [markedDates, setMarkedDates] = useState<MarkedDates>(
         {} as MarkedDates
     );
+    useEffect(()=>{
+        if(!dateNow)return
+        setCurrentDate(dateNow)
+    },[dateNow])
     let countTask = useRef(0);
     let monthYear = moment(currentDate).format("MM-yyyy");
     const getTypeColor = (type: string) => {

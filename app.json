@@ -42,18 +42,21 @@
         "@config-plugins/react-native-ble-plx",
         {
           "isBackgroundEnabled": true,
-          "modes": ["peripheral", "central"],
+          "modes": [
+            "peripheral",
+            "central"
+          ],
           "bluetoothAlwaysPermission": "Allow $(PRODUCT_NAME) to connect to bluetooth devices"
         }
       ]
     ],
-    "extra": {
-      "eas": {
-        "projectId": "bb80f571-7532-400d-954c-8ea2da8f92d1"
-      }
-    },
     "updates": {
       "url": "https://u.expo.dev/bb80f571-7532-400d-954c-8ea2da8f92d1"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0b903def-5325-4465-8f03-a857dd1fd628"
+      }
     }
   }
 }

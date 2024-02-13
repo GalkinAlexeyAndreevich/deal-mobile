@@ -15,8 +15,8 @@ const initialState: TypeState = {
 };
 
 interface ChangeNameProps {
-    taskId: number;
-    subtaskId: number;
+    taskId: string;
+    subtaskId: string | undefined;
     text: string;
 }
 
@@ -26,12 +26,10 @@ const tasksDatesSlice = createSlice({
     reducers: {
         setTasks(state, actions: PayloadAction<Task[]>) {
             state.tasks = actions.payload;
-            console.log("изменили цели", state.tasks);
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         setType(state, action: PayloadAction<ITypeTask[]>) {
             state.typesTask = action.payload;
-            console.log("изменили тип", state.typesTask);
             AsyncStorage.setItem(
                 "savedTypesTask",
                 JSON.stringify(state.typesTask)
@@ -40,7 +38,7 @@ const tasksDatesSlice = createSlice({
         setSubTasks(state, actions: PayloadAction<SubTask[]>) {
             state.subtasks = actions.payload;
         },
-        setStatusTask(state, action: PayloadAction<number>) {
+        setStatusTask(state, action: PayloadAction<string>) {
             const taskId = action.payload;
             const index = state.tasks.findIndex((el) => el.id === taskId);
             let el = state.tasks[index];
@@ -53,22 +51,27 @@ const tasksDatesSlice = createSlice({
         },
         setNameTask(state, action: PayloadAction<ChangeNameProps>) {
             const { taskId, subtaskId, text } = action.payload;
+            
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
             let foundTask = state.tasks[taskIndex];
+            console.log(foundTask);
+            
             if (subtaskId) {
                 const subIndex = foundTask.subtasks.findIndex(
                     (el) => el.id === subtaskId
                 );
                 let foundSub = foundTask.subtasks[subIndex];
-                foundSub.name = text;
-            } else {
+                if(foundSub)foundSub.name = text;
+            }  else if(foundTask) {
                 foundTask.name = text;
+                console.log('new task name', foundTask.name);
+                
             }
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         setSubtask(
             state,
-            action: PayloadAction<{ taskId: number; subtaskId: number }>
+            action: PayloadAction<{ taskId: string; subtaskId: string }>
         ) {
             const { taskId, subtaskId } = action.payload;
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
@@ -95,7 +98,7 @@ const tasksDatesSlice = createSlice({
         },
         changeArrSubtaskInTask(
             state,
-            action: PayloadAction<{ taskId: number; subtasks: SubTask[] }>
+            action: PayloadAction<{ taskId: string; subtasks: SubTask[] }>
         ) {
             const { taskId, subtasks } = action.payload;
             const taskIndex = state.tasks.findIndex(
@@ -114,7 +117,7 @@ const tasksDatesSlice = createSlice({
             state.tasks = state.tasks.filter(task=>task.date != currentDate)
             state.tasks = state.tasks.concat(newTasks)
         },
-        deleteTask(state, action: PayloadAction<number>) {
+        deleteTask(state, action: PayloadAction<string>) {
             const taskId = action.payload;
             const newTasks = state.tasks.filter((task) => task.id !== taskId);
             state.tasks = newTasks;
@@ -122,7 +125,7 @@ const tasksDatesSlice = createSlice({
         },
         deleteSubtask(
             state,
-            action: PayloadAction<{ taskId: number; subtaskId: number }>
+            action: PayloadAction<{ taskId: string; subtaskId: string }>
         ) {
             const { taskId, subtaskId } = action.payload;
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
@@ -132,6 +135,16 @@ const tasksDatesSlice = createSlice({
             state.tasks[taskIndex].subtasks = newSubtask;
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
+        setTypeTask(state, action:PayloadAction<{taskId:string, newType:string}>){
+            const {taskId, newType} = action.payload
+            const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
+            state.tasks[taskIndex].type = newType
+        },
+        addSubtaskInTask(state,action:PayloadAction<{taskId:string, subtasks:SubTask[]}>){
+            const {taskId, subtasks} = action.payload
+            const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
+            state.tasks[taskIndex].subtasks = subtasks
+        }
     },
 });
 
@@ -145,7 +158,9 @@ export const {
     deleteTask,
     deleteSubtask,
     changeArrSubtaskInTask,
-    setPositionTasks
+    setPositionTasks,
+    setTypeTask,
+    addSubtaskInTask
 } = tasksDatesSlice.actions;
 
 export default tasksDatesSlice.reducer;

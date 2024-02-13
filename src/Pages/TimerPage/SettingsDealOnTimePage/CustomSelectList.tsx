@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { SelectList } from "react-native-dropdown-select-list";
 import { useAppSelector } from "@src/store/hook";
 import { SelectItem, Task } from "@src/interfaces";
+import moment from "moment";
 
 interface Props {
     setSelectedTask: Dispatch<SetStateAction<Task>>;
@@ -13,13 +14,17 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
     const [selectData, setSelectData] = useState<SelectItem[]>([]);
     const [filtered1, setFiltered1] = useState<Task[]>([]);
 
-    const [selectKey, setSelectedKey] = useState<number>(-1);
+    const [selectKey, setSelectedKey] = useState<string>('-1');
     useEffect(() => {
-        // const newArr = tasks.filter(
-        //     (task) => new Date(task.date).getDate() === new Date().getDate()
-        // );
+        let newArr = tasks.filter(
+            (task) => moment(task.date).format('LL')=== moment().format('LL')
+        );
+        // console.log(newArr[0].date,moment(newArr[0].date).format('LL'),  moment().format('LL'));
+        
+        console.log("фильтр даты ",newArr);
+        
         let onlyValue: SelectItem[] = [];
-        for (let item of tasks) {
+        for (let item of newArr) {
             onlyValue.push({
                 value: item.name,
                 key: item.id,
@@ -35,7 +40,7 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
     //     setSelectedTask(filtered1[0])
     // },[filtered1])
 
-    const selectTask = (key: number) => {
+    const selectTask = (key: string) => {
         if (selectKey) {
             for (let i = 0; i < selectData.length; i++) {
                 if (selectData[i].key == selectKey)
@@ -67,8 +72,8 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
                     backgroundColor: "#d9fcff",
                     borderWidth: 0,
                 }}
-                setSelected={(key: number) => selectTask(key)}
-                inputStyles={{color:selectKey >=0?"black":"grey"}}
+                setSelected={(key: string) => selectTask(key)}
+                inputStyles={{color:selectKey =='-1'?"black":"grey"}}
                 disabledTextStyles={{ fontWeight: "bold" }}
                 data={selectData}
                 save="key"

@@ -15,7 +15,7 @@ type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 export default function SettingsDealOnTimePage({ navigation }: TProps) {
     const dispatch = useAppDispatch();
-    const { setTimerOn,setTimeEnd } = useBackgroundTimer();
+    const { setTimerOn,setTimeEnd,setBeginTimer } = useBackgroundTimer();
     const [selectedMinutes, setSelectedMinutes] = useState(5);
     const [selectedTask, setSelectedTask] = useState<Task>({} as Task)
 
@@ -31,10 +31,13 @@ export default function SettingsDealOnTimePage({ navigation }: TProps) {
             Alert.alert("Неполные настройки","Вы не выбрали цель или время");
             return;
         }
-        console.log(moment().add(selectedMinutes,'m').toISOString());
+        const hours = Math.floor(selectedMinutes / 60)
+        const minutes = selectedMinutes % 60
+        console.log(moment().toISOString(),moment().add(hours,'h').add(minutes,'m').toISOString());
+        // console.log(moment().add(hours,'h').add(minutes,'m').toISOString());
         setTimerOn(true);
-        setTimeEnd(moment().add(selectedMinutes,'m').toISOString())
-        
+        setTimeEnd(moment().add(hours,'h').add(minutes,'m').toISOString())
+        setBeginTimer(true)
         dispatch(addTask(selectedTask));
         navigation.navigate("DealWithTimerPage");
     };

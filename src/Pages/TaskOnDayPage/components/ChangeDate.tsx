@@ -74,7 +74,7 @@ export default function ChangeDate({ currentDate, setCurrentDate }: Props) {
                 </Text>
             </Pressable>
             <Pressable
-                // style={{ padding: 10 }}
+                style={{ padding: 5 }}
                 onPress={() => addAndSubtractDay(true)}>
                 <Ionicons
                     name="caret-forward-sharp"

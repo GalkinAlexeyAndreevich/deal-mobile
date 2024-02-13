@@ -20,7 +20,6 @@ export const SavedDataProvider = ({ children }: Props) => {
             let typesTask = await JSON.parse(
                 (await AsyncStorage.getItem("savedTypesTask")) || "[]"
             );
-            console.log(tasks);
 
             if (!tasks || !tasks.length) {
                 await AsyncStorage.setItem("savedTask", JSON.stringify(defaultTasks));
@@ -36,7 +35,7 @@ export const SavedDataProvider = ({ children }: Props) => {
                 );
                 dispatch(setType(defaultTypeTasks));
             }
-            else dispatch(setType(typesTask));
+            else dispatch(setType(defaultTypeTasks));
 
             console.log("Сохраненные данные перенесены");
         }

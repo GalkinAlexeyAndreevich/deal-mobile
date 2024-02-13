@@ -22,17 +22,14 @@ interface Props{
 
 export default function DayComponent({date,countOnWeek,setCurrentDate,currentDate,marking}:Props) {
 	const getHeightOnCount = (date: string) => {
-        
-		if (!countOnWeek) return 50;
-        
+		if (!countOnWeek) return 50;   
 		const week = moment(date).isoWeek();
         if(!countOnWeek[week]) return 50
-        if(countOnWeek[week].textLength < 10) return 50
-        let sum = 50 + countOnWeek[week].maxLength
-        console.log("sum ", sum);
-        
+        if(countOnWeek[week].textLength < 10) return 50 *(countOnWeek[week].countTask >0?countOnWeek[week].countTask:1) 
+        let sum = 50 + countOnWeek[week].maxLength     
 		return sum;
 	};
+    
     const maxWeek = Math.max.apply(null, Object.keys(countOnWeek).map(Number));    
     return (
         <Pressable
@@ -55,6 +52,7 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
                     color: "black",
                     fontSize: 15,
                     paddingLeft: 3,
+                    fontWeight:moment().format('LL')==moment(date.dateString).format('LL')?'bold':'normal'
                 }}>
                 {date.day}{" "}
             </Text>

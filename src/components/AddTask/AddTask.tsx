@@ -5,7 +5,6 @@ import {
     Modal,
     StyleSheet,
     TouchableHighlight,
-    Text,
     FlatList,
     Image,
 } from "react-native";
@@ -19,6 +18,8 @@ import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
 import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import uuid from 'react-native-uuid';
+
 
 export default function AddTask({ currentDate }: { currentDate: string }) {
     const {
@@ -35,10 +36,11 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
     const [subtasks, setSubtasks] = useState<SubTask[]>([]);
     const addSubtask = () => {
         if (subtasks.length > 10) return;
+        const newId = uuid.v4(); 
         setSubtasks((prev) => [
             ...prev,
             {
-                id: subtasks.length + 1,
+                id: String(newId),
                 name: "",
                 done: false,
             },
@@ -77,9 +79,10 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 done: false,
             });
         }
+        const newId = uuid.v4(); 
 
         const object: Task = {
-            id: tasks.length + 1,
+            id: String(newId),
             name: inputValue,
             done: false,
             date: moment(currentDate).format("YYYY-MM-DD"),

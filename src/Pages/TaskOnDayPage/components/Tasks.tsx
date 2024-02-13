@@ -1,24 +1,27 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
-import { SubTask, Task } from "@interfaces";
+import { Task } from "@interfaces";
 import {
-    setNameTask,
-    changeArrSubtaskInTask,
     setPositionTasks,
 } from "@store/tasksDatesSlice";
-import Subtasks from "./Subtasks";
 import TaskItem from "./TaskItem";
 import DraggableFlatList, {
     ScaleDecorator,
     RenderItemParams,
 } from "react-native-draggable-flatlist";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { RootStackParamList } from "@src/routes/TabNavigator";
+import moment from "moment";
+interface IProps {
+    navigation: NativeStackNavigationProp<RootStackParamList, "TaskOnDayPage">;
+    currentDate: string;
+}
 
-export default function Tasks({ currentDate }: { currentDate: string }) {
+export default function Tasks({ currentDate, navigation }: IProps) {
     const { tasks } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
     const [filtered, setFiltered] = useState<Task[]>([]);
-    const [changed,setChanged] = useState(false)
 
     useEffect(() => {
         let filteredArr = [];
@@ -27,28 +30,11 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
         }
         setFiltered(filteredArr);
     }, [tasks, currentDate]);
-    const changeNameTask = (
-        text: string,
-        task: Task,
-        subtask: SubTask = {} as SubTask
-    ) => {
-        if (!text) return;
-        console.log(text, task.id);
-        dispatch(
-            setNameTask({ text, taskId: task.id, subtaskId: subtask?.id })
-        );
-    };
 
-    const checkDif = (
-        taskId: number,
-        prevData: SubTask[],
-        subtasks: SubTask[]
-    ) => {
-        console.log(prevData);
 
-        console.log(subtasks);
-
-        dispatch(changeArrSubtaskInTask({ taskId, subtasks }));
+    const redirectToTask = (task: Task) => {
+        console.log("redirectOnNewPage", task);
+        navigation.navigate("TaskPage", { taskId: task.id,uniqueId:moment().toISOString() });
     };
 
     const renderTask = ({
@@ -58,44 +44,12 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
     }: RenderItemParams<Task>) => {
         return (
             <ScaleDecorator>
-                <View
-                    style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        backgroundColor: "white",
-                    }}>
-                        <TaskItem
-                            task={task}
-                            changeNameTask={changeNameTask}
-                            drag={drag}
-                            isActive={isActive}
-                            changed={changed}
-                            setChanged={setChanged}
-                        />
-                    <DraggableFlatList
-                        scrollEnabled={false}
-                        data={task.subtasks}
-                        onDragEnd={({ data }) =>
-                            checkDif(task.id, task.subtasks, data)
-                        }
-                        keyExtractor={(item) => String(item.id)}
-                        renderItem={({
-                            item,
-                            drag,
-                            isActive,
-                        }: RenderItemParams<SubTask>) => (
-                            <Subtasks
-                                subtask={item}
-                                task={task}
-                                changeNameTask={changeNameTask}
-                                drag={drag}
-                                isActive={isActive}
-                                changed={changed}
-                                setChanged={setChanged}
-                            />
-                        )}
-                    />
-                </View>
+                <TaskItem
+                    task={task}
+                    drag={drag}
+                    isActive={isActive}
+                    redirect={redirectToTask}
+                />
             </ScaleDecorator>
         );
     };
@@ -106,11 +60,7 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
     };
 
     return (
-        <TouchableOpacity style={{ height: "100%" }} onPress={()=>{
-            console.log("eee press")
-            setChanged(false)
-            
-        }}>
+        <View>
             {filtered.length == 0 && (
                 <View
                     style={{
@@ -133,6 +83,6 @@ export default function Tasks({ currentDate }: { currentDate: string }) {
                 keyExtractor={(item) => String(item.id)}
                 renderItem={renderTask}
             />
-        </TouchableOpacity>
+        </View>
     );
 }

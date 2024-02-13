@@ -3,12 +3,12 @@ export interface IMarkedDates{
 	dots:{key:string, color:string}[]
 }
 export interface SubTask{
-	id:number,
+	id:string,
 	name:string,
 	done:boolean,
 }
 export interface Task{
-	id:number,
+	id:string,
 	name:string,
 	done:boolean,
 	subtasks: SubTask[],
@@ -26,8 +26,8 @@ export interface ITypeTask {
 
 export interface SelectItem {
 	value: string;
-	key: number;
-	label: number;
+	key: string;
+	label: string;
 	disabled?: boolean;
 }
 

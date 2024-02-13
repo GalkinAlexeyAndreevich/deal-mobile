@@ -7,8 +7,6 @@ import {
     TouchableOpacity,
 } from "react-native";
 import React, { Dispatch, SetStateAction, useRef, useState } from "react";
-import { useAppDispatch } from "@store/hook";
-import { deleteSubtask, setSubtask } from "@store/tasksDatesSlice";
 import { CheckBox } from "react-native-elements";
 import { SubTask, Task } from "@interfaces";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
@@ -21,6 +19,8 @@ interface Props {
     isActive: boolean;
     changed: boolean;
     setChanged: Dispatch<SetStateAction<boolean>>;
+    deleteSubtask:(subtaskId:string)=>void
+    changeStatusSubtask:(subtaskId:string)=>void
 }
 
 export default function Subtasks({
@@ -31,8 +31,9 @@ export default function Subtasks({
     isActive,
     changed,
     setChanged,
+    deleteSubtask,
+    changeStatusSubtask
 }: Props) {
-    const dispatch = useAppDispatch();
     const inputRef = useRef<TextInput>(null);
     const longPress = () => {
         console.log("long press");
@@ -46,11 +47,11 @@ export default function Subtasks({
         setChanged(true);
         setIsActiveInput(true);
     };
-    const blurInput = () => {
-        console.log("unfocus");
-        setIsActiveInput(false);
-        inputRef.current && inputRef.current.blur();
-    };
+    // const blurInput = () => {
+    //     console.log("unfocus");
+    //     setIsActiveInput(false);
+    //     inputRef.current && inputRef.current.blur();
+    // };
     const [isActiveInput, setIsActiveInput] = useState(false);
     return (
         <TouchableOpacity
@@ -66,14 +67,7 @@ export default function Subtasks({
                     size={20}
                     checked={subtask.done}
                     onLongPress={longPress}
-                    onPress={() =>
-                        dispatch(
-                            setSubtask({
-                                subtaskId: subtask.id,
-                                taskId: task.id,
-                            })
-                        )
-                    }
+                    onPress={() =>changeStatusSubtask(subtask.id)}
                     checkedColor="red"
                     checkedIcon="dot-circle-o"
                     uncheckedIcon="circle-o"
@@ -95,29 +89,25 @@ export default function Subtasks({
                         onChangeText={(text) =>
                             changeNameTask(text, task, subtask)
                         }
-                        onEndEditing={blurInput}
+                        // onEndEditing={blurInput}
+                        placeholder="Введите подцель"
                     />
                 ) : (
                     <Text
                         style={{
                             fontSize: 20,
+                            width:'75%',
+                            opacity:subtask.name.length?1:0.3
                         }}>
-                        {subtask.name}
+                        {subtask.name.length?subtask.name:'Введите подцель'}
                     </Text>
                 )}
             </View>
 
             <Pressable
-                style={{ paddingHorizontal: 3 }}
+                style={{ padding: 3,marginRight:10 }}
                 onLongPress={longPress}
-                onPress={() =>
-                    dispatch(
-                        deleteSubtask({
-                            taskId: task.id,
-                            subtaskId: subtask.id,
-                        })
-                    )
-                }>
+                onPress={() => deleteSubtask(subtask.id)}>
                 <Icon name="close" size={25} color="red" />
             </Pressable>
         </TouchableOpacity>
@@ -130,18 +120,18 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        paddingLeft: 15,
+        paddingLeft: 0,
+        justifyContent:'space-between'
     },
     secondContainer: {
         display: "flex",
         flexDirection: "row",
-        width: "91.3%",
         alignItems: "center",
     },
     input: {
         margin: 0,
         padding: 0,
         fontSize: 20,
-        // width: "80%",
+        width: "75%",
     },
 });

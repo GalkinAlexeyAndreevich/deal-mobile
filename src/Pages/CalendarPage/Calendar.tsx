@@ -85,12 +85,6 @@ export default function CustomCalendar({
                             filtered[currentNumberWeek].maxLength,
                             Math.round(sum)
                         );
-
-                        console.log(
-                            "final lenght word ",
-                            textLength,
-                            filtered[currentNumberWeek]
-                        );
                     }
                 }
                 return filtered;
@@ -109,7 +103,7 @@ export default function CustomCalendar({
     defineLocale();
 
     return (
-        <View style={{ height: "83%" }}>
+        <View>
             <ScrollView horizontal={false}>
                 <Calendar
                     key={currentDate}
@@ -140,6 +134,7 @@ export default function CustomCalendar({
                         setCurrentDate(date.dateString);
                     }}
                 />
+                <View style={{backgroundColor:"white", width:'100%', height:75}}></View>
             </ScrollView>
         </View>
     );

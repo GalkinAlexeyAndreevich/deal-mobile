@@ -11,7 +11,6 @@ import { TimerProvider } from "src/TimerContext";
 import { SavedDataProvider } from "@src/SavedDataContext";
 import { fetch } from "@react-native-community/netinfo";
 import AlertAsync from "react-native-alert-async";
-// import RNDisableBatteryOptimizationsAndroid from 'react-native-disable-battery-optimizations-android';
 
 moment().locale("ru");
 

@@ -47,12 +47,17 @@ function DrawerView( { navigation }:{navigation:DrawerNavigationHelpers} ) {
 export function MyDrawer() {
     return (
         <Drawer.Navigator
-            drawerContent={(props) => <DrawerView {...props}/>}
+            // drawerContent={(props) => <DrawerView {...props}/>}
             initialRouteName="TabNavigator"
-            screenOptions={({ navigation }) => ({
-                
+            screenOptions={({ navigation,route }) => ({
                 headerRight: () => (
-                    <Pressable onPress={() => navigation.openDrawer()}>
+                    <Pressable onPress={
+                        () => {
+                            navigation.openDrawer()
+                            // console.log(navigation.getState());
+                            
+                        }
+                        }>
                         <Ionicons
                             name={
                                 Platform.OS === "android"
@@ -63,6 +68,9 @@ export function MyDrawer() {
                             color={"#000"}
                             style={{ marginRight: 10 }}
                         />
+                        <Text>
+                            {/* {String(navigation.index) + Math.random()* 100} */}
+                        </Text>
                     </Pressable>
                 ),
                 headerStyle: {
