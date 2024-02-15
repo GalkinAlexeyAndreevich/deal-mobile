@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
 			alignItems:"center"
 	},
 	outerContainer: {
-			zIndex: 2,
+			zIndex: 10,
 			dispatch:"flex",
 			justifyContent:"center",
 			alignItems:"center",

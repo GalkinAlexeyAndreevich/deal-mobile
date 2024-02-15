@@ -140,10 +140,10 @@ const tasksDatesSlice = createSlice({
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
             state.tasks[taskIndex].type = newType
         },
-        addSubtaskInTask(state,action:PayloadAction<{taskId:string, subtasks:SubTask[]}>){
-            const {taskId, subtasks} = action.payload
+        addSubtaskInTask(state,action:PayloadAction<{taskId:string, subtask:SubTask}>){
+            const {taskId, subtask} = action.payload
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
-            state.tasks[taskIndex].subtasks = subtasks
+            state.tasks[taskIndex].subtasks = [subtask,...state.tasks[taskIndex].subtasks]
         }
     },
 });

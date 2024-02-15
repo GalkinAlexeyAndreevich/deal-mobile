@@ -10,6 +10,8 @@ import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import { CheckBox } from "react-native-elements";
 import { SubTask, Task } from "@interfaces";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { deleteSubtask, setSubtask } from "@src/store/tasksDatesSlice";
+import { useAppDispatch } from "@src/store/hook";
 
 interface Props {
     task: Task;
@@ -19,8 +21,6 @@ interface Props {
     isActive: boolean;
     changed: boolean;
     setChanged: Dispatch<SetStateAction<boolean>>;
-    deleteSubtask:(subtaskId:string)=>void
-    changeStatusSubtask:(subtaskId:string)=>void
 }
 
 export default function Subtasks({
@@ -31,9 +31,8 @@ export default function Subtasks({
     isActive,
     changed,
     setChanged,
-    deleteSubtask,
-    changeStatusSubtask
 }: Props) {
+    const dispatch = useAppDispatch()
     const inputRef = useRef<TextInput>(null);
     const longPress = () => {
         console.log("long press");
@@ -52,6 +51,14 @@ export default function Subtasks({
     //     setIsActiveInput(false);
     //     inputRef.current && inputRef.current.blur();
     // };
+    const redRound = ():React.ReactElement=>{
+        return(
+            <View style={{paddingRight:3, paddingTop:4}}>
+                <View style={{backgroundColor:'black', width:9, height:9, borderRadius:50}}></View>
+            </View>
+            
+        )
+    }
     const [isActiveInput, setIsActiveInput] = useState(false);
     return (
         <TouchableOpacity
@@ -64,12 +71,21 @@ export default function Subtasks({
             onPress={enableInput}>
             <View style={styles.secondContainer}>
                 <CheckBox
-                    size={20}
+                // style={{padding:0, margin:0}}
+                // containerStyle={{padding:3, margin:0}}
+                    size={12}
                     checked={subtask.done}
                     onLongPress={longPress}
-                    onPress={() =>changeStatusSubtask(subtask.id)}
+                    onPress={() =>{
+                        dispatch(
+                            setSubtask({
+                                subtaskId: subtask.id,
+                                taskId: task.id,
+                            })
+                        );
+                    }}
                     checkedColor="red"
-                    checkedIcon="dot-circle-o"
+                    checkedIcon={redRound()}
                     uncheckedIcon="circle-o"
                 />
 
@@ -107,7 +123,14 @@ export default function Subtasks({
             <Pressable
                 style={{ padding: 3,marginRight:10 }}
                 onLongPress={longPress}
-                onPress={() => deleteSubtask(subtask.id)}>
+                onPress={() =>{
+                    dispatch(
+                        deleteSubtask({
+                            taskId: task.id,
+                            subtaskId: subtask.id,
+                        })
+                    );
+                }}>
                 <Icon name="close" size={25} color="red" />
             </Pressable>
         </TouchableOpacity>

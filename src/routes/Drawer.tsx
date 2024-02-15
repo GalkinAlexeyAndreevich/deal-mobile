@@ -79,14 +79,27 @@ export function MyDrawer() {
                 },
                 headerTitle: () => <Header />,
                 drawerStyle: {
-                    width: "50%",
+                    width: "55%",
                 },
                 headerTitleAlign: "center",
                 drawerPosition: "right",
                 headerLeft: () => null,
             })}>
-            <Drawer.Screen name="TabNavigator" component={TabNavigator} />
-            <Drawer.Screen name="About" component={About} />
+            <Drawer.Screen options={{
+                drawerLabel:'Основное приложение',
+                drawerLabelStyle:{
+                    fontSize:13,
+                    padding:0,
+                    margin:0
+                },
+                // drawerItemStyle:{
+                //     padding:0,
+                //     margin:0
+                // }
+            }} name="TabNavigator" component={TabNavigator} />
+            <Drawer.Screen options={{
+                drawerLabel:'О приложении'
+            }} name="About" component={About} />
         </Drawer.Navigator>
     );
 }

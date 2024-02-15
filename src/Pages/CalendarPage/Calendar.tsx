@@ -79,7 +79,7 @@ export default function CustomCalendar({
                             markedDates[date]?.dots!.length
                         );
                         const sum =
-                            (filtered[currentNumberWeek].countTask || 1) * 15 +
+                            (filtered[currentNumberWeek].countTask || 1) * 18 +
                             filtered[currentNumberWeek].textLength * 1.9;
                         filtered[currentNumberWeek].maxLength = Math.max(
                             filtered[currentNumberWeek].maxLength,

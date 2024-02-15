@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet } from "react-native";
 import React from "react";
 import type { Task } from "@src/interfaces";
 import { useAppDispatch } from "@src/store/hook";
@@ -34,9 +34,8 @@ const styles = StyleSheet.create({
         padding: 0,
         fontSize: 20,
         borderBottomWidth: 0,
-        textDecorationLine: "underline",
         width: "90%",
-        fontWeight: "bold",
+        // fontWeight: "bold",
         paddingVertical: 10,
     },
 });

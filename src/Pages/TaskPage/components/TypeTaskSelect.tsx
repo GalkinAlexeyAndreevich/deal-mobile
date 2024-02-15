@@ -12,10 +12,18 @@ interface Props{
 
 export default function TypeTaskSelect({task}:Props) {
 	const { typesTask } = useAppSelector((state) => state.tasksDates);
+    const type = typesTask.find(element=>element.value == task.type)
     const dispatch = useAppDispatch()
+    const optimizationWidth = ()=>{
+        if(!type?.value?.length || type?.value?.length <6)return 80
+        if(type?.value?.length < 10){
+            return type?.value?.length * 17
+        }
+        return type?.value?.length * 11
+    }   
     const typeItem = (item: ITypeTask) => {
         return (
-            <View style={styles.item}>
+            <View style={{...styles.item}}>
                 <View
                     style={{
                         width: 10,
@@ -24,16 +32,22 @@ export default function TypeTaskSelect({task}:Props) {
                         backgroundColor: item.color,
                         marginRight: 10,
                     }}></View>
-                <Text>{item.value}</Text>
+                    <Text>
+                        <Text>{item.value}</Text>
+                    </Text>
             </View>
         );
     };
     return (
         <Dropdown
-            style={styles.dropdown}
+            style={{...styles.dropdown,backgroundColor:type?.color, width:optimizationWidth()}}
             labelField="value"
             valueField="value"
             data={typesTask}
+            // style={{backgroundColor:'green'}}
+            containerStyle={{width:200}}
+            // activeColor="blue"
+            // selectedTextStyle={{backgroundColor:'yellow'}}
             renderItem={typeItem}
             onChange={(item) => {
                 dispatch(setTypeTask({newType:item.value, taskId:task.id}))
@@ -46,9 +60,9 @@ export default function TypeTaskSelect({task}:Props) {
 
 const styles = StyleSheet.create({
     dropdown: {
-        height: 40,
-        width:200,
-        backgroundColor: "white",
+        // height: 40,
+        // width:200,
+        // backgroundColor: "green",
         borderRadius: 12,
         padding: 5,
         shadowColor: "#000",
