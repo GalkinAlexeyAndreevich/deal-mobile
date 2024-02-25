@@ -1,4 +1,4 @@
-import { TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet, View } from "react-native";
 import React from "react";
 import type { Task } from "@src/interfaces";
 import { useAppDispatch } from "@src/store/hook";
@@ -11,20 +11,25 @@ interface Props {
 export default function TaskInput({ task }: Props) {
     const dispatch = useAppDispatch();
     const changeNameTask = (text: string, task: Task) => {
-        if (!text) return;
+        // if (!text) return;
         console.log(text, task.id);
         dispatch(setNameTask({ text, taskId: task.id, subtaskId: undefined }));
     };
     return (
-        <TextInput
-            underlineColorAndroid="transparent"
-            // ref={inputRef}
-            style={styles.input}
-            multiline={true}
-            maxLength={50}
-            value={task.name}
-            onChangeText={(text) => changeNameTask(text, task)}
-        />
+        <View style={{width:"80%"}}>
+            <TextInput
+                underlineColorAndroid="transparent"
+                // ref={inputRef}
+                style={styles.input}
+                // keyboardType="default"
+                multiline={true}
+                // returnKeyType="done"
+                maxLength={50}
+                value={task.name}
+                blurOnSubmit={true}
+                onChangeText={(text) => changeNameTask(text, task)}
+            />
+        </View>
     );
 }
 
@@ -34,8 +39,9 @@ const styles = StyleSheet.create({
         padding: 0,
         fontSize: 20,
         borderBottomWidth: 0,
-        width: "90%",
+        // width: "80%",
+        maxHeight: 100,
         // fontWeight: "bold",
-        paddingVertical: 10,
+        // paddingVertical: 10,
     },
 });

@@ -15,11 +15,11 @@ export default function TypeTaskSelect({task}:Props) {
     const type = typesTask.find(element=>element.value == task.type)
     const dispatch = useAppDispatch()
     const optimizationWidth = ()=>{
-        if(!type?.value?.length || type?.value?.length <6)return 80
+        if(!type?.value?.length || type?.value?.length <6)return 90
         if(type?.value?.length < 10){
-            return type?.value?.length * 17
+            return type?.value?.length * 19
         }
-        return type?.value?.length * 11
+        return type?.value?.length * 13
     }   
     const typeItem = (item: ITypeTask) => {
         return (
@@ -52,6 +52,7 @@ export default function TypeTaskSelect({task}:Props) {
             onChange={(item) => {
                 dispatch(setTypeTask({newType:item.value, taskId:task.id}))
             }}
+            // renderRightIcon={}
             
             value={task.type}
         />
@@ -63,8 +64,10 @@ const styles = StyleSheet.create({
         // height: 40,
         // width:200,
         // backgroundColor: "green",
-        borderRadius: 12,
-        padding: 5,
+        // borderRadius: 12,
+        display:"flex",
+        paddingHorizontal: 10,
+        justifyContent:"flex-end",
         shadowColor: "#000",
         shadowOffset: {
             width: 0,

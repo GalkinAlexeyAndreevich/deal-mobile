@@ -8,7 +8,7 @@ import {
     FlatList,
     Image,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import Fontisto from "react-native-vector-icons/Fontisto";
 // import FontAwesome from "react-native-vector-icons/FontAwesome";
@@ -30,7 +30,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
     const dispatch = useAppDispatch();
     const [openModal, setOpenModal] = useState(false);
     const [inputValue, setInputValue] = useState("");
-    const [chosenType, setChosenType] = useState<ITypeTask>({} as ITypeTask);
+    const [chosenType, setChosenType] = useState<ITypeTask>(typesTask[0]);
     //отдельно есть массив подзадач которые уже создали и подзадачи которые появляются при добавлении на кнопку
     // Изменять можно все новые позадания на этот объект вешать обработчик
     const [subtasks, setSubtasks] = useState<SubTask[]>([]);
@@ -90,7 +90,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
             subtasks: finalArrSubtask,
         };
         setInputValue("");
-        setChosenType({} as ITypeTask);
+        setChosenType(typesTask[0]);
 
         dispatch(setTasks([...tasks, object]));
     };
@@ -130,6 +130,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                     console.log("open modal");
                     setOpenModal(true);
                     setSubtasks([]);
+                    // setChosenType(typesTask[0])
                 }}
                 style={{
                     flex: 1,
@@ -184,7 +185,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                 alignItems: "center",
                                 justifyContent: "space-between",
                                 // paddingHorizontal: 10,
-                                paddingRight: 10,
+                                paddingRight: 0,
                             }}>
                             <View
                                 style={{
@@ -258,7 +259,7 @@ const styles = StyleSheet.create({
     },
     textInputTask: {
         margin: 0,
-        marginHorizontal: 10,
+        // marginHorizontal: 10,
         padding: 0,
         borderWidth: 1,
         borderRadius: 10,

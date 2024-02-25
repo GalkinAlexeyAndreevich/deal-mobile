@@ -31,29 +31,29 @@ function TabNavigator() {
                    }
                    navigation.navigate(route.name)
                 },
-                state: () => {
-                    console.log(route.name);
-                    if (route.name !== "TaskPage") {
-                        navigation.getParent()?.setOptions({
-                            headerLeft: () => null,
-                        });
-                    } else {
-                        navigation.getParent()?.setOptions({
-                            headerLeft: () => (
-                                <Pressable
-                                style={{marginLeft:5,padding:10}}
-                                    onPress={() =>
-                                        navigation.navigate("TaskOnDayPage")
-                                    }>
-                                    <Ionicons
-                                        name="arrow-back-outline"
-                                        size={24}
-                                    />
-                                </Pressable>
-                            ),
-                        });
-                    }
-                },
+                // state: () => {
+                //     console.log(route.name);
+                //     if (route.name !== "TaskPage") {
+                //         navigation.getParent()?.setOptions({
+                //             headerLeft: () => null,
+                //         });
+                //     } else {
+                //         navigation.getParent()?.setOptions({
+                //             headerLeft: () => (
+                //                 <Pressable
+                //                 style={{marginLeft:5,padding:10}}
+                //                     onPress={() =>
+                //                         navigation.navigate("TaskOnDayPage")
+                //                     }>
+                //                     <Ionicons
+                //                         name="arrow-back-outline"
+                //                         size={24}
+                //                     />
+                //                 </Pressable>
+                //             ),
+                //         });
+                //     }
+                // },
             })}
             initialRouteName="TaskOnDayPage">
             {/* <Tab.Screen

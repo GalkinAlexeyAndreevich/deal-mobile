@@ -116,6 +116,7 @@ const tasksDatesSlice = createSlice({
             // state.tasks = Array.from(new Set(state.tasks.concat(newTasks)))
             state.tasks = state.tasks.filter(task=>task.date != currentDate)
             state.tasks = state.tasks.concat(newTasks)
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         deleteTask(state, action: PayloadAction<string>) {
             const taskId = action.payload;
@@ -139,11 +140,13 @@ const tasksDatesSlice = createSlice({
             const {taskId, newType} = action.payload
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
             state.tasks[taskIndex].type = newType
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         addSubtaskInTask(state,action:PayloadAction<{taskId:string, subtask:SubTask}>){
             const {taskId, subtask} = action.payload
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
             state.tasks[taskIndex].subtasks = [subtask,...state.tasks[taskIndex].subtasks]
+            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         }
     },
 });

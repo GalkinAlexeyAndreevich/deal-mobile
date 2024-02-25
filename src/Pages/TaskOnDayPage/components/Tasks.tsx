@@ -2,9 +2,7 @@ import { View, Text } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "@store/hook";
 import { Task } from "@interfaces";
-import {
-    setPositionTasks,
-} from "@store/tasksDatesSlice";
+import { setPositionTasks } from "@store/tasksDatesSlice";
 import TaskItem from "./TaskItem";
 import DraggableFlatList, {
     ScaleDecorator,
@@ -19,7 +17,7 @@ interface IProps {
 }
 
 export default function Tasks({ currentDate, navigation }: IProps) {
-    const { tasks } = useAppSelector((state) => state.tasksDates);
+    const { tasks,typesTask } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
     const [filtered, setFiltered] = useState<Task[]>([]);
 
@@ -31,10 +29,12 @@ export default function Tasks({ currentDate, navigation }: IProps) {
         setFiltered(filteredArr);
     }, [tasks, currentDate]);
 
-
     const redirectToTask = (task: Task) => {
         console.log("redirectOnNewPage", task);
-        navigation.navigate("TaskPage", { taskId: task.id,uniqueId:moment().toISOString() });
+        navigation.navigate("TaskPage", {
+            taskId: task.id,
+            uniqueId: moment().toISOString(),
+        });
     };
 
     const renderTask = ({
@@ -61,28 +61,28 @@ export default function Tasks({ currentDate, navigation }: IProps) {
 
     return (
         <View>
-            {filtered.length == 0 && (
+            {filtered.length ===0 ? (
                 <View
                     style={{
-                        flex: 1,
                         display: "flex",
                         paddingTop: "50%",
                         alignSelf: "center",
                     }}>
-                    <Text style={{ fontSize: 20, color: "#a7ceff" }}>
+                    <Text style={{textAlign:'center', fontSize: 20, color: "#a7ceff" }}>
                         У вас нет целей на этот день,
                     </Text>
-                    <Text style={{ fontSize: 20, color: "#a7ceff" }}>
+                    <Text style={{textAlign:'center', fontSize: 20, color: "#a7ceff" }}>
                         но вы можете их добавить.
                     </Text>
                 </View>
+            ) : (
+                <DraggableFlatList
+                    data={filtered}
+                    onDragEnd={({ data }) => setTasksPosition(data)}
+                    keyExtractor={(item) => String(item.id)}
+                    renderItem={renderTask}
+                />
             )}
-            <DraggableFlatList
-                data={filtered}
-                onDragEnd={({ data }) => setTasksPosition(data)}
-                keyExtractor={(item) => String(item.id)}
-                renderItem={renderTask}
-            />
         </View>
     );
 }

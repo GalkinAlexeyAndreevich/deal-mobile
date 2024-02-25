@@ -50,31 +50,26 @@ export function MyDrawer() {
             // drawerContent={(props) => <DrawerView {...props}/>}
             initialRouteName="TabNavigator"
             screenOptions={({ navigation,route }) => ({
-                headerRight: () => (
-                    <Pressable onPress={
-                        () => {
-                            navigation.openDrawer()
-                            // console.log(navigation.getState());
-                            
-                        }
-                        }>
-                        <Ionicons
-                            name={
-                                Platform.OS === "android"
-                                    ? "md-menu"
-                                    : "ios-menu"
-                            }
-                            size={32}
-                            color={"#000"}
-                            style={{ marginRight: 10 }}
-                        />
-                        <Text>
-                            {/* {String(navigation.index) + Math.random()* 100} */}
-                        </Text>
-                    </Pressable>
-                ),
+                // headerRight: () => (
+                //     <Pressable onPress={
+                //         () => {
+                //             navigation.openDrawer()    
+                //         }
+                //         }>
+                //         <Ionicons
+                //             name={
+                //                 Platform.OS === "android"
+                //                     ? "md-menu"
+                //                     : "ios-menu"
+                //             }
+                //             size={32}
+                //             color={"#000"}
+                //             style={{ marginRight: 10,paddingTop:10 }}
+                //         />
+                //     </Pressable>
+                // ),
                 headerStyle: {
-                    height: 120,
+                    height: 150,
                     borderWidth:0
                 },
                 headerTitle: () => <Header />,

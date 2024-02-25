@@ -5,8 +5,8 @@ export default function Header() {
     return (
         <View>
             <Image
-                source={require("@assets/deal.jpg")}
-                style={{ width: 200, height:80 }}
+                source={require("@assets/deal3.png")}
+                style={{ width: 185, height:85 }}
             />
         </View>
     );

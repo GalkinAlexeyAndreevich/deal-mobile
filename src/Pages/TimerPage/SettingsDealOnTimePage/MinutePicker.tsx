@@ -30,7 +30,7 @@ export default function MinutePicker({selected, setSelected}:Props) {
                 <Text
                     style={{
                         borderRadius: 10,
-                        backgroundColor: "#8ffb93",
+                        backgroundColor: "rgb(194,239,154)",
                         fontSize: 23,
                         padding: 10,
                         marginHorizontal: 5,

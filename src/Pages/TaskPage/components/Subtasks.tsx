@@ -72,7 +72,7 @@ export default function Subtasks({
             <View style={styles.secondContainer}>
                 <CheckBox
                 // style={{padding:0, margin:0}}
-                // containerStyle={{padding:3, margin:0}}
+                // containerStyle={{padding:0, paddingHorizontal:3, margin:0}}
                     size={12}
                     checked={subtask.done}
                     onLongPress={longPress}
@@ -105,6 +105,7 @@ export default function Subtasks({
                         onChangeText={(text) =>
                             changeNameTask(text, task, subtask)
                         }
+                        blurOnSubmit={true}
                         // onEndEditing={blurInput}
                         placeholder="Введите подцель"
                     />

@@ -29,6 +29,19 @@ export default function CustomCalendar({
     setCurrentDate,
 }: Props) {
     let monthYear = moment(currentDate).format("MM-yyyy");
+    const countWord = ()=>{
+        console.log("test", Object.values(markedDates));
+        const arrDates =  Object.values(markedDates)
+        let count = 0
+        for(let i=0; i<arrDates.length;i++){
+            if(!arrDates[i].dots)continue
+            for(let j=0;j<arrDates[i].dots!.length;j++){
+                count += arrDates[i].dots![j].key?.length || 0
+            }
+        }
+        return count
+    }
+    const count = countWord()
     // Функция оптимизация высоты для недели
     const getStartAndEndOfWeeks = (month: string | Date) => {
         console.log("getStartAndEndOfWeeks", month);
@@ -79,8 +92,8 @@ export default function CustomCalendar({
                             markedDates[date]?.dots!.length
                         );
                         const sum =
-                            (filtered[currentNumberWeek].countTask || 1) * 18 +
-                            filtered[currentNumberWeek].textLength * 1.9;
+                            (filtered[currentNumberWeek].countTask || 1) * 17 +
+                            filtered[currentNumberWeek].textLength * 2;
                         filtered[currentNumberWeek].maxLength = Math.max(
                             filtered[currentNumberWeek].maxLength,
                             Math.round(sum)
@@ -98,7 +111,7 @@ export default function CustomCalendar({
     // Перерасчет произойдет если изменится месяц или год, а также количество заданий
     const countOnWeek = useMemo(
         () => getStartAndEndOfWeeks(currentDate),
-        [countTask, monthYear]
+        [countTask, monthYear,count]
     );
     defineLocale();
 

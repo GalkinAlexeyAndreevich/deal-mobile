@@ -1,13 +1,25 @@
-import { View, Text, Pressable, TextInput, StyleSheet } from "react-native";
+import {
+    View,
+    Text,
+    Pressable,
+    TextInput,
+    StyleSheet,
+    type ScrollView,
+} from "react-native";
 import React, {
     useState,
     type Dispatch,
     type SetStateAction,
     useEffect,
     useRef,
+    type RefObject,
 } from "react";
 import DraggableFlatList, {
+    NestableDraggableFlatList,
+    NestableScrollContainer,
+    ShadowDecorator,
     type RenderItemParams,
+    ScaleDecorator,
 } from "react-native-draggable-flatlist";
 import type { SubTask, Task } from "@src/interfaces";
 import { useAppDispatch } from "@src/store/hook";
@@ -27,6 +39,7 @@ interface Props {
     changed: boolean;
     setChanged: Dispatch<SetStateAction<boolean>>;
     uniqueId: string;
+    scrollViewRef: RefObject<ScrollView> | null;
 }
 
 export default function SubtaskBlock({
@@ -34,18 +47,19 @@ export default function SubtaskBlock({
     changed,
     setChanged,
     uniqueId,
+    scrollViewRef,
 }: Props) {
     const dispatch = useAppDispatch();
     const [subtaskValue, setSubtaskValue] = useState("");
-    const [modeCreate, setModeCreate] = useState(false);
-    const subtaskRef = useRef<TextInput>(null)
-    const [statusSubtask, setStatusSubtask] = useState(false)
+    // const [modeCreate, setModeCreate] = useState(false);
+    const subtaskRef = useRef<TextInput>(null);
+    const [statusSubtask, setStatusSubtask] = useState(false);
     const clearInput = () => {
         setSubtaskValue("");
-        setModeCreate(false);
-        setStatusSubtask(false)
+        // setModeCreate(false);
+        setStatusSubtask(false);
     };
-    useEffect(clearInput,[uniqueId])
+    useEffect(clearInput, [uniqueId]);
     // console.log(visibleSubtasks);
     const addSubtask = () => {
         if (!subtaskValue.length) return;
@@ -63,46 +77,50 @@ export default function SubtaskBlock({
         task: Task,
         subtask: SubTask = {} as SubTask
     ) => {
-        if(!text.length)return
+        // if (!text.length) return;
         dispatch(
             setNameTask({ text, taskId: task.id, subtaskId: subtask?.id })
         );
     };
     const redRound = ():React.ReactElement=>{
         return(
-            <View style={{paddingRight:3, paddingTop:3}}>
-                <View style={{backgroundColor:'red', width:16, height:16, borderRadius:50}}></View>
+            <View style={{paddingRight:3, paddingTop:4}}>
+                <View style={{backgroundColor:'black', width:9, height:9, borderRadius:50}}></View>
             </View>
             
         )
     }
 
-
-    const checkDif = (
-        taskId: string,
-        subtasks: SubTask[]
-    ) => {
+    const checkDif = (taskId: string, subtasks: SubTask[]) => {
         dispatch(changeArrSubtaskInTask({ taskId, subtasks }));
     };
     return (
         <>
-            {modeCreate && (
+            {/* <Text>Редактирование подцелей</Text> */}
+            <View
+                style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                }}>
                 <View
                     style={{
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
                     }}>
-                <CheckBox
-                    size={12}
-                    checked={statusSubtask}
-                    onPress={() =>{
-                        setStatusSubtask(prev=>!prev)
-                    }}
-                    checkedColor="red"
-                    checkedIcon={redRound()}
-                    uncheckedIcon="circle-o"
-                />
+                    <CheckBox
+                        size={12}
+                        checked={statusSubtask}
+                        onPress={() => {
+                            setStatusSubtask((prev) => !prev);
+                        }}
+                        checkedColor="red"
+                        checkedIcon={redRound()}
+                        uncheckedIcon="circle-o"
+                    />
+
                     <TextInput
                         ref={subtaskRef}
                         style={styles.input}
@@ -110,56 +128,46 @@ export default function SubtaskBlock({
                         maxLength={50}
                         value={subtaskValue}
                         onChangeText={(text) => setSubtaskValue(text)}
-                        onEndEditing={() => addSubtask()}
+                        blurOnSubmit={true}
+                        onSubmitEditing={() => addSubtask()} 
+                        // onEndEditing={() => addSubtask()}
                         placeholder="введите подцель"
-                        autoFocus={true}
-                        
                     />
-                    <Pressable
-                        style={{ padding: 3, marginRight: 10 }}
-                        onPress={() => clearInput()}>
-                        <Icon name="close" size={25} color="red" />
-                    </Pressable>
                 </View>
-            )}
 
-            <DraggableFlatList
-                style={{ height: '70%' }}
-                // scrollEnabled={false}
-                data={task.subtasks}
-                onDragEnd={({ data }) => checkDif(task.id, data)}
-                // onDragBegin={() => setOuterScrollEnabled(false)}
-                keyExtractor={(item) => String(item.id)}
-                renderItem={({
-                    item,
-                    drag,
-                    isActive,
-                }: RenderItemParams<SubTask>) => (
-                    <Subtasks
-                        subtask={item}
-                        task={task}
-                        changeNameTask={changeNameTask}
-                        drag={drag}
-                        isActive={isActive}
-                        changed={changed}
-                        setChanged={setChanged}
+                <Pressable
+                    style={{ padding: 3, marginRight: 10 }}
+                    onPress={() => clearInput()}>
+                    <Icon name="close" size={25} color="red" />
+                </Pressable>
+            </View>
+            <View>
+            {/* <NestableScrollContainer> */}
+                    <NestableDraggableFlatList
+                        scrollEnabled={false}
+                        data={task.subtasks}
+                        onDragEnd={({ data }) => checkDif(task.id, data)}
+                        // onDragBegin={() => setOuterScrollEnabled(false)}
+                        keyExtractor={(item) => String(item.id)}
+                        renderItem={({
+                            item,
+                            drag,
+                            isActive,
+                        }: RenderItemParams<SubTask>) => (
+                                <Subtasks
+                                    subtask={item}
+                                    task={task}
+                                    changeNameTask={changeNameTask}
+                                    drag={drag}
+                                    isActive={isActive}
+                                    changed={changed}
+                                    setChanged={setChanged}
+                                />
+                        )}
+                        // simultaneousHandlers={scrollViewRef}
+                        // activationDistance={20}
                     />
-                )}
-                // simultaneousHandlers={scrollViewRef}
-                // activationDistance={50}
-            />
-
-            <Pressable style={styles.add} onPress={() => {
-                if(modeCreate && subtaskValue.length)addSubtask()
-                setModeCreate(true)
-                console.log("open");
-                subtaskRef.current?.focus()
-                }}>
-                <Fontisto name="plus-a" color={"black"} size={18} />
-                <Text style={{ paddingLeft: 10, fontSize: 20 }}>
-                    Добавить подцель
-                </Text>
-            </Pressable>
+            </View>
         </>
     );
 }
@@ -170,10 +178,11 @@ const styles = StyleSheet.create({
         padding: 0,
         fontSize: 20,
         borderBottomWidth: 0,
+        maxHeight:100,
         // textDecorationLine: "underline",
-        width: "75.5%",
+        width: "75%",
         // fontWeight: "bold",
-        paddingVertical: 10,
+        // paddingVertical: 10,
     },
     add: {
         display: "flex",
@@ -181,6 +190,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingTop: 5,
         // paddingLeft:17,
-        opacity:0.5
+        opacity: 0.5,
     },
 });

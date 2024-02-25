@@ -44,7 +44,7 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
                 borderColor: "#a0a0a0",
                 borderBottomWidth: moment(date.dateString).isoWeek()===maxWeek?1:0.2,
                 backgroundColor:
-                    currentDate == date.dateString ? "#e4f7fe" : "white",
+                    currentDate == date.dateString ? "#e8ffe3" : "white",
             }}>
             <Text
                 style={{
