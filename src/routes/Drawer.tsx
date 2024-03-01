@@ -69,7 +69,7 @@ export function MyDrawer() {
                 //     </Pressable>
                 // ),
                 headerStyle: {
-                    height: 150,
+                    height: 100,
                     borderWidth:0
                 },
                 headerTitle: () => <Header />,

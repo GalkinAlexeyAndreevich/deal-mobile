@@ -1,4 +1,4 @@
-import { View, ScrollView } from "react-native";
+import { ScrollView, View } from "react-native";
 import React, { useMemo } from "react";
 import { Calendar } from "react-native-calendars";
 import { MarkedDates, Theme } from "react-native-calendars/src/types";

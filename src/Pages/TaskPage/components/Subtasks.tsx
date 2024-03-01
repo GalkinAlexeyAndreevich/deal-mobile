@@ -10,6 +10,7 @@ import React, { Dispatch, SetStateAction, useRef, useState } from "react";
 import { CheckBox } from "react-native-elements";
 import { SubTask, Task } from "@interfaces";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { deleteSubtask, setSubtask } from "@src/store/tasksDatesSlice";
 import { useAppDispatch } from "@src/store/hook";
 
@@ -51,7 +52,7 @@ export default function Subtasks({
     //     setIsActiveInput(false);
     //     inputRef.current && inputRef.current.blur();
     // };
-    const redRound = ():React.ReactElement=>{
+    const blackRound = ():React.ReactElement=>{
         return(
             <View style={{paddingRight:3, paddingTop:4}}>
                 <View style={{backgroundColor:'black', width:9, height:9, borderRadius:50}}></View>
@@ -59,6 +60,7 @@ export default function Subtasks({
             
         )
     }
+
     const [isActiveInput, setIsActiveInput] = useState(false);
     return (
         <TouchableOpacity
@@ -84,9 +86,9 @@ export default function Subtasks({
                             })
                         );
                     }}
-                    checkedColor="red"
-                    checkedIcon={redRound()}
-                    uncheckedIcon="circle-o"
+                    checkedColor="black"
+                    checkedIcon={<FontAwesome name="circle" size={12}/>}
+                    uncheckedIcon={<FontAwesome name="circle-o" size={12}/>}
                 />
 
                 {isActiveInput && changed ? (

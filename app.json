@@ -52,12 +52,21 @@
           ],
           "bluetoothAlwaysPermission": "Allow $(PRODUCT_NAME) to connect to bluetooth devices"
         }
+      ],
+      [
+        "expo-updates",
+        {
+          "username": "galkinalexey"
+        }
       ]
     ],
     "extra": {
       "eas": {
         "projectId": "bb80f571-7532-400d-954c-8ea2da8f92d1"
       }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/bb80f571-7532-400d-954c-8ea2da8f92d1"
     }
   }
 }

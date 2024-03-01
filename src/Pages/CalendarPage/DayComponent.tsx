@@ -25,7 +25,7 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
 		if (!countOnWeek) return 50;   
 		const week = moment(date).isoWeek();
         if(!countOnWeek[week]) return 50
-        if(countOnWeek[week].textLength < 10) return 50 *(countOnWeek[week].countTask >0?countOnWeek[week].countTask:1) 
+        if(countOnWeek[week].textLength < 10) return 70 *(countOnWeek[week].countTask >0?countOnWeek[week].countTask:1) 
         let sum = 50 + countOnWeek[week].maxLength     
 		return sum;
 	};

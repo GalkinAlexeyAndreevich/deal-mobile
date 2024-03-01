@@ -14,12 +14,9 @@ import React, {
     useRef,
     type RefObject,
 } from "react";
-import DraggableFlatList, {
+import {
     NestableDraggableFlatList,
-    NestableScrollContainer,
-    ShadowDecorator,
     type RenderItemParams,
-    ScaleDecorator,
 } from "react-native-draggable-flatlist";
 import type { SubTask, Task } from "@src/interfaces";
 import { useAppDispatch } from "@src/store/hook";
@@ -28,10 +25,10 @@ import {
     changeArrSubtaskInTask,
     setNameTask,
 } from "@src/store/tasksDatesSlice";
-import Fontisto from "react-native-vector-icons/Fontisto";
 import Subtasks from "./Subtasks";
 import uuid from "react-native-uuid";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { CheckBox } from "react-native-elements";
 
 interface Props {
@@ -82,14 +79,19 @@ export default function SubtaskBlock({
             setNameTask({ text, taskId: task.id, subtaskId: subtask?.id })
         );
     };
-    const redRound = ():React.ReactElement=>{
-        return(
-            <View style={{paddingRight:3, paddingTop:4}}>
-                <View style={{backgroundColor:'black', width:9, height:9, borderRadius:50}}></View>
+    const redRound = (): React.ReactElement => {
+        return (
+            <View style={{ paddingRight: 3, paddingTop: 4 }}>
+                <View
+                    style={{
+                        backgroundColor: "black",
+                        width: 9,
+                        height: 9,
+                        borderRadius: 50,
+                    }}></View>
             </View>
-            
-        )
-    }
+        );
+    };
 
     const checkDif = (taskId: string, subtasks: SubTask[]) => {
         dispatch(changeArrSubtaskInTask({ taskId, subtasks }));
@@ -116,9 +118,11 @@ export default function SubtaskBlock({
                         onPress={() => {
                             setStatusSubtask((prev) => !prev);
                         }}
-                        checkedColor="red"
-                        checkedIcon={redRound()}
-                        uncheckedIcon="circle-o"
+                        checkedColor="black"
+                        checkedIcon={<FontAwesome name="circle" size={12} />}
+                        uncheckedIcon={
+                            <FontAwesome name="circle-o" size={12} />
+                        }
                     />
 
                     <TextInput
@@ -129,7 +133,7 @@ export default function SubtaskBlock({
                         value={subtaskValue}
                         onChangeText={(text) => setSubtaskValue(text)}
                         blurOnSubmit={true}
-                        onSubmitEditing={() => addSubtask()} 
+                        onSubmitEditing={() => addSubtask()}
                         // onEndEditing={() => addSubtask()}
                         placeholder="введите подцель"
                     />
@@ -142,31 +146,31 @@ export default function SubtaskBlock({
                 </Pressable>
             </View>
             <View>
-            {/* <NestableScrollContainer> */}
-                    <NestableDraggableFlatList
-                        scrollEnabled={false}
-                        data={task.subtasks}
-                        onDragEnd={({ data }) => checkDif(task.id, data)}
-                        // onDragBegin={() => setOuterScrollEnabled(false)}
-                        keyExtractor={(item) => String(item.id)}
-                        renderItem={({
-                            item,
-                            drag,
-                            isActive,
-                        }: RenderItemParams<SubTask>) => (
-                                <Subtasks
-                                    subtask={item}
-                                    task={task}
-                                    changeNameTask={changeNameTask}
-                                    drag={drag}
-                                    isActive={isActive}
-                                    changed={changed}
-                                    setChanged={setChanged}
-                                />
-                        )}
-                        // simultaneousHandlers={scrollViewRef}
-                        // activationDistance={20}
-                    />
+                {/* <NestableScrollContainer> */}
+                <NestableDraggableFlatList
+                    scrollEnabled={false}
+                    data={task.subtasks}
+                    onDragEnd={({ data }) => checkDif(task.id, data)}
+                    // onDragBegin={() => setOuterScrollEnabled(false)}
+                    keyExtractor={(item) => String(item.id)}
+                    renderItem={({
+                        item,
+                        drag,
+                        isActive,
+                    }: RenderItemParams<SubTask>) => (
+                        <Subtasks
+                            subtask={item}
+                            task={task}
+                            changeNameTask={changeNameTask}
+                            drag={drag}
+                            isActive={isActive}
+                            changed={changed}
+                            setChanged={setChanged}
+                        />
+                    )}
+                    // simultaneousHandlers={scrollViewRef}
+                    // activationDistance={20}
+                />
             </View>
         </>
     );
@@ -178,18 +182,14 @@ const styles = StyleSheet.create({
         padding: 0,
         fontSize: 20,
         borderBottomWidth: 0,
-        maxHeight:100,
-        // textDecorationLine: "underline",
+        maxHeight: 100,
         width: "75%",
-        // fontWeight: "bold",
-        // paddingVertical: 10,
     },
     add: {
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
         paddingTop: 5,
-        // paddingLeft:17,
         opacity: 0.5,
     },
 });

@@ -130,7 +130,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                     console.log("open modal");
                     setOpenModal(true);
                     setSubtasks([]);
-                    // setChosenType(typesTask[0])
+                    setChosenType(typesTask[0])
                 }}
                 style={{
                     flex: 1,
