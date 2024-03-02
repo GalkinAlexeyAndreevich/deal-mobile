@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "55466273519",
+    "project_id": "deal-mobile-deede",
+    "storage_bucket": "deal-mobile-deede.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:55466273519:android:e4ce71a276726bcfd1c91a",
+        "android_client_info": {
+          "package_name": "com.dealmobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDuq9sZ7UWPXNhHggctPZ8Mulrbjwy-7Fk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

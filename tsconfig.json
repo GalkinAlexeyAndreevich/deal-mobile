@@ -29,6 +29,7 @@
             "@store/*": ["src/store/*"],
             "@utils/*": ["src/utils/*"],
             "@interfaces": ["src/interfaces.ts"],
+            "@firebase/auth": ["./node_modules/@firebase/auth/dist/index.rn.d.ts"]
         }
     },
     "exclude": ["node_modules"]

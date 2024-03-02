@@ -4,7 +4,6 @@ import { useAppDispatch } from "./store/hook";
 import { setTasks, setType } from "./store/tasksDatesSlice";
 import { defaultTasks, defaultTypeTasks } from "./utils/dataNoFetch";
 import type {ResultSetRowList} from "react-native-sqlite-storage"
-import { createTables, getTasks } from "db";
 
 const SavedDataContext = createContext({});
 
@@ -47,11 +46,6 @@ export const SavedDataProvider = ({ children }: Props) => {
             console.log("Сохраненные данные перенесены");
         }
         getSaveData();
-        try{
-            createTables()
-        }catch(err){
-            console.log("error in db", err);
-        }
     }, []);
 
     return (
