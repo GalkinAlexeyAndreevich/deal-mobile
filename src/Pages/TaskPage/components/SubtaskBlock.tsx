@@ -30,6 +30,7 @@ import uuid from "react-native-uuid";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { CheckBox } from "react-native-elements";
+import { addSubtaskDb } from "db";
 
 interface Props {
     task: Task;
@@ -61,11 +62,12 @@ export default function SubtaskBlock({
     const addSubtask = () => {
         if (!subtaskValue.length) return;
         const newSubtask: SubTask = {
-            id: String(uuid.v4()),
-            name: subtaskValue,
-            done: statusSubtask,
+            subtask_id: String(uuid.v4()),
+            subtask_name: subtaskValue,
+            subtask_done: statusSubtask,
         };
         clearInput();
+        addSubtaskDb(newSubtask,task.id)
         dispatch(addSubtaskInTask({ taskId: task.id, subtask: newSubtask }));
     };
 
@@ -76,20 +78,7 @@ export default function SubtaskBlock({
     ) => {
         // if (!text.length) return;
         dispatch(
-            setNameTask({ text, taskId: task.id, subtaskId: subtask?.id })
-        );
-    };
-    const redRound = (): React.ReactElement => {
-        return (
-            <View style={{ paddingRight: 3, paddingTop: 4 }}>
-                <View
-                    style={{
-                        backgroundColor: "black",
-                        width: 9,
-                        height: 9,
-                        borderRadius: 50,
-                    }}></View>
-            </View>
+            setNameTask({ text, taskId: task.id, subtaskId: subtask?.subtask_id })
         );
     };
 
@@ -152,7 +141,7 @@ export default function SubtaskBlock({
                     data={task.subtasks}
                     onDragEnd={({ data }) => checkDif(task.id, data)}
                     // onDragBegin={() => setOuterScrollEnabled(false)}
-                    keyExtractor={(item) => String(item.id)}
+                    keyExtractor={(item) => String(item. subtask_id)}
                     renderItem={({
                         item,
                         drag,

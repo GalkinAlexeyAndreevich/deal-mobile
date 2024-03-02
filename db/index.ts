@@ -1,7 +1,7 @@
 import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 import { Asset } from 'expo-asset';
-import type { Task } from '@src/interfaces';
+import type { SubTask, Task } from '@src/interfaces';
 
 
 // const loadDatabase = async()=>{
@@ -22,40 +22,103 @@ import type { Task } from '@src/interfaces';
 // }
 
 
-// const db = SQLite.openDatabase("Deal.db");
+const deleteDatabase = async () => {
+  try {
+    const db = SQLite.openDatabase("Deal.db")
+    // Close any existing connections to the database
+    db.closeAsync();
 
+    // Delete the database file
+    db.deleteAsync();
+
+    console.log('Database deleted successfully.');
+  } catch (error) {
+    console.error('Error deleting database:', error);
+  }
+};
 
 export const createTables = async() => {
+  // await deleteDatabase()
   const db = SQLite.openDatabase("Deal.db")
-
+  
   await db.transactionAsync(async (tx) => {
     await tx.executeSqlAsync(`
-        CREATE TABLE IF NOT EXISTS tasks (
-          id INTEGER, name TEXT, done BOOLEAN, date TEXT, type TEXT, priorityId
+        CREATE TABLE IF NOT EXISTS TASKS (
+          id TEXT, name TEXT, done BOOLEAN, date TEXT, type TEXT, priorityId INTEGER
         );
     `);
     await tx.executeSqlAsync(`
-      CREATE TABLE IF NOT EXISTS subtasks (
-        id INTEGER, name TEXT, done BOOLEAN
+      CREATE TABLE IF NOT EXISTS SUBTASKS (
+        subtask_id TEXT, subtask_name TEXT, subtask_done BOOLEAN, task_id TEXT,
+        FOREIGN KEY (task_id) REFERENCES TASKS(id)
       );
     `);
     await tx.executeSqlAsync(`
-    CREATE TABLE IF NOT EXISTS typeTask (
-      id INTEGER, key TEXT,value TEXT, color TEXT
+    CREATE TABLE IF NOT EXISTS TYPE_TASKS (
+      id TEXT auto_increment, key TEXT,value TEXT, color TEXT
     );
   `);
   });
 };
 
-export const addTask = async({id,name, done, date,type,priorityId}:Task)=>{
+export const addTask = async({id:task_id,name, done, date,type,subtasks,priorityId=0}:Task)=>{
   const db = SQLite.openDatabase("Deal.db")
+  
   await db.transactionAsync(async (tx) => {
-    await tx.executeSqlAsync(
+    const result = await tx.executeSqlAsync(
       'INSERT INTO tasks VALUES (?, ?,?,?,?,?)',
-      [id,name, String(done), date,type,Number(priorityId)]
+      [task_id,name, String(done), date,type,Number(priorityId)]
     );
+    console.log("task add", result);
+    for(let i=0;i<subtasks.length;i++){
+      let {subtask_id, subtask_name, subtask_done} = subtasks[i]
+      await tx.executeSqlAsync(
+        'INSERT INTO subtasks VALUES (?, ?,?,?)',
+        [subtask_id,subtask_name, String(subtask_done),task_id]
+      );
+    }
   });
 } 
+
+export const addSubtaskDb = async({subtask_id, subtask_name, subtask_done}:SubTask,task_id:string)=>{
+  const db = SQLite.openDatabase("Deal.db")
+  await db.transactionAsync(async (tx) => {
+    const result = await tx.executeSqlAsync(
+      'INSERT INTO subtasks VALUES (?, ?,?, ?)',
+      [subtask_id,subtask_name, String(subtask_done),task_id]
+    );
+    console.log("subtask add", result);
+    
+    
+  });
+} 
+
+
+
+export const getTasks = async()=>{
+  const db = SQLite.openDatabase("Deal.db")
+  return new Promise((resolve)=>{
+    db.transactionAsync(async (tx) => {
+      const result = await tx.executeSqlAsync('SELECT * FROM TASKS', []);
+      resolve(result.rows)
+    });
+  })
+} 
+
+export const getTasksWithSubtask = async()=>{
+  const db = SQLite.openDatabase("Deal.db")
+  return new Promise<unknown[]>((resolve)=>{
+    db.transactionAsync(async (tx) => {
+      const result = await tx.executeSqlAsync(`
+      SELECT * FROM TASKS LEFT OUTER JOIN subtasks on tasks.id = subtasks.task_id`, []);
+      console.log("test result", result.rows);
+      
+      resolve(result.rows)
+    });
+  })
+} 
+
+
 
 
 

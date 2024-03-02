@@ -34,28 +34,6 @@ export const getArrMinutes = ()=>{
 
 
 
-export const defaultSubtasks:SubTask[] = [
-    {
-        id: '1',
-        name: "test1_1",
-        done: false,
-    },
-    {
-        id: '2',
-        name: "test1_2",
-        done: false,
-    },
-    {
-        id: '3',
-        name: "test1_3",
-        done: false,
-    },
-    {
-        id: '4',
-        name: "test2_1",
-        done: false,
-    },
-]
 
 export const defaultTasks: Task[] = [
     {
@@ -67,19 +45,19 @@ export const defaultTasks: Task[] = [
         priorityId:1,
         subtasks: [
             {
-                id: '1',
-                name: "test1_1",
-                done: false,
+                subtask_id: '1',
+                subtask_name: "test1_1",
+                subtask_done: false,
             },
             {
-                id: '2',
-                name: "test1_2",
-                done: false,
+                subtask_id: '2',
+                subtask_name: "test1_2",
+                subtask_done: false,
             },
             {
-                id: '3',
-                name: "test1_3",
-                done: false,
+                subtask_id: '3',
+                subtask_name: "test1_3",
+                subtask_done: false,
             },
         ],
     },
@@ -92,9 +70,9 @@ export const defaultTasks: Task[] = [
         priorityId:2,
         subtasks: [
             {
-                id: '4',
-                name: "test2_1",
-                done: false,
+                subtask_id: '4',
+                subtask_name: "test2_1",
+                subtask_done: false,
             },
         ],
     },

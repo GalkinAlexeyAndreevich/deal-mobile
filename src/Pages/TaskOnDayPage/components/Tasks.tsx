@@ -79,7 +79,7 @@ export default function Tasks({ currentDate, navigation }: IProps) {
                 <DraggableFlatList
                     data={filtered}
                     onDragEnd={({ data }) => setTasksPosition(data)}
-                    keyExtractor={(item) => String(item.id)}
+                    keyExtractor={(item) => item.id}
                     renderItem={renderTask}
                 />
             )}

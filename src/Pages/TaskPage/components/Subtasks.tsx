@@ -76,12 +76,12 @@ export default function Subtasks({
                 // style={{padding:0, margin:0}}
                 // containerStyle={{padding:0, paddingHorizontal:3, margin:0}}
                     size={12}
-                    checked={subtask.done}
+                    checked={subtask.subtask_done}
                     onLongPress={longPress}
                     onPress={() =>{
                         dispatch(
                             setSubtask({
-                                subtaskId: subtask.id,
+                                subtaskId: subtask.subtask_id,
                                 taskId: task.id,
                             })
                         );
@@ -103,7 +103,7 @@ export default function Subtasks({
                         autoFocus={isActiveInput}
                         multiline={true}
                         maxLength={50}
-                        value={subtask.name}
+                        value={subtask.subtask_name}
                         onChangeText={(text) =>
                             changeNameTask(text, task, subtask)
                         }
@@ -116,9 +116,9 @@ export default function Subtasks({
                         style={{
                             fontSize: 20,
                             width:'75%',
-                            opacity:subtask.name.length?1:0.3
+                            opacity:subtask.subtask_name.length?1:0.3
                         }}>
-                        {subtask.name.length?subtask.name:'Введите подцель'}
+                        {subtask.subtask_name.length?subtask.subtask_name:'Введите подцель'}
                     </Text>
                 )}
             </View>
@@ -130,7 +130,7 @@ export default function Subtasks({
                     dispatch(
                         deleteSubtask({
                             taskId: task.id,
-                            subtaskId: subtask.id,
+                            subtaskId: subtask.subtask_id,
                         })
                     );
                 }}>
