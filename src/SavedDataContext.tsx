@@ -60,9 +60,9 @@ export const SavedDataProvider = ({ children }: Props) => {
                 let formattedArr:Task[] = []
                 for(let i=0;i<allData.length;i++){
                     let index = formattedArr.findIndex(element=>element.id==allData[i].id)
-                    const {subtask_id, subtask_name, subtask_done} = allData[i]
+                    const {subtask_id, subtask_name, subtask_done,subtask_priorityId} = allData[i]
                     if(index !== -1 && subtask_id){
-                        formattedArr[index].subtasks.push({subtask_id, subtask_name, subtask_done:String(subtask_done)=="true"})
+                        formattedArr[index].subtasks.push({subtask_id, subtask_name, subtask_done:String(subtask_done)=="true",subtask_priorityId})
                     }
                     else{
                         const newObj = Object
@@ -71,7 +71,7 @@ export const SavedDataProvider = ({ children }: Props) => {
                           .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}) as Task;
                         newObj.done = String(newObj.done)=="true"
                         if(subtask_id){
-                            formattedArr.push({...newObj, subtasks:[{subtask_id, subtask_name, subtask_done}]}) 
+                            formattedArr.push({...newObj, subtasks:[{subtask_id, subtask_name, subtask_done: String(subtask_done)=="true",subtask_priorityId}]}) 
                         }else{
                             formattedArr.push({...newObj, subtasks:[]}) 
                         }

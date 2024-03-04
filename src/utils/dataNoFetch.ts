@@ -48,16 +48,19 @@ export const defaultTasks: Task[] = [
                 subtask_id: '1',
                 subtask_name: "test1_1",
                 subtask_done: false,
+                subtask_priorityId:0
             },
             {
                 subtask_id: '2',
                 subtask_name: "test1_2",
                 subtask_done: false,
+                subtask_priorityId:1
             },
             {
                 subtask_id: '3',
                 subtask_name: "test1_3",
                 subtask_done: false,
+                subtask_priorityId:2
             },
         ],
     },
@@ -73,6 +76,7 @@ export const defaultTasks: Task[] = [
                 subtask_id: '4',
                 subtask_name: "test2_1",
                 subtask_done: false,
+                subtask_priorityId:0
             },
         ],
     },

@@ -44,6 +44,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 subtask_id: String(newId),
                 subtask_name: "",
                 subtask_done: false,
+                subtask_priorityId:0
             },
         ]);
     };
@@ -80,6 +81,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 subtask_id: allSubtasks.length + subtasks[i].subtask_id,
                 subtask_name: subtasks[i].subtask_name,
                 subtask_done: false,
+                subtask_priorityId:0
             });
         }
         const newId = uuid.v4(); 
@@ -91,6 +93,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
             date: moment(currentDate).format("YYYY-MM-DD"),
             type: typeTask,
             subtasks: finalArrSubtask,
+            priorityId:0
         };
         setInputValue("");
         setChosenType(typesTask[0]);

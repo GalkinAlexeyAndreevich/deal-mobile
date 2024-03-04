@@ -30,7 +30,7 @@ import uuid from "react-native-uuid";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { CheckBox } from "react-native-elements";
-import { addSubtaskDb } from "db";
+import { addSubtaskDb, setOrderSubtask } from "db";
 
 interface Props {
     task: Task;
@@ -51,6 +51,7 @@ export default function SubtaskBlock({
     const [subtaskValue, setSubtaskValue] = useState("");
     // const [modeCreate, setModeCreate] = useState(false);
     const subtaskRef = useRef<TextInput>(null);
+    const [sortedArr, setSortedArr] = useState<SubTask[]>([])
     const [statusSubtask, setStatusSubtask] = useState(false);
     const clearInput = () => {
         setSubtaskValue("");
@@ -61,16 +62,23 @@ export default function SubtaskBlock({
     // console.log(visibleSubtasks);
     const addSubtask = () => {
         if (!subtaskValue.length) return;
+        console.log("try add new subtask");
+        
         const newSubtask: SubTask = {
             subtask_id: String(uuid.v4()),
             subtask_name: subtaskValue,
             subtask_done: statusSubtask,
+            subtask_priorityId:0
         };
         clearInput();
         addSubtaskDb(newSubtask,task.id)
         dispatch(addSubtaskInTask({ taskId: task.id, subtask: newSubtask }));
     };
 
+    useEffect(()=>{
+        let copyArr = JSON.parse(JSON.stringify(task.subtasks)) as SubTask[]
+        setSortedArr(copyArr.sort((a,b)=>a.subtask_priorityId>b.subtask_priorityId?1:-1))
+    },[task.subtasks])
     const changeNameTask = (
         text: string,
         task: Task,
@@ -83,7 +91,12 @@ export default function SubtaskBlock({
     };
 
     const checkDif = (taskId: string, subtasks: SubTask[]) => {
-        dispatch(changeArrSubtaskInTask({ taskId, subtasks }));
+        let finalSubtasks = JSON.parse(JSON.stringify(subtasks))
+        for(let i=0;i<finalSubtasks.length;i++){
+            finalSubtasks[i].subtask_priorityId = i
+        }
+        setOrderSubtask(subtasks)
+        dispatch(changeArrSubtaskInTask({ taskId, subtasks:finalSubtasks }));
     };
     return (
         <>
@@ -138,7 +151,7 @@ export default function SubtaskBlock({
                 {/* <NestableScrollContainer> */}
                 <NestableDraggableFlatList
                     scrollEnabled={false}
-                    data={task.subtasks}
+                    data={sortedArr}
                     onDragEnd={({ data }) => checkDif(task.id, data)}
                     // onDragBegin={() => setOuterScrollEnabled(false)}
                     keyExtractor={(item) => String(item. subtask_id)}

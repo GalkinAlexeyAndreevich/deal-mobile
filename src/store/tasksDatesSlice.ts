@@ -112,6 +112,7 @@ const tasksDatesSlice = createSlice({
         },
         setPositionTasks(state, action:PayloadAction<{newTasks:Task[], currentDate:string}>){
             const {newTasks, currentDate} = action.payload
+            
             // const newArr = [...state.tasks].concat(newTasks).unique(); 
             // state.tasks = Array.from(new Set(state.tasks.concat(newTasks)))
             state.tasks = state.tasks.filter(task=>task.date != currentDate)

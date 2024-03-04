@@ -11,6 +11,7 @@ import DraggableFlatList, {
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@src/routes/TabNavigator";
 import moment from "moment";
+import { setOrderTask } from "db";
 interface IProps {
     navigation: NativeStackNavigationProp<RootStackParamList, "TaskOnDayPage">;
     currentDate: string;
@@ -23,10 +24,14 @@ export default function Tasks({ currentDate, navigation }: IProps) {
 
     useEffect(() => {
         let filteredArr = [];
+        console.log(tasks);
+        
         for (let i = 0; i < tasks.length; i++) {
             if (tasks[i].date == currentDate) filteredArr.push(tasks[i]);
         }
-        setFiltered(filteredArr);
+        console.log("отсортированный массив",filteredArr.sort((a,b)=>a.priorityId > b.priorityId?1:-1));
+        
+        setFiltered(filteredArr.sort((a,b)=>a.priorityId > b.priorityId?1:-1));
     }, [tasks, currentDate]);
 
     const redirectToTask = (task: Task) => {
@@ -55,8 +60,14 @@ export default function Tasks({ currentDate, navigation }: IProps) {
     };
     const setTasksPosition = (data: Task[]) => {
         console.log("new position ", data);
-
-        data && dispatch(setPositionTasks({ newTasks: data, currentDate }));
+        let finalTasks = JSON.parse(JSON.stringify(data))
+        for(let i=0;i<finalTasks.length;i++){
+            finalTasks[i].priorityId = i
+        }
+        console.log("after sort",finalTasks );
+        
+        setOrderTask(data)
+        data && dispatch(setPositionTasks({ newTasks: finalTasks, currentDate }));
     };
 
     return (

@@ -6,6 +6,7 @@ export interface SubTask{
 	subtask_id:string,
 	subtask_name:string,
 	subtask_done:boolean,
+	subtask_priorityId:number
 }
 export interface Task{
 	id:string,
@@ -15,7 +16,7 @@ export interface Task{
 	color?:string,
 	date:string,
 	type:string
-	priorityId?:number
+	priorityId:number
 }
 
 export interface ITypeTask {

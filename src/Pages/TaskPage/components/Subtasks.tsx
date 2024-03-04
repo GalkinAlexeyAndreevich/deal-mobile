@@ -13,6 +13,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { deleteSubtask, setSubtask } from "@src/store/tasksDatesSlice";
 import { useAppDispatch } from "@src/store/hook";
+import { deleteSubtaskDb } from "db";
 
 interface Props {
     task: Task;
@@ -52,14 +53,6 @@ export default function Subtasks({
     //     setIsActiveInput(false);
     //     inputRef.current && inputRef.current.blur();
     // };
-    const blackRound = ():React.ReactElement=>{
-        return(
-            <View style={{paddingRight:3, paddingTop:4}}>
-                <View style={{backgroundColor:'black', width:9, height:9, borderRadius:50}}></View>
-            </View>
-            
-        )
-    }
 
     const [isActiveInput, setIsActiveInput] = useState(false);
     return (
@@ -133,6 +126,7 @@ export default function Subtasks({
                             subtaskId: subtask.subtask_id,
                         })
                     );
+                    deleteSubtaskDb(subtask.subtask_id)
                 }}>
                 <Icon name="close" size={25} color="red" />
             </Pressable>

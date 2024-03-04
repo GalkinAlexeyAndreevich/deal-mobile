@@ -11,6 +11,7 @@ import { deleteTask, setStatusTask } from "@store/tasksDatesSlice";
 import { CheckBox, Image } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Task } from "@interfaces";
+import { deleteTaskDb } from "db";
 
 interface Props {
     task: Task;
@@ -69,7 +70,10 @@ export default function TaskItem({ task, drag, isActive,redirect }: Props) {
             <Pressable
                 style={{ paddingHorizontal: 3 }}
                 onLongPress={longPress}
-                onPress={() => dispatch(deleteTask(task.id))}>
+                onPress={() => {
+                    dispatch(deleteTask(task.id))
+                    deleteTaskDb(task.id)
+                }}>
                 <Icon name="close" size={25} color="red" />
             </Pressable>
         </TouchableOpacity>
