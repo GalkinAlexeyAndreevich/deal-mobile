@@ -89,8 +89,8 @@ export const addTask = async({id:task_id,name, done, date,type,subtasks}:Task)=>
 
 export const addSubtaskDb = async({subtask_id, subtask_name, subtask_done}:SubTask,task_id:string)=>{
   const db = SQLite.openDatabase("Deal.db")
+  let priorityId = 0
   await db.transactionAsync(async (tx) => {
-    let priorityId = 0
     const priorityIdQuery = await tx.executeSqlAsync(
       'select max(subtask_priorityId) priority from subtasks where task_id=?',[task_id]
     )
@@ -190,9 +190,8 @@ export const setOrderSubtask = async(subtasks:SubTask[])=>{
 export const updateTask = async(task:Task)=>{
   const db = SQLite.openDatabase("Deal.db")
   return new Promise((resolve)=>{
-
+    const {id, name, done,type} = task
     db.transactionAsync(async (tx) => {
-        const {id, name, done,type} = task
         const result = await tx.executeSqlAsync(`
         update TASKS set name=?, done=?,type=? where id=?`, [name, String(done),type,id]);
       
@@ -203,10 +202,9 @@ export const updateTask = async(task:Task)=>{
 export const updateSubtask = async(subtask:SubTask)=>{
   const db = SQLite.openDatabase("Deal.db")
   return new Promise((resolve)=>{
-
-    
+    const {subtask_id, subtask_name, subtask_done} = subtask
     db.transactionAsync(async (tx) => {
-        const {subtask_id, subtask_name, subtask_done} = subtask
+        
         const result = await tx.executeSqlAsync(`
         update SUBTASKS set subtask_name=?, subtask_done=? where subtask_id=?`, [subtask_name, String(subtask_done),subtask_id]);
       

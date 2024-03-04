@@ -40,7 +40,9 @@ export default function TaskItem({ task, drag, isActive,redirect }: Props) {
                 <CheckBox
                     size={23}
                     checked={task.done}
-                    onPress={() => dispatch(setStatusTask(task.id))}
+                    onPress={() => {
+                        dispatch(setStatusTask(task.id))
+                    }}
                     checkedColor="red"
                     onLongPress={longPress}
                     containerStyle={{ margin: 0, paddingHorizontal: 0 }}
