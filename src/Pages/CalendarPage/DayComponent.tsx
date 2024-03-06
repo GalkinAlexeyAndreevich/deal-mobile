@@ -21,7 +21,7 @@ interface Props{
 }
 
 export default function DayComponent({date,countOnWeek,setCurrentDate,currentDate,marking}:Props) {
-    const [heightDay, setHeightDay] = useState(50) 
+    // const [heightDay, setHeightDay] = useState(50) 
 	const getHeightOnCount = (date: string) => {
 		if (!countOnWeek) return 50;   
 		const week = moment(date).isoWeek();
@@ -30,9 +30,9 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
         let sum = 50 + countOnWeek[week].maxLength     
 		return sum;
 	};
-    useEffect(()=>{
-        setHeightDay(getHeightOnCount(date.dateString))
-    },[countOnWeek])
+    // useEffect(()=>{
+    //     setHeightDay(getHeightOnCount(date.dateString))
+    // },[countOnWeek])
     
     const maxWeek = Math.max.apply(null, Object.keys(countOnWeek).map(Number));    
     return (
@@ -43,7 +43,7 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
             }}
             style={{
                 width: "100%",
-                height: heightDay,
+                height: getHeightOnCount(date.dateString),
                 borderWidth: 0.2,
                 borderColor: "#a0a0a0",
                 borderBottomWidth: moment(date.dateString).isoWeek()===maxWeek?1:0.2,

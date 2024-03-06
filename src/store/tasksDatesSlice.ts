@@ -146,10 +146,10 @@ const tasksDatesSlice = createSlice({
             state.tasks[taskIndex].subtasks = newSubtask;
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
-        setTypeTask(state, action:PayloadAction<{taskId:string, newType:string}>){
-            const {taskId, newType} = action.payload
+        setTypeTask(state, action:PayloadAction<{taskId:string, newTypeId:string}>){
+            const {taskId, newTypeId} = action.payload
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
-            state.tasks[taskIndex].type = newType
+            state.tasks[taskIndex].typeId = newTypeId
             updateTask(state.tasks[taskIndex])
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },

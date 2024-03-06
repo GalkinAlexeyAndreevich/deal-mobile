@@ -15,7 +15,7 @@ export interface Task{
 	subtasks: SubTask[],
 	color?:string,
 	date:string,
-	type:string
+	typeId:string
 	priorityId:number
 }
 

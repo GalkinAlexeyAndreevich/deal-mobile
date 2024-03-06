@@ -1,6 +1,6 @@
-import * as FileSystem from 'expo-file-system';
+// import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
-import { Asset } from 'expo-asset';
+// import { Asset } from 'expo-asset';
 import type { SubTask, Task } from '@src/interfaces';
 
 
@@ -38,13 +38,12 @@ const deleteDatabase = async () => {
 };
 
 export const createTables = async() => {
-  // await deleteDatabase()
   const db = SQLite.openDatabase("Deal.db")
   
   await db.transactionAsync(async (tx) => {
     await tx.executeSqlAsync(`
         CREATE TABLE IF NOT EXISTS TASKS (
-          id TEXT, name TEXT, done BOOLEAN, date TEXT, type TEXT, priorityId INTEGER
+          id TEXT, name TEXT, done BOOLEAN, date TEXT, typeId TEXT, priorityId INTEGER
         );
     `);
     await tx.executeSqlAsync(`
@@ -54,14 +53,14 @@ export const createTables = async() => {
       );
     `);
     await tx.executeSqlAsync(`
-    CREATE TABLE IF NOT EXISTS TYPE_TASKS (
-      id TEXT auto_increment, key TEXT,value TEXT, color TEXT
-    );
-  `);
+      CREATE TABLE IF NOT EXISTS TYPE_TASKS (
+        id TEXT auto_increment, value TEXT, color TEXT
+      );
+    `);
   });
 };
 
-export const addTask = async({id:task_id,name, done, date,type,subtasks}:Task)=>{
+export const addTask = async({id:task_id,name, done, date,typeId,subtasks}:Task)=>{
   const db = SQLite.openDatabase("Deal.db")
   
   await db.transactionAsync(async (tx) => {
@@ -72,11 +71,10 @@ export const addTask = async({id:task_id,name, done, date,type,subtasks}:Task)=>
     if(priorityIdQuery.rows[0].priority!=null){
       priorityId = priorityIdQuery.rows[0].priority + 1
     }
-    const result = await tx.executeSqlAsync(
+    await tx.executeSqlAsync(
       'INSERT INTO tasks VALUES (?, ?,?,?,?,?)',
-      [task_id,name, String(done), date,type,Number(priorityId)]
+      [task_id,name, String(done), date,typeId,Number(priorityId)]
     );
-    console.log("task add", result);
     for(let i=0;i<subtasks.length;i++){
       let {subtask_id, subtask_name, subtask_done} = subtasks[i]
       await tx.executeSqlAsync(
@@ -127,8 +125,6 @@ export const getTasksWithSubtask = async()=>{
     db.transactionAsync(async (tx) => {
       const result = await tx.executeSqlAsync(`
       SELECT * FROM TASKS LEFT OUTER JOIN subtasks on tasks.id = subtasks.task_id`, []);
-      console.log("test result", result.rows);
-      
       resolve(result.rows)
     });
   })
@@ -136,32 +132,27 @@ export const getTasksWithSubtask = async()=>{
 
 export const deleteTaskDb = async(task_id:string)=>{
   const db = SQLite.openDatabase("Deal.db")
-  return new Promise((resolve)=>{
-    db.transactionAsync(async (tx) => {
-      const result = await tx.executeSqlAsync(`
-      delete FROM SUBTASKS where task_id=?`, [task_id]);
-      console.log("Удаление подзадач", result);
-      const result1 = await tx.executeSqlAsync(`
-      delete FROM TASKS where id=?`, [task_id]);
-      console.log("Удаление задач", result1);
-    });
-  })
+  db.transactionAsync(async (tx) => {
+    const result = await tx.executeSqlAsync(`
+    delete FROM SUBTASKS where task_id=?`, [task_id]);
+    console.log("Удаление подзадач", result);
+    const result1 = await tx.executeSqlAsync(`
+    delete FROM TASKS where id=?`, [task_id]);
+    console.log("Удаление задач", result1);
+  });
 }
 
 export const deleteSubtaskDb = async(subtask_id:string)=>{
   const db = SQLite.openDatabase("Deal.db")
-  return new Promise((resolve)=>{
     db.transactionAsync(async (tx) => {
       const result = await tx.executeSqlAsync(`
       delete FROM SUBTASKS where subtask_id=?`, [subtask_id]);
       console.log("Удаление подзадач", result);
     });
-  })
 }
 
 export const setOrderTask = async(tasks:Task[])=>{
   const db = SQLite.openDatabase("Deal.db")
-  return new Promise((resolve)=>{
 
     db.transactionAsync(async (tx) => {
       for(let i=0; i<tasks.length;i++){
@@ -169,13 +160,11 @@ export const setOrderTask = async(tasks:Task[])=>{
         update TASKS set priorityId=? where id=?`, [i, tasks[i].id]);
         console.log("Изменение порядка задач", result);
       }
-    });
   })
 }
 
 export const setOrderSubtask = async(subtasks:SubTask[])=>{
   const db = SQLite.openDatabase("Deal.db")
-  return new Promise((resolve)=>{
 
     db.transactionAsync(async (tx) => {
       for(let i=0; i<subtasks.length;i++){
@@ -183,32 +172,26 @@ export const setOrderSubtask = async(subtasks:SubTask[])=>{
         update SUBTASKS set subtask_priorityId=? where subtask_id=?`, [i, subtasks[i].subtask_id]);
         console.log("Изменение порядка подзадач", result);
       }
-    });
   })
 }
 
 export const updateTask = async(task:Task)=>{
   const db = SQLite.openDatabase("Deal.db")
-  return new Promise((resolve)=>{
-    const {id, name, done,type} = task
+    const {id, name, done,typeId} = task
     db.transactionAsync(async (tx) => {
-        const result = await tx.executeSqlAsync(`
-        update TASKS set name=?, done=?,type=? where id=?`, [name, String(done),type,id]);
-      
-    });
+      await tx.executeSqlAsync(`
+      update TASKS set name=?, done=?,typeId=? where id=?
+      `, [name, String(done),typeId,id]);  
   })
 }
 
 export const updateSubtask = async(subtask:SubTask)=>{
   const db = SQLite.openDatabase("Deal.db")
-  return new Promise((resolve)=>{
     const {subtask_id, subtask_name, subtask_done} = subtask
-    db.transactionAsync(async (tx) => {
-        
-        const result = await tx.executeSqlAsync(`
-        update SUBTASKS set subtask_name=?, subtask_done=? where subtask_id=?`, [subtask_name, String(subtask_done),subtask_id]);
-      
-    });
+    db.transactionAsync(async (tx) => { 
+      await tx.executeSqlAsync(`
+      update SUBTASKS set subtask_name=?, subtask_done=? where subtask_id=?
+      `, [subtask_name, String(subtask_done),subtask_id]);    
   })
 }
 

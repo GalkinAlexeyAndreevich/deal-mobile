@@ -35,8 +35,8 @@ export default function CalendarPage({ navigation,route }: Props) {
     },[dateNow])
     let countTask = useRef(0);
     let monthYear = moment(currentDate).format("MM-yyyy");
-    const getTypeColor = (type: string) => {
-        const findItem = typesTask.find((element) => element.key == type);
+    const getTypeColor = (typeId: string) => {
+        const findItem = typesTask.find((element) => element.key == typeId);
         console.log("color: ", findItem?.color);
         
         return findItem && findItem.color.length ? findItem.color : "white";
@@ -48,7 +48,7 @@ export default function CalendarPage({ navigation,route }: Props) {
             };
             acc[cur.date].dots?.push({
                 key: cur.name,
-                color: getTypeColor(cur.type),
+                color: getTypeColor(cur.typeId),
             });
             return acc;
         }, {});

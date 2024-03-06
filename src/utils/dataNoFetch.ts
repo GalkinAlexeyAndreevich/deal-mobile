@@ -9,11 +9,11 @@ import { SubTask, Task } from "@interfaces";
 //     { key: "Работа по дому", value: "Работа по дому", color: "#fff272" },
 // ];
 export const defaultTypeTasks:ITypeTask[] = [
-        { key: "Без категории", value: "Без категории", color: "#FFFCB9" },
-        { key: "Учёба", value: "Учёба", color: "rgb(189,254,248)" },
-        { key: "Работа", value: "Работа", color: "rgb(204,204,254)" },
-        { key: "Спорт", value: "Спорт", color: "rgb(255,171,171)" },
-        { key: "Работа по дому", value: "Работа по дому", color: "rgb(194,239,154)" },
+        { key: "1", value: "Без категории", color: "#FFFCB9" },
+        { key: "2", value: "Учёба", color: "rgb(189,254,248)" },
+        { key: "3", value: "Работа", color: "rgb(204,204,254)" },
+        { key: "4", value: "Спорт", color: "rgb(255,171,171)" },
+        { key: "5", value: "Работа по дому", color: "rgb(194,239,154)" },
         // { key: "Другое", value: "Другое", color: "rgb(186,214,228)" },
         
 ];
@@ -41,7 +41,7 @@ export const defaultTasks: Task[] = [
         name: "test1",
         done: false,
         date: "2024-01-12",
-        type: "Работа",
+        typeId: "3",
         priorityId:1,
         subtasks: [
             {
@@ -69,7 +69,7 @@ export const defaultTasks: Task[] = [
         name: "test2",
         done: false,
         date: "2024-01-12",
-        type: "Учеба",
+        typeId: "3",
         priorityId:2,
         subtasks: [
             {
@@ -85,7 +85,7 @@ export const defaultTasks: Task[] = [
         name: "test3",
         done: false,
         date: "2024-01-12",
-        type: "Спорт",
+        typeId: "5",
         priorityId:3,
         subtasks: [],
     },
@@ -93,7 +93,7 @@ export const defaultTasks: Task[] = [
         id: '4',
         name: "test3",
         done: false,
-        type: "Другое",
+        typeId: "1",
         date: "2024-01-12",
         subtasks: [],
         priorityId:4,

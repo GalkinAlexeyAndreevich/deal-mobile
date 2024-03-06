@@ -17,7 +17,6 @@ export interface ResultSet {
     rowsAffected: number;
     rows: ResultSetRowList;
 }
-const keysToFilterOut = ["id","name","done","date","type", "priorityId"]
 
 export const SavedDataProvider = ({ children }: Props) => {
     const dispatch = useAppDispatch();
@@ -38,7 +37,7 @@ export const SavedDataProvider = ({ children }: Props) => {
             // }
             // else dispatch(setTasks(tasks));
             
-
+            AsyncStorage.setItem("savedTask",JSON.stringify([]))
             if (!typesTask || !typesTask.length) {
                 await AsyncStorage.setItem(
                     "savedTypesTask",
@@ -53,10 +52,7 @@ export const SavedDataProvider = ({ children }: Props) => {
         getSaveData();
         try{
             createTables().then(async()=>{
-                const myTasks = await getTasks()
-                console.log("tasks value",  myTasks);
                 const allData = await getTasksWithSubtask() as (Task & SubTask)[]
-                console.log("all", allData);
                 let formattedArr:Task[] = []
                 for(let i=0;i<allData.length;i++){
                     let index = formattedArr.findIndex(element=>element.id==allData[i].id)
@@ -65,40 +61,20 @@ export const SavedDataProvider = ({ children }: Props) => {
                         formattedArr[index].subtasks.push({subtask_id, subtask_name, subtask_done:String(subtask_done)=="true",subtask_priorityId})
                     }
                     else{
-                        const newObj = Object
-                          .entries(allData[i])
-                          .filter(([key]) => keysToFilterOut.includes(key))
-                          .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {}) as Task;
-                        newObj.done = String(newObj.done)=="true"
+                        let {id, name, done, date, typeId, priorityId} = allData[i]
+                        done = String(done)=="true"
                         if(subtask_id){
-                            formattedArr.push({...newObj, subtasks:[{subtask_id, subtask_name, subtask_done: String(subtask_done)=="true",subtask_priorityId}]}) 
+                            formattedArr.push({
+                                id, name, done, date, typeId, priorityId, 
+                                subtasks:[{subtask_id, subtask_name, subtask_done: String(subtask_done)=="true",subtask_priorityId}]}) 
                         }else{
-                            formattedArr.push({...newObj, subtasks:[]}) 
-                        }
-                        
+                            formattedArr.push({id, name, done, date, typeId, priorityId,  subtasks:[]}) 
+                        }  
                     }
                 }
                 console.log("отформатированный массив", formattedArr);
-                
-                dispatch(setTasks(formattedArr));
-               
-                
+                dispatch(setTasks(formattedArr));    
             })
-            // export const getTasks = async () => {
-            //     const db = SQLite.openDatabase("Deal.db");
-            //     return new Promise((resolve, reject) => {
-            //         db.transaction((tx) => {
-            //             const result = tx.executeSql(
-            //                 "SELECT * FROM TASKS",
-            //                 [],
-            //                 (_, { rows: { _array } }) => {
-            //                   resolve(_array);
-            //                 }
-            //             );
-            //         });
-            //     });
-            // };
-            
         }catch(err){
             console.log("error in db", err);
         }

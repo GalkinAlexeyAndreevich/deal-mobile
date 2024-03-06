@@ -12,7 +12,7 @@ interface Props{
 
 export default function TypeTaskSelect({task}:Props) {
 	const { typesTask } = useAppSelector((state) => state.tasksDates);
-    const type = typesTask.find(element=>element.value == task.type)
+    const type = typesTask.find(element=>element.key == task.typeId)
     const dispatch = useAppDispatch()
     const optimizationWidth = ()=>{
         if(!type?.value?.length || type?.value?.length <6)return 90
@@ -50,11 +50,10 @@ export default function TypeTaskSelect({task}:Props) {
             // selectedTextStyle={{backgroundColor:'yellow'}}
             renderItem={typeItem}
             onChange={(item) => {
-                dispatch(setTypeTask({newType:item.value, taskId:task.id}))
+                dispatch(setTypeTask({newTypeId:item.key, taskId:task.id}))
             }}
             // renderRightIcon={}
-            
-            value={task.type}
+            key={task.typeId}
         />
     );
 }
