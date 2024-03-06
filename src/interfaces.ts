@@ -3,9 +3,10 @@ export interface IMarkedDates{
 	dots:{key:string, color:string}[]
 }
 export interface SubTask{
-	id:string,
-	name:string,
-	done:boolean,
+	subtask_id:string,
+	subtask_name:string,
+	subtask_done:boolean,
+	subtask_priorityId:number
 }
 export interface Task{
 	id:string,
@@ -14,8 +15,8 @@ export interface Task{
 	subtasks: SubTask[],
 	color?:string,
 	date:string,
-	type:string
-	priorityId?:number
+	typeId:string
+	priorityId:number
 }
 
 export interface ITypeTask {

@@ -29,19 +29,19 @@ export default function CustomCalendar({
     setCurrentDate,
 }: Props) {
     let monthYear = moment(currentDate).format("MM-yyyy");
-    const countWord = ()=>{
+    const countWord = () => {
         console.log("test", Object.values(markedDates));
-        const arrDates =  Object.values(markedDates)
-        let count = 0
-        for(let i=0; i<arrDates.length;i++){
-            if(!arrDates[i].dots)continue
-            for(let j=0;j<arrDates[i].dots!.length;j++){
-                count += arrDates[i].dots![j].key?.length || 0
+        const arrDates = Object.values(markedDates);
+        let count = 0;
+        for (let i = 0; i < arrDates.length; i++) {
+            if (!arrDates[i].dots) continue;
+            for (let j = 0; j < arrDates[i].dots!.length; j++) {
+                count += arrDates[i].dots![j].key?.length || 0;
             }
         }
-        return count
-    }
-    const count = countWord()
+        return count;
+    };
+    const count = countWord();
     // Функция оптимизация высоты для недели
     const getStartAndEndOfWeeks = (month: string | Date) => {
         console.log("getStartAndEndOfWeeks", month);
@@ -111,45 +111,48 @@ export default function CustomCalendar({
     // Перерасчет произойдет если изменится месяц или год, а также количество заданий
     const countOnWeek = useMemo(
         () => getStartAndEndOfWeeks(currentDate),
-        [countTask, monthYear,count]
+        [countTask, monthYear, count]
     );
     defineLocale();
 
     return (
-        <View>
-            <ScrollView horizontal={false}>
-                <Calendar
-                    key={currentDate}
-                    current={currentDate}
-                    firstDay={1}
-                    date={currentDate}
-                    theme={calendarTheme}
-                    customHeaderTitle={
-                        <HeaderComponent
+        <ScrollView horizontal={false}>
+            <Calendar
+                key={currentDate}
+                current={currentDate}
+                firstDay={1}
+                date={currentDate}
+                theme={calendarTheme}
+                customHeaderTitle={
+                    <HeaderComponent
+                        currentDate={currentDate}
+                        setOpenModal={setOpenModal}
+                    />
+                }
+                markingType="multi-dot"
+                dayComponent={({ date, marking }) =>
+                    date && (
+                        <DayComponent
+                            date={date}
+                            marking={marking}
                             currentDate={currentDate}
-                            setOpenModal={setOpenModal}
+                            setCurrentDate={setCurrentDate}
+                            countOnWeek={countOnWeek}
                         />
-                    }
-                    markingType="multi-dot"
-                    dayComponent={({ date, marking }) =>
-                        date && (
-                            <DayComponent
-                                date={date}
-                                marking={marking}
-                                currentDate={currentDate}
-                                setCurrentDate={setCurrentDate}
-                                countOnWeek={countOnWeek}
-                            />
-                        )
-                    }
-                    markedDates={markedDates}
-                    onMonthChange={(date) => {
-                        setCurrentDate(date.dateString);
-                    }}
-                />
-                <View style={{backgroundColor:"white", width:'100%', height:75}}></View>
-            </ScrollView>
-        </View>
+                    )
+                }
+                markedDates={markedDates}
+                onMonthChange={(date) => {
+                    setCurrentDate(date.dateString);
+                }}
+            />
+            <View
+                style={{
+                    backgroundColor: "white",
+                    width: "100%",
+                    height: 75,
+                }}></View>
+        </ScrollView>
     );
 }
 export const calendarTheme: Theme = {

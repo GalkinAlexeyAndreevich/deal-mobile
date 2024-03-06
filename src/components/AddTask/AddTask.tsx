@@ -19,6 +19,7 @@ import ModalTypeTask from "@components/ModalTypeTask";
 import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import uuid from 'react-native-uuid';
+import { addTask } from "db";
 
 
 export default function AddTask({ currentDate }: { currentDate: string }) {
@@ -40,28 +41,31 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
         setSubtasks((prev) => [
             ...prev,
             {
-                id: String(newId),
-                name: "",
-                done: false,
+                subtask_id: String(newId),
+                subtask_name: "",
+                subtask_done: false,
+                subtask_priorityId:0
             },
         ]);
     };
     const deleteSubtask = (subtask: SubTask) => {
-        const newArr = subtasks.filter((item) => item.id != subtask.id);
+        const newArr = subtasks.filter((item) => item.subtask_id != subtask.subtask_id);
         setSubtasks(newArr);
     };
 
     const changeNameSubtask = (item: SubTask, name: string) => {
+        console.log(item, name);
+        
         setSubtasks(
             subtasks.map((subtask) =>
-                subtask.id === item.id && subtask.name == item.name
-                    ? { ...subtask, name }
+                subtask.subtask_id === item.subtask_id
+                    ? { ...subtask, subtask_name:name }
                     : subtask
             )
         );
     };
 
-    const saveChange = () => {
+    const saveChange = async() => {
         if (inputValue.length < 1) return;
         setOpenModal(false);
         let finalArrSubtask: SubTask[] = [];
@@ -72,11 +76,12 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 ? typesTask[0].value
                 : "Без категории";
         for (let i = 0; i < subtasks.length; i++) {
-            if (!subtasks[i].name.length) continue;
+            if (!subtasks[i].subtask_name.length) continue;
             finalArrSubtask.push({
-                id: allSubtasks.length + subtasks[i].id,
-                name: subtasks[i].name,
-                done: false,
+                subtask_id: allSubtasks.length + subtasks[i].subtask_id,
+                subtask_name: subtasks[i].subtask_name,
+                subtask_done: false,
+                subtask_priorityId:0
             });
         }
         const newId = uuid.v4(); 
@@ -88,10 +93,11 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
             date: moment(currentDate).format("YYYY-MM-DD"),
             type: typeTask,
             subtasks: finalArrSubtask,
+            priorityId:0
         };
         setInputValue("");
         setChosenType(typesTask[0]);
-
+        addTask(object)
         dispatch(setTasks([...tasks, object]));
     };
 
@@ -111,7 +117,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                     style={{}}
                     placeholderTextColor="#98989a"
                     placeholder="Введите подцель"
-                    value={item.name}
+                    value={item.subtask_name}
                     onChangeText={(text) => changeNameSubtask(item, text)}
                 />
                 <Pressable

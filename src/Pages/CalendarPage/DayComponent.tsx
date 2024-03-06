@@ -1,5 +1,5 @@
 import { View, Text, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { DateData } from "react-native-calendars";
 import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
@@ -21,6 +21,7 @@ interface Props{
 }
 
 export default function DayComponent({date,countOnWeek,setCurrentDate,currentDate,marking}:Props) {
+    // const [heightDay, setHeightDay] = useState(50) 
 	const getHeightOnCount = (date: string) => {
 		if (!countOnWeek) return 50;   
 		const week = moment(date).isoWeek();
@@ -29,6 +30,9 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
         let sum = 50 + countOnWeek[week].maxLength     
 		return sum;
 	};
+    // useEffect(()=>{
+    //     setHeightDay(getHeightOnCount(date.dateString))
+    // },[countOnWeek])
     
     const maxWeek = Math.max.apply(null, Object.keys(countOnWeek).map(Number));    
     return (
