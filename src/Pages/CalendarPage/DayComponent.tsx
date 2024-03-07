@@ -30,6 +30,13 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
         let sum = 50 + countOnWeek[week].maxLength     
 		return sum;
 	};
+    const hyphenatedText = (text: string): string => {
+        return text
+            .split(' ')
+            .map((word) => word.split('').join('\u00AD'))
+            .join(' ');
+    }
+
     // useEffect(()=>{
     //     setHeightDay(getHeightOnCount(date.dateString))
     // },[countOnWeek])
@@ -56,25 +63,28 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
                     color: "black",
                     fontSize: 15,
                     paddingLeft: 3,
-                    fontWeight:moment().format('LL')==moment(date.dateString).format('LL')?'bold':'normal'
+                    fontWeight:moment().format('LL')==moment(date.dateString).format('LL')?'bold':'normal',
                 }}>
                 {date.day}{" "}
             </Text>
             {marking?.dots?.map((item, index) => {
                 return (
-                    <View key={index}>
+                    <View style={{
+                        backgroundColor: item?.color,
+                        paddingVertical: 3,
+                        marginVertical: 3,
+                        marginHorizontal:2,
+                        borderWidth:item?.color == "white"?0.2:0
+                    }} key={index}>
                         <Text
+                            // textBreakStrategy="highQuality"
+                            android_hyphenationFrequency="full"
                             style={{
-                                backgroundColor: item?.color,
                                 color: item?.selectedDotColor,
-                                paddingVertical: 3,
-                                marginVertical: 3,
-                                marginHorizontal:2,
                                 fontSize: 10,
-                                textAlign: "center",
-                                borderWidth:item?.color == "white"?0.2:0
+                                textAlign: "center",  
                             }}>
-                            {item.key}
+                            {hyphenatedText(item.key || "")}
                         </Text>
                     </View>
                 );
