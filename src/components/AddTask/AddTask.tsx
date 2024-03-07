@@ -18,9 +18,8 @@ import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
 import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import uuid from 'react-native-uuid';
+import uuid from "react-native-uuid";
 import { addTask } from "db";
-
 
 export default function AddTask({ currentDate }: { currentDate: string }) {
     const {
@@ -35,45 +34,50 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
     //отдельно есть массив подзадач которые уже создали и подзадачи которые появляются при добавлении на кнопку
     // Изменять можно все новые позадания на этот объект вешать обработчик
     const [subtasks, setSubtasks] = useState<SubTask[]>([]);
+    const [locked, setLocked] = useState(false);
     const addSubtask = () => {
         if (subtasks.length > 10) return;
-        const newId = uuid.v4(); 
+        const newId = uuid.v4();
         setSubtasks((prev) => [
             ...prev,
             {
                 subtask_id: String(newId),
                 subtask_name: "",
                 subtask_done: false,
-                subtask_priorityId:0
+                subtask_priorityId: 0,
             },
         ]);
     };
     const deleteSubtask = (subtask: SubTask) => {
-        const newArr = subtasks.filter((item) => item.subtask_id != subtask.subtask_id);
+        const newArr = subtasks.filter(
+            (item) => item.subtask_id != subtask.subtask_id
+        );
         setSubtasks(newArr);
     };
 
     const changeNameSubtask = (item: SubTask, name: string) => {
         console.log(item, name);
-        
+
         setSubtasks(
             subtasks.map((subtask) =>
                 subtask.subtask_id === item.subtask_id
-                    ? { ...subtask, subtask_name:name }
+                    ? { ...subtask, subtask_name: name }
                     : subtask
             )
         );
     };
 
-    const saveChange = async() => {
+    const saveChange = async () => {
         if (inputValue.length < 1) return;
-        setOpenModal(false);
+        if (!locked) {
+            setOpenModal(false);
+        }
         let finalArrSubtask: SubTask[] = [];
         let typeTask =
             Object.keys(chosenType).length > 0
-                ? chosenType.value
-                : typesTask[0].value.length > 0
-                ? typesTask[0].value
+                ? chosenType.key
+                : typesTask[0].key.length > 0
+                ? typesTask[0].key
                 : "Без категории";
         for (let i = 0; i < subtasks.length; i++) {
             if (!subtasks[i].subtask_name.length) continue;
@@ -81,23 +85,23 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 subtask_id: allSubtasks.length + subtasks[i].subtask_id,
                 subtask_name: subtasks[i].subtask_name,
                 subtask_done: false,
-                subtask_priorityId:0
+                subtask_priorityId: 0,
             });
         }
-        const newId = uuid.v4(); 
+        const newId = uuid.v4();
 
         const object: Task = {
             id: String(newId),
             name: inputValue,
             done: false,
             date: moment(currentDate).format("YYYY-MM-DD"),
-            type: typeTask,
+            typeId: typeTask,
             subtasks: finalArrSubtask,
-            priorityId:0
+            priorityId: 0,
         };
         setInputValue("");
         setChosenType(typesTask[0]);
-        addTask(object)
+        addTask(object);
         dispatch(setTasks([...tasks, object]));
     };
 
@@ -136,7 +140,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                     console.log("open modal");
                     setOpenModal(true);
                     setSubtasks([]);
-                    setChosenType(typesTask[0])
+                    setChosenType(typesTask[0]);
                 }}
                 style={{
                     flex: 1,
@@ -169,14 +173,38 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                 display: "flex",
                                 flexDirection: "column",
                             }}>
-                            <TextInput
-                                style={styles.textInputTask}
-                                maxLength={50}
-                                // placeholderTextColor="#98989a"
-                                placeholder="Введите цель"
-                                value={inputValue}
-                                onChangeText={(text) => setInputValue(text)}
-                            />
+                            <View
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                }}>
+
+                                <View style={{ width: "92.5%" }}>
+                                    <TextInput
+                                        style={styles.textInputTask}
+                                        maxLength={50}
+                                        // placeholderTextColor="#98989a"
+                                        placeholder="Введите цель"
+                                        value={inputValue}
+                                        onChangeText={(text) =>
+                                            setInputValue(text)
+                                        }
+                                    />
+                                </View>
+                                <Pressable
+                                    onPress={() => setLocked((prev) => !prev)}
+                                    style={{
+                                        paddingLeft: "1.5%",
+                                    }}>
+                                    {locked ? (
+                                        <Fontisto name="locked" size={25} />
+                                    ) : (
+                                        <Fontisto name="unlocked" size={25} />
+                                    )}
+                                </Pressable>
+                            </View>
+
                             <FlatList
                                 style={{ maxHeight: 150, marginHorizontal: 10 }}
                                 data={subtasks}
@@ -214,6 +242,17 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                     />
                                     {/* <Text>Создать подзадачу</Text> */}
                                 </Pressable>
+                                {/* <Pressable
+                                    onPress={() => setLocked((prev) => !prev)}
+                                    style={{
+                                        paddingLeft: 3,
+                                    }}>
+                                    {locked ? (
+                                        <Fontisto name="locked" size={15} />
+                                    ) : (
+                                        <Fontisto name="unlocked" size={15} />
+                                    )}
+                                </Pressable> */}
                             </View>
                             <Button
                                 title="Создать цель"

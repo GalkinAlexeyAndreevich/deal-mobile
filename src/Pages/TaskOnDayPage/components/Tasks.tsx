@@ -39,6 +39,7 @@ export default function Tasks({ currentDate, navigation }: IProps) {
         navigation.navigate("TaskPage", {
             taskId: task.id,
             uniqueId: moment().toISOString(),
+            currentDate:currentDate
         });
     };
 

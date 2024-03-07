@@ -20,7 +20,7 @@ import { NestableScrollContainer } from "react-native-draggable-flatlist";
 type Props = NativeStackScreenProps<RootStackParamList, "TaskPage">;
 
 export default function TaskPage({ navigation, route }: Props) {
-    const { taskId, uniqueId } = route.params;
+    const { taskId, uniqueId,currentDate } = route.params;
     const { tasks } = useAppSelector((state) => state.tasksDates);
     const [changed, setChanged] = useState(false);
     const [openSubtask, setOpenSubtask] = useState(true);
@@ -42,7 +42,9 @@ export default function TaskPage({ navigation, route }: Props) {
             <NestableScrollContainer>
                 <View>
                     <Pressable
-                        onPress={() => navigation.navigate("TaskOnDayPage", {})}
+                        onPress={() => navigation.navigate("TaskOnDayPage", {
+                            dateNow:new Date(currentDate).toISOString()
+                        })}
                         style={{
                             width: 40,
                             height: 40,

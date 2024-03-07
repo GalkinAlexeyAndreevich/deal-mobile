@@ -53,7 +53,8 @@ export default function TypeTaskSelect({task}:Props) {
                 dispatch(setTypeTask({newTypeId:item.key, taskId:task.id}))
             }}
             // renderRightIcon={}
-            key={task.typeId}
+            value={type?.value}
+            // key={task.typeId}
         />
     );
 }
