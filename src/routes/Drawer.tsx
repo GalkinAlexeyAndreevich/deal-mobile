@@ -49,7 +49,7 @@ export function MyDrawer() {
         <Drawer.Navigator
             // drawerContent={(props) => <DrawerView {...props}/>}
             initialRouteName="TabNavigator"
-            screenOptions={({ navigation,route }) => ({
+            screenOptions={() => ({
                 // headerRight: () => (
                 //     <Pressable onPress={
                 //         () => {

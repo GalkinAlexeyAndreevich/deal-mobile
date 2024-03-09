@@ -18,13 +18,11 @@ import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
 import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import uuid from "react-native-uuid";
 import { addTask } from "db";
 
 export default function AddTask({ currentDate }: { currentDate: string }) {
     const {
         tasks,
-        subtasks: allSubtasks,
         typesTask,
     } = useAppSelector((state) => state.tasksDates);
     const dispatch = useAppDispatch();
@@ -37,11 +35,10 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
     const [locked, setLocked] = useState(false);
     const addSubtask = () => {
         if (subtasks.length > 10) return;
-        const newId = uuid.v4();
         setSubtasks((prev) => [
             ...prev,
             {
-                subtask_id: String(newId),
+                subtask_id: new Date().getTime(),
                 subtask_name: "",
                 subtask_done: false,
                 subtask_priorityId: 0,
@@ -76,22 +73,20 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
         let typeTask =
             Object.keys(chosenType).length > 0
                 ? chosenType.key
-                : typesTask[0].key.length > 0
+                : typesTask[0].key > 0
                 ? typesTask[0].key
-                : "Без категории";
+                : 1;
         for (let i = 0; i < subtasks.length; i++) {
             if (!subtasks[i].subtask_name.length) continue;
             finalArrSubtask.push({
-                subtask_id: allSubtasks.length + subtasks[i].subtask_id,
+                subtask_id: subtasks[i].subtask_id,
                 subtask_name: subtasks[i].subtask_name,
                 subtask_done: false,
                 subtask_priorityId: 0,
             });
         }
-        const newId = uuid.v4();
-
         const object: Task = {
-            id: String(newId),
+            id: new Date().getTime(),
             name: inputValue,
             done: false,
             date: moment(currentDate).format("YYYY-MM-DD"),
@@ -102,7 +97,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
         setInputValue("");
         setChosenType(typesTask[0]);
         addTask(object);
-        dispatch(setTasks([...tasks, object]));
+        dispatch(setTasks([ object,...tasks]));
     };
 
     const SubtaskItem = ({ item }: { item: SubTask }) => {
@@ -173,37 +168,14 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                 display: "flex",
                                 flexDirection: "column",
                             }}>
-                            <View
-                                style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}>
-
-                                <View style={{ width: "92.5%" }}>
-                                    <TextInput
-                                        style={styles.textInputTask}
-                                        maxLength={50}
-                                        // placeholderTextColor="#98989a"
-                                        placeholder="Введите цель"
-                                        value={inputValue}
-                                        onChangeText={(text) =>
-                                            setInputValue(text)
-                                        }
-                                    />
-                                </View>
-                                <Pressable
-                                    onPress={() => setLocked((prev) => !prev)}
-                                    style={{
-                                        paddingLeft: "1.5%",
-                                    }}>
-                                    {locked ? (
-                                        <Fontisto name="locked" size={25} />
-                                    ) : (
-                                        <Fontisto name="unlocked" size={25} />
-                                    )}
-                                </Pressable>
-                            </View>
+                            <TextInput
+                                style={styles.textInputTask}
+                                maxLength={50}
+                                // placeholderTextColor="#98989a"
+                                placeholder="Введите цель"
+                                value={inputValue}
+                                onChangeText={(text) => setInputValue(text)}
+                            />
 
                             <FlatList
                                 style={{ maxHeight: 150, marginHorizontal: 10 }}
@@ -242,17 +214,18 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                     />
                                     {/* <Text>Создать подзадачу</Text> */}
                                 </Pressable>
-                                {/* <Pressable
+                                <Pressable
                                     onPress={() => setLocked((prev) => !prev)}
                                     style={{
-                                        paddingLeft: 3,
+                                        paddingLeft: 5,
+                                        paddingTop:5
                                     }}>
                                     {locked ? (
-                                        <Fontisto name="locked" size={15} />
+                                        <Fontisto name="locked" size={20} />
                                     ) : (
-                                        <Fontisto name="unlocked" size={15} />
+                                        <Fontisto name="unlocked" size={20} />
                                     )}
-                                </Pressable> */}
+                                </Pressable>
                             </View>
                             <Button
                                 title="Создать цель"
@@ -272,7 +245,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                     fontSize: 20,
                                 }}
                                 containerStyle={{
-                                    width: 200,
+                                    width: 180,
                                 }}
                                 onPress={saveChange}
                             />

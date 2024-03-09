@@ -9,11 +9,11 @@ import { SubTask, Task } from "@interfaces";
 //     { key: "Работа по дому", value: "Работа по дому", color: "#fff272" },
 // ];
 export const defaultTypeTasks:ITypeTask[] = [
-        { key: "1", value: "Без категории", color: "#FFFCB9" },
-        { key: "2", value: "Учёба", color: "rgb(189,254,248)" },
-        { key: "3", value: "Работа", color: "rgb(204,204,254)" },
-        { key: "4", value: "Спорт", color: "rgb(255,171,171)" },
-        { key: "5", value: "Работа по дому", color: "rgb(194,239,154)" },
+        { key: 1, value: "Без категории", color: "#FFFCB9" },
+        { key: 2, value: "Учёба", color: "rgb(189,254,248)" },
+        { key: 3, value: "Работа", color: "rgb(204,204,254)" },
+        { key: 4, value: "Спорт", color: "rgb(255,171,171)" },
+        { key: 5, value: "Работа по дому", color: "rgb(194,239,154)" },
         // { key: "Другое", value: "Другое", color: "rgb(186,214,228)" },
         
 ];
@@ -35,70 +35,70 @@ export const getArrMinutes = ()=>{
 
 
 
-export const defaultTasks: Task[] = [
-    {
-        id: '1',
-        name: "test1",
-        done: false,
-        date: "2024-01-12",
-        typeId: "3",
-        priorityId:1,
-        subtasks: [
-            {
-                subtask_id: '1',
-                subtask_name: "test1_1",
-                subtask_done: false,
-                subtask_priorityId:0
-            },
-            {
-                subtask_id: '2',
-                subtask_name: "test1_2",
-                subtask_done: false,
-                subtask_priorityId:1
-            },
-            {
-                subtask_id: '3',
-                subtask_name: "test1_3",
-                subtask_done: false,
-                subtask_priorityId:2
-            },
-        ],
-    },
-    {
-        id: '2',
-        name: "test2",
-        done: false,
-        date: "2024-01-12",
-        typeId: "3",
-        priorityId:2,
-        subtasks: [
-            {
-                subtask_id: '4',
-                subtask_name: "test2_1",
-                subtask_done: false,
-                subtask_priorityId:0
-            },
-        ],
-    },
-    {
-        id: '3',
-        name: "test3",
-        done: false,
-        date: "2024-01-12",
-        typeId: "5",
-        priorityId:3,
-        subtasks: [],
-    },
-    {
-        id: '4',
-        name: "test3",
-        done: false,
-        typeId: "1",
-        date: "2024-01-12",
-        subtasks: [],
-        priorityId:4,
-    },
-];
+// export const defaultTasks: Task[] = [
+//     {
+//         id: '1',
+//         name: "test1",
+//         done: false,
+//         date: "2024-01-12",
+//         typeId: "3",
+//         priorityId:1,
+//         subtasks: [
+//             {
+//                 subtask_id: '1',
+//                 subtask_name: "test1_1",
+//                 subtask_done: false,
+//                 subtask_priorityId:0
+//             },
+//             {
+//                 subtask_id: '2',
+//                 subtask_name: "test1_2",
+//                 subtask_done: false,
+//                 subtask_priorityId:1
+//             },
+//             {
+//                 subtask_id: '3',
+//                 subtask_name: "test1_3",
+//                 subtask_done: false,
+//                 subtask_priorityId:2
+//             },
+//         ],
+//     },
+//     {
+//         id: '2',
+//         name: "test2",
+//         done: false,
+//         date: "2024-01-12",
+//         typeId: "3",
+//         priorityId:2,
+//         subtasks: [
+//             {
+//                 subtask_id: '4',
+//                 subtask_name: "test2_1",
+//                 subtask_done: false,
+//                 subtask_priorityId:0
+//             },
+//         ],
+//     },
+//     {
+//         id: '3',
+//         name: "test3",
+//         done: false,
+//         date: "2024-01-12",
+//         typeId: "5",
+//         priorityId:3,
+//         subtasks: [],
+//     },
+//     {
+//         id: '4',
+//         name: "test3",
+//         done: false,
+//         typeId: "1",
+//         date: "2024-01-12",
+//         subtasks: [],
+//         priorityId:4,
+//     },
+// ];
 
 // export const defaultData: Tasks[] = [
 //     {

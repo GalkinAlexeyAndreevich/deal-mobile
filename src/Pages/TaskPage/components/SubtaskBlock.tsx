@@ -65,7 +65,7 @@ export default function SubtaskBlock({
         console.log("try add new subtask");
         
         const newSubtask: SubTask = {
-            subtask_id: String(uuid.v4()),
+            subtask_id: new Date().getTime(),
             subtask_name: subtaskValue,
             subtask_done: statusSubtask,
             subtask_priorityId:0
@@ -90,7 +90,7 @@ export default function SubtaskBlock({
         );
     };
 
-    const checkDif = (taskId: string, subtasks: SubTask[]) => {
+    const checkDif = (taskId: number, subtasks: SubTask[]) => {
         let finalSubtasks = JSON.parse(JSON.stringify(subtasks))
         for(let i=0;i<finalSubtasks.length;i++){
             finalSubtasks[i].subtask_priorityId = i

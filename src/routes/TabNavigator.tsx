@@ -12,7 +12,7 @@ export type RootStackParamList = {
     Statistics: undefined;
     TaskOnDayPage:  {dateNow?: string};
     CalendarPage: {dateNow?: string};
-    TaskPage: { taskId: string,uniqueId:string,currentDate:string };
+    TaskPage: { taskId: number,uniqueId:string,currentDate:string };
 };
 const Tab = createBottomTabNavigator<RootStackParamList>();
 function TabNavigator() {

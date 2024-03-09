@@ -27,6 +27,7 @@ export const SavedDataProvider = ({ children }: Props) => {
             //     (await AsyncStorage.getItem("savedTask")) || "[]"
             // );
             // tasks = []
+            await AsyncStorage.removeItem('savedTypesTask')
             let typesTask = await JSON.parse(
                 (await AsyncStorage.getItem("savedTypesTask")) || "[]"
             );

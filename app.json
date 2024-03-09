@@ -28,7 +28,7 @@
     "android": {
       "adaptiveIcon": {
         "backgroundColor": "#000000",
-        "foregroundImage": "./src/assets/adaptive-icon-black7.png"
+        "foregroundImage": "./src/assets/adaptive-icon-black8.png"
       },
       "package": "com.dealmobile",
       "permissions": [

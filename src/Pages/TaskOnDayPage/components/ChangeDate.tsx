@@ -54,7 +54,6 @@ export default function ChangeDate({ currentDate, setCurrentDate }: Props) {
                 style={{
                     display: "flex",
                     alignItems: "center",
-                    // justifyContent: "center",
                     paddingVertical: 5,
                     marginBottom: 5,
                 }}
@@ -64,8 +63,6 @@ export default function ChangeDate({ currentDate, setCurrentDate }: Props) {
                         fontSize: 21,
                         backgroundColor: "#dafffd",
                         borderWidth: 1,
-                        // borderTopWidth:1,
-                        // borderBottomWidth:0.8,
                         borderColor: "#a0f7ff",
                         paddingHorizontal: 35,
                         paddingVertical: 5,

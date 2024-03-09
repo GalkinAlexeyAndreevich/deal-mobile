@@ -1,4 +1,4 @@
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import moment from "moment";
 import "moment/locale/ru";
@@ -22,44 +22,46 @@ export default function TaskOnDayPage({navigation,route}:Props) {
         setCurrentDate(dateNow)
     },[dateNow])
     return (
-        <View
-            style={{
-                backgroundColor: "white",
-                flex: 1,
-                paddingVertical: 5,
-            }}>
+        <View style={styles.container}>
             <ChangeDate
                 currentDate={currentDate}
                 setCurrentDate={setCurrentDate}
             />
-            <View
-                style={{
-                    height: "85.5%",
-                    borderWidth: 1,
-                    marginHorizontal: 14,
-                    marginBottom: 0,
-                    borderColor: "#acf9ff",
-                    paddingBottom:25
-                }}>
+            <View style={styles.taskBlock}>
                 <Tasks navigation={navigation} currentDate={moment(currentDate).format("YYYY-MM-DD")} />
             </View>
-
-            <View
-                style={{
-                    position: "absolute",
-                    bottom: "2%",
-                    right: 8,
-                }}>
+            <View style={styles.addTask}>
                 <AddTask currentDate={currentDate} />
             </View>
-            <View
-                style={{
-                    position: "absolute",
-                    bottom: "3%",
-                    left: 30,
-                }}>
+            <View style={styles.timer}>
                 <MiniTimer navigation={navigation}/>
             </View>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container:{
+        backgroundColor: "white",
+        flex: 1,
+        paddingVertical: 5,
+    },
+    taskBlock:{
+        height: "85.5%",
+        borderWidth: 1,
+        marginHorizontal: 14,
+        marginBottom: 0,
+        borderColor: "#acf9ff",
+        paddingBottom:25
+    },
+    addTask:{
+        position: "absolute",
+        bottom: "2%",
+        right: 8,
+    },
+    timer:{
+        position: "absolute",
+        bottom: "3%",
+        left: 30,
+    }
+})
