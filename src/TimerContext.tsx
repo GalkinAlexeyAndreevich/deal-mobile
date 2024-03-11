@@ -37,20 +37,15 @@ export const TimerProvider = ({ children }: Props) => {
     const [timeEnd, setTimeEnd] = useState("");
     const [pausedBegin, setPausedBegin] = useState("");
     const [diff,setDiff] = useState(0)
-    // const diffRef = useRef(0)
     const [diffPause, setDifPause] = useState(0)
     const timer = useRef<ReturnType<typeof setInterval> | null>(null)
-    // console.log(timeEnd);
-    
-    useEffect(()=>{
+    const clearPause = ()=>{
         setDifPause(0)
-        // diffRef.current = 0
         setPausedBegin("")
+    }
+    useEffect(()=>{
         setDiff(0)
-        // console.log("diff ref change ",diffRef.current);
         console.log("render ",diffPause,pausedBegin);
-        
-        
     },[timeEnd,beginTimer])
     useEffect(() => {
         if(!timeEnd)return
@@ -58,10 +53,8 @@ export const TimerProvider = ({ children }: Props) => {
             setPausedBegin(moment().toISOString())
         }
         if(timerOn && pausedBegin.length){
-            setDifPause(prev=>prev+Math.abs(moment(moment()).diff(pausedBegin,'seconds')))
+            setDifPause(prev=>prev + Math.abs(moment(moment()).diff(pausedBegin)) + 300)
             console.log("change dif because pause",diffPause);
-            
-            // diffRef.current += Math.abs(moment(moment()).diff(pausedBegin,'seconds'))
             setPausedBegin("")
         }
         if (timerOn) startTimer();
@@ -73,30 +66,21 @@ export const TimerProvider = ({ children }: Props) => {
         };
     }, [timerOn,timeEnd,diffPause]);
     useEffect(()=>{
-        setDifPause(0)
-        // diffRef.current = 0
+        clearPause()
         setTimeEnd("")
-        setPausedBegin("")
     },[])
     useEffect(()=>{
         if(diff<=0){
             timer.current && clearInterval(timer.current)
-            // diffRef.current = 0
-            setDifPause(0)
             setTimeEnd("")
-            setPausedBegin("")
+            clearPause()
             setBeginTimer(false)
         }
     },[diff])
 
     const startTimer = () => {
         timer.current = setInterval(()=>{
-            const dif = moment(timeEnd).diff(moment(),'seconds') + diffPause;            
-            // const dif = moment(timeEnd).diff(moment(),'seconds') + diffRef.current;
-            // console.log(moment(timeEnd).diff(moment()),moment(timeEnd).diff(moment())/1000,dif);
-            // console.log(moment(timeEnd).toISOString(), moment().toISOString());
-            // console.log(diffPause,beginTimer);
-            
+            const dif = moment(timeEnd).diff(moment(),'seconds') + Math.round(diffPause/1000);            
             if(dif>0) setDiff(dif);
             else setDiff(0)
         },500)

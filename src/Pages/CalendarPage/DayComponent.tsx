@@ -3,6 +3,10 @@ import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { DateData } from "react-native-calendars";
 import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
+import Hypher from 'hypher';
+import russian from 'hyphenation.ru';
+
+const h = new Hypher(russian);
 
 type countOnWeek = {
     [key: number]: {
@@ -84,7 +88,7 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
                                 fontSize: 10,
                                 textAlign: "center",  
                             }}>
-                            {hyphenatedText(item.key || "")}
+                            {h.hyphenateText(item.key || "")}
                         </Text>
                     </View>
                 );

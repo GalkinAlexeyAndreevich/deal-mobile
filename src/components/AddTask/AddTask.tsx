@@ -82,8 +82,16 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 subtask_id: subtasks[i].subtask_id,
                 subtask_name: subtasks[i].subtask_name,
                 subtask_done: false,
-                subtask_priorityId: 0,
+                subtask_priorityId: i,
             });
+        }
+        const tasksOnDate =  tasks.filter(element=>element.date == moment(currentDate).format("YYYY-MM-DD"))
+        let priorityId = 0
+        if(tasksOnDate.length){
+            for(let i=0;i<tasksOnDate.length;i++){
+                priorityId = Math.max(priorityId, tasksOnDate[i].priorityId)
+            }
+            priorityId+=1
         }
         const object: Task = {
             id: new Date().getTime(),
@@ -92,12 +100,12 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
             date: moment(currentDate).format("YYYY-MM-DD"),
             typeId: typeTask,
             subtasks: finalArrSubtask,
-            priorityId: 0,
+            priorityId: priorityId,
         };
         setInputValue("");
         setChosenType(typesTask[0]);
         addTask(object);
-        dispatch(setTasks([ object,...tasks]));
+        dispatch(setTasks([...tasks,object]));
     };
 
     const SubtaskItem = ({ item }: { item: SubTask }) => {

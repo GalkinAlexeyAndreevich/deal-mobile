@@ -30,7 +30,7 @@ export default function DealWithTimerPage({ navigation }: TProps) {
         setDiff(0)
     };
     // const time = diff==0?'00:00:00':`${moment.utc( diff*1000 ).format( 'hh:mm:ss' )}`;
-    const time = `${hours > 0?(hours > 10 ? hours:"0"+hours + ' :'):''}${mins > 10 ? mins:"0"+mins} : ${seconds > 10 ? seconds:"0"+seconds}`
+    const time = `${hours > 0?(hours >= 10 ? hours:"0"+hours + ' :'):''}${mins >= 10 ? mins:"0"+mins} : ${seconds >= 10 ? seconds:"0"+seconds}`
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{nameTask}</Text>
@@ -50,11 +50,6 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                     }}>
                         
                     <Text style={{fontSize: 30, color: diff==0?"red":"black" }}>{time}</Text>
-                    {/* <Text style={{ fontSize: 30, color: secondsLeft==0?"red":"black"  }}>
-                        {hours > 0 && (hours > 10 ? hours : "0" + hours) + ":"}
-                        {mins < 10 ? "0" + mins : mins}:
-                        {seconds < 10 ? "0" + seconds : seconds}
-                    </Text> */}
                     {diff === 0 && !timerOn && (
                         <Text style={{ fontSize: 30}}>
                             Время истекло
