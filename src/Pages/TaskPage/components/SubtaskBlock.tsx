@@ -26,7 +26,6 @@ import {
     setNameTask,
 } from "@src/store/tasksDatesSlice";
 import Subtasks from "./Subtasks";
-import uuid from "react-native-uuid";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { CheckBox } from "react-native-elements";
@@ -45,7 +44,6 @@ export default function SubtaskBlock({
     changed,
     setChanged,
     uniqueId,
-    scrollViewRef,
 }: Props) {
     const dispatch = useAppDispatch();
     const [subtaskValue, setSubtaskValue] = useState("");

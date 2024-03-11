@@ -1,25 +1,7 @@
-// import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
-// import { Asset } from 'expo-asset';
 import type { SubTask, Task } from '@src/interfaces';
 
 
-// const loadDatabase = async()=>{
-//   const dbName = "Deal.db"
-//   const dbAsset = require("./assets/Deal.db")
-//   const 
-// }
-
-// async function openDatabase(pathToDatabaseFile: string): Promise<SQLite.SQLiteDatabase> {
-//   if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
-//     await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
-//   }
-//   await FileSystem.downloadAsync(
-//     Asset.fromModule(require(pathToDatabaseFile)).uri,
-//     FileSystem.documentDirectory + 'SQLite/Deal.db'
-//   );
-//   return SQLite.openDatabase('Deal.db');
-// }
 
 
 const deleteDatabase = async () => {
@@ -101,6 +83,17 @@ export const addSubtaskDb = async({subtask_name, subtask_done}:SubTask,task_id:n
       priorityId = priorityIdQuery.rows[0].priority + 1
     }
     console.log(priorityId);
+    const taskData = await tx.executeSqlAsync(
+      'select * from tasks where id=?',[task_id]
+    )
+    if(taskData.rows[0].done && !subtask_done){
+      const updateTask = await tx.executeSqlAsync(
+        `update TASKS set done=false where id=?`,
+        [task_id]
+      );
+      console.log("updated status task", updateTask);
+    }
+  
     
     const result = await tx.executeSqlAsync(
       'INSERT INTO subtasks(subtask_name, subtask_done, task_id,subtask_priorityId) VALUES (?, ?,?, ?)',

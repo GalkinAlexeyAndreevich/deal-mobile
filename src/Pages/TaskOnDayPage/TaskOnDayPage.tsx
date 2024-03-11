@@ -5,7 +5,6 @@ import "moment/locale/ru";
 import Tasks from "./components/Tasks";
 import AddTask from "@components/AddTask";
 import ChangeDate from "./components/ChangeDate";
-import MiniTimer from "@components/MiniTimer";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@src/routes/TabNavigator";
 
@@ -33,9 +32,6 @@ export default function TaskOnDayPage({navigation,route}:Props) {
             <View style={styles.addTask}>
                 <AddTask currentDate={currentDate} />
             </View>
-            <View style={styles.timer}>
-                <MiniTimer navigation={navigation}/>
-            </View>
         </View>
     );
 }
@@ -58,10 +54,5 @@ const styles = StyleSheet.create({
         position: "absolute",
         bottom: "2%",
         right: 8,
-    },
-    timer:{
-        position: "absolute",
-        bottom: "3%",
-        left: 30,
     }
 })

@@ -40,10 +40,6 @@ export default function DayComponent({date,countOnWeek,setCurrentDate,currentDat
             .map((word) => word.split('').join('\u00AD'))
             .join(' ');
     }
-
-    // useEffect(()=>{
-    //     setHeightDay(getHeightOnCount(date.dateString))
-    // },[countOnWeek])
     
     const maxWeek = Math.max.apply(null, Object.keys(countOnWeek).map(Number));    
     return (

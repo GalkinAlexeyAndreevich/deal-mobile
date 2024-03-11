@@ -7,7 +7,6 @@ import * as Updates from "expo-updates";
 import { useEffect, useRef } from "react";
 import moment from "moment";
 import "./ignoreWarnings";
-import { TimerProvider } from "src/TimerContext";
 import { SavedDataProvider } from "@src/SavedDataContext";
 import { fetch } from "@react-native-community/netinfo";
 import AlertAsync from "react-native-alert-async";
@@ -36,8 +35,6 @@ export default function App() {
                 
                 if (confirmUpdate) {
                     check1.current = 1
-                    // await AlertAsync(`соглашение на обновление: ${installStatus} и ${check1.current}`);
-                    
                     await Updates.fetchUpdateAsync().then(async(result) => {
                         if(result.isNew){
                             check1.current = 2
@@ -66,35 +63,6 @@ export default function App() {
                 })
             })
         }
-        // RNDisableBatteryOptimizationsAndroid.isBatteryOptimizationEnabled().then((isEnabled:boolean) => {
-        //     if (isEnabled) {
-        //       // Battery optimizations are enabled, prompt the user to whitelist
-        //       RNDisableBatteryOptimizationsAndroid.openBatteryModal();
-        //     }
-        // });
-
-        // const requestBatteryOptimizationPermission = async () => {
-        //     try {
-        //       const granted = await PermissionsAndroid.request(
-        //         PermissionsAndroid.PERMISSIONS.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
-        //         {
-        //           title: 'Battery Optimization Permission',
-        //           message: 'This app needs to ignore battery optimizations to run in the background.',
-        //           buttonPositive: 'OK',
-        //         }
-        //       );
-        
-        //       if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        //         await AlertAsync('Battery optimization permission',' granted');
-        //       } else {
-        //         await AlertAsync('Battery optimization permission','denied');
-        //       }
-        //     } catch (error) {
-        //         await AlertAsync('Error requesting battery optimization permission:', `${error}`);
-        //     }
-        //   };
-
-        //   requestBatteryOptimizationPermission()
     }, []);
     if (check1.current > 0) {
         return (
@@ -115,7 +83,6 @@ export default function App() {
     }
     return (
         <Provider store={store}>
-            <TimerProvider>
                 <SavedDataProvider>
                     <View
                         style={{
@@ -125,7 +92,6 @@ export default function App() {
                         <AppNavigator />
                     </View>
                 </SavedDataProvider>
-            </TimerProvider>
         </Provider>
     );
 }

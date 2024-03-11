@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
 import React from "react";
-// import { ITypeTask } from "@src/interfaces";
 import { useAppDispatch, useAppSelector } from "@src/store/hook";
 import type { ITypeTask, Task } from "@src/interfaces";
 import { Dropdown } from "react-native-element-dropdown";
@@ -44,27 +43,18 @@ export default function TypeTaskSelect({task}:Props) {
             labelField="value"
             valueField="value"
             data={typesTask}
-            // style={{backgroundColor:'green'}}
             containerStyle={{width:200}}
-            // activeColor="blue"
-            // selectedTextStyle={{backgroundColor:'yellow'}}
             renderItem={typeItem}
             onChange={(item) => {
                 dispatch(setTypeTask({newTypeId:item.key, taskId:task.id}))
             }}
-            // renderRightIcon={}
             value={type?.value}
-            // key={task.typeId}
         />
     );
 }
 
 const styles = StyleSheet.create({
     dropdown: {
-        // height: 40,
-        // width:200,
-        // backgroundColor: "green",
-        // borderRadius: 12,
         display:"flex",
         paddingHorizontal: 10,
         justifyContent:"flex-end",

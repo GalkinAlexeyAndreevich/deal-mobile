@@ -9,13 +9,9 @@ import { useAppSelector } from "@store/hook";
 import { timeToString } from "@utils/timeToString";
 import AddTask from "@components/AddTask";
 import moment from "moment";
-import MiniTimer from "@components/MiniTimer";
 import { RootStackParamList } from "@src/routes/TabNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
-// interface IPageProps {
-//     navigation: NativeStackNavigationProp<RootStackParamList, "CalendarPage">;
-// }
 type Props = NativeStackScreenProps<RootStackParamList, 'CalendarPage'>;
 export default function CalendarPage({ navigation,route }: Props) {
     const [currentDate, setCurrentDate] = useState<string>(
@@ -82,14 +78,6 @@ export default function CalendarPage({ navigation,route }: Props) {
                     right: 8,
                 }}>
                 <AddTask currentDate={currentDate} />
-            </View>
-            <View
-                style={{
-                    position: "absolute",
-                    bottom: "3%",
-                    left: 30,
-                }}>
-                <MiniTimer navigation={navigation} />
             </View>
 
             {openModal && (

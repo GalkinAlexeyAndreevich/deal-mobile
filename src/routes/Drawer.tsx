@@ -6,7 +6,6 @@ import {
 } from "@react-navigation/drawer";
 import { Platform, Pressable, Text, View } from "react-native";
 import Header from "@components/Header";
-import About from "@Pages/SubPage/About";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import TabNavigator from "./TabNavigator";
 import { Button } from "@rneui/base";
@@ -50,24 +49,6 @@ export function MyDrawer() {
             // drawerContent={(props) => <DrawerView {...props}/>}
             initialRouteName="TabNavigator"
             screenOptions={() => ({
-                // headerRight: () => (
-                //     <Pressable onPress={
-                //         () => {
-                //             navigation.openDrawer()    
-                //         }
-                //         }>
-                //         <Ionicons
-                //             name={
-                //                 Platform.OS === "android"
-                //                     ? "md-menu"
-                //                     : "ios-menu"
-                //             }
-                //             size={32}
-                //             color={"#000"}
-                //             style={{ marginRight: 10,paddingTop:10 }}
-                //         />
-                //     </Pressable>
-                // ),
                 headerStyle: {
                     height: 100,
                     borderWidth:0
@@ -87,14 +68,7 @@ export function MyDrawer() {
                     padding:0,
                     margin:0
                 },
-                // drawerItemStyle:{
-                //     padding:0,
-                //     margin:0
-                // }
             }} name="TabNavigator" component={TabNavigator} />
-            <Drawer.Screen options={{
-                drawerLabel:'О приложении'
-            }} name="About" component={About} />
         </Drawer.Navigator>
     );
 }

@@ -157,6 +157,9 @@ const tasksDatesSlice = createSlice({
             const {taskId, subtask} = action.payload
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
             state.tasks[taskIndex].subtasks = [subtask,...state.tasks[taskIndex].subtasks]
+            if(state.tasks[taskIndex].done && !subtask.subtask_done){
+                state.tasks[taskIndex].done = false
+            }
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         }
     },
