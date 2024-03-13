@@ -40,20 +40,15 @@ export default function Subtasks({
         console.log("long press");
         drag();
     };
+
     const enableInput = () => {
-        console.log("enable");
         if (!isActiveInput) {
             inputRef.current && inputRef.current.focus();
         }
         setChanged(true);
         setIsActiveInput(true);
     };
-    // const blurInput = () => {
-    //     console.log("unfocus");
-    //     setIsActiveInput(false);
-    //     inputRef.current && inputRef.current.blur();
-    // };
-
+    
     const [isActiveInput, setIsActiveInput] = useState(false);
     return (
         <TouchableOpacity
@@ -66,8 +61,6 @@ export default function Subtasks({
             onPress={enableInput}>
             <View style={styles.secondContainer}>
                 <CheckBox
-                // style={{padding:0, margin:0}}
-                // containerStyle={{padding:0, paddingHorizontal:3, margin:0}}
                     size={12}
                     checked={subtask.subtask_done}
                     onLongPress={longPress}
@@ -101,7 +94,6 @@ export default function Subtasks({
                             changeNameTask(text, task, subtask)
                         }
                         blurOnSubmit={true}
-                        // onEndEditing={blurInput}
                         placeholder="Введите подцель"
                     />
                 ) : (

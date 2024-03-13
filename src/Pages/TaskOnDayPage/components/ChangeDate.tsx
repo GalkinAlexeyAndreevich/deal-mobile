@@ -1,4 +1,4 @@
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import moment from "moment";
@@ -25,6 +25,7 @@ export default function ChangeDate({ currentDate, setCurrentDate }: Props) {
         }
         setCurrentDate(timeToString(newDate));
     };
+
     const changeDatePicker = (
         { type }: DateTimePickerEvent,
         selectedData: Date | undefined
@@ -36,37 +37,16 @@ export default function ChangeDate({ currentDate, setCurrentDate }: Props) {
     };
 
     return (
-        <View
-            style={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
-                alignItems: "center",
-                marginVertical:2
-            }}>
+        <View style={styles.container}>
             <Pressable
                 style={{ padding: 5 }}
                 onPress={() => addAndSubtractDay(false)}>
                 <Ionicons name="caret-back-sharp" size={13} color={"#00adf5"} />
             </Pressable>
 
-            <Pressable
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    paddingVertical: 5,
-                    marginBottom: 5,
-                }}
+            <Pressable style={styles.button}
                 onPress={() => setOpenModal(true)}>
-                <Text
-                    style={{
-                        fontSize: 21,
-                        backgroundColor: "#dafffd",
-                        borderWidth: 1,
-                        borderColor: "#a0f7ff",
-                        paddingHorizontal: 35,
-                        paddingVertical: 5,
-                    }}>
+                <Text style={styles.buttonText}>
                     {moment(currentDate).format("D MMMM")}
                 </Text>
             </Pressable>
@@ -79,12 +59,38 @@ export default function ChangeDate({ currentDate, setCurrentDate }: Props) {
                     color={"#00adf5"}
                 />
             </Pressable>
+
             {openModal && (
                 <RNDateTimePicker
                     value={new Date(currentDate)}
                     onChange={changeDatePicker}
                 />
             )}
+            
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container:{
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-around",
+        alignItems: "center",
+        marginVertical:2
+    },
+    button:{
+        display: "flex",
+        alignItems: "center",
+        paddingVertical: 5,
+        marginBottom: 5,
+    },
+    buttonText:{
+        fontSize: 21,
+        backgroundColor: "#dafffd",
+        borderWidth: 1,
+        borderColor: "#a0f7ff",
+        paddingHorizontal: 35,
+        paddingVertical: 5,
+    }
+})

@@ -152,7 +152,7 @@ export default function SubtaskBlock({
                     data={sortedArr}
                     onDragEnd={({ data }) => checkDif(task.id, data)}
                     // onDragBegin={() => setOuterScrollEnabled(false)}
-                    keyExtractor={(item) => String(item. subtask_id)}
+                    keyExtractor={(item) => String(item.subtask_id)}
                     renderItem={({
                         item,
                         drag,

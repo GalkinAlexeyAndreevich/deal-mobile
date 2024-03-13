@@ -25,12 +25,14 @@ export const createTables = async() => {
   await db.transactionAsync(async (tx) => {
     await tx.executeSqlAsync(`
         CREATE TABLE IF NOT EXISTS TASKS (
-          id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, done BOOLEAN, date TEXT, typeId INTEGER, priorityId INTEGER
+          id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, done BOOLEAN,
+          date TEXT, typeId INTEGER, priorityId INTEGER
         );
     `);
     await tx.executeSqlAsync(`
       CREATE TABLE IF NOT EXISTS SUBTASKS (
-        subtask_id INTEGER PRIMARY KEY AUTOINCREMENT, subtask_name TEXT, subtask_done BOOLEAN, task_id INTEGER, subtask_priorityId INTEGER,
+        subtask_id INTEGER PRIMARY KEY AUTOINCREMENT, subtask_name TEXT,
+        subtask_done BOOLEAN, task_id INTEGER, subtask_priorityId INTEGER,
         FOREIGN KEY (task_id) REFERENCES TASKS(id)
       );
     `);

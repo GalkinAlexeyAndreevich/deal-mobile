@@ -42,16 +42,46 @@ export default function CustomCalendar({
         return count;
     };
     const count = countWord();
+    const getTextLength = (markedDates: MarkedDates, date: string) => {
+        let textLength = 0;
+        for (let i = 0; i < markedDates[date]?.dots!.length; i++) {
+            let count: number = markedDates[date]?.dots![i]?.key?.length || 0;
+            textLength += count;
+        }
+        return textLength;
+    };
+
+    const maxLengthOnWeek = (
+        filtered: countOnWeek,
+        markedDates: MarkedDates,
+        date: string,
+        currentNumberWeek: number
+    ) => {
+        let textLength = getTextLength(markedDates, date);
+        filtered[currentNumberWeek].textLength = Math.max(
+            filtered[currentNumberWeek].textLength,
+            textLength
+        );
+        filtered[currentNumberWeek].countTask = Math.max(
+            filtered[currentNumberWeek].countTask,
+            markedDates[date]?.dots!.length
+        );
+        const sum =
+            (filtered[currentNumberWeek].countTask || 1) * 17 +
+            filtered[currentNumberWeek].textLength * 2;
+        filtered[currentNumberWeek].maxLength = Math.max(
+            filtered[currentNumberWeek].maxLength,
+            Math.round(sum)
+        );
+    };
+
     // Функция оптимизация высоты для недели
-    const getStartAndEndOfWeeks = (month: string | Date) => {
+    const optimizeHeightOnWeeks = (month: string | Date) => {
         console.log("getStartAndEndOfWeeks", month);
         const startOfMonth = moment(month).startOf("month");
         const endOfMonth = moment(month).endOf("month");
-
         const startWeek = startOfMonth.isoWeek();
         const endWeek = endOfMonth.isoWeek();
-        console.log(startOfMonth, endOfMonth, startWeek, endWeek);
-
         let filtered = {} as countOnWeek;
         for (let i = startWeek; i <= endWeek; i++) {
             filtered[i] = {
@@ -60,8 +90,7 @@ export default function CustomCalendar({
                 maxLength: 0,
             };
         }
-
-        const filteredMarkedDates = Object.keys(markedDates).reduce(
+        const maxLengthOnWeeks = Object.keys(markedDates).reduce(
             (filtered, date) => {
                 const currentNumberWeek = moment(date).isoWeek();
                 if (moment(date).year() !== moment(month).year())
@@ -71,32 +100,11 @@ export default function CustomCalendar({
                     currentNumberWeek <= endWeek
                 ) {
                     if (markedDates[date]?.dots !== undefined) {
-                        let textLength = 0;
-
-                        for (
-                            let i = 0;
-                            i < markedDates[date]?.dots!.length;
-                            i++
-                        ) {
-                            let count: number =
-                                markedDates[date]?.dots![i]?.key?.length || 0;
-                            textLength += count;
-                        }
-
-                        filtered[currentNumberWeek].textLength = Math.max(
-                            filtered[currentNumberWeek].textLength,
-                            textLength
-                        );
-                        filtered[currentNumberWeek].countTask = Math.max(
-                            filtered[currentNumberWeek].countTask,
-                            markedDates[date]?.dots!.length
-                        );
-                        const sum =
-                            (filtered[currentNumberWeek].countTask || 1) * 17 +
-                            filtered[currentNumberWeek].textLength * 2;
-                        filtered[currentNumberWeek].maxLength = Math.max(
-                            filtered[currentNumberWeek].maxLength,
-                            Math.round(sum)
+                        maxLengthOnWeek(
+                            filtered,
+                            markedDates,
+                            date,
+                            currentNumberWeek
                         );
                     }
                 }
@@ -104,13 +112,13 @@ export default function CustomCalendar({
             },
             filtered
         );
-        console.log("Снова вызвали функцию", filteredMarkedDates);
-
-        return filteredMarkedDates || {};
+        return maxLengthOnWeeks || {};
     };
-    // Перерасчет произойдет если изменится месяц или год, а также количество заданий
+
+    // Перерасчет произойдет если изменится месяц или год,
+    // количество заданий, или общее количество символов
     const countOnWeek = useMemo(
-        () => getStartAndEndOfWeeks(currentDate),
+        () => optimizeHeightOnWeeks(currentDate),
         [countTask, monthYear, count]
     );
     defineLocale();

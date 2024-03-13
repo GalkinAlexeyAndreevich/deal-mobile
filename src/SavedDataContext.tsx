@@ -48,7 +48,9 @@ export const SavedDataProvider = ({ children }: Props) => {
                     let index = formattedArr.findIndex(element=>element.id==allData[i].id)
                     const {subtask_id, subtask_name, subtask_done,subtask_priorityId} = allData[i]
                     if(index !== -1 && subtask_id){
-                        formattedArr[index].subtasks.push({subtask_id, subtask_name, subtask_done:String(subtask_done)=="true",subtask_priorityId})
+                        formattedArr[index].subtasks.push({
+                            subtask_id, subtask_name, subtask_done:String(subtask_done)=="true",subtask_priorityId
+                        })
                     }
                     else{
                         let {id, name, done, date, typeId, priorityId} = allData[i]
@@ -56,7 +58,10 @@ export const SavedDataProvider = ({ children }: Props) => {
                         if(subtask_id){
                             formattedArr.push({
                                 id, name, done, date, typeId, priorityId, 
-                                subtasks:[{subtask_id, subtask_name, subtask_done: String(subtask_done)=="true",subtask_priorityId}]}) 
+                                subtasks:[{
+                                    subtask_id, subtask_name, subtask_done: String(subtask_done)=="true",subtask_priorityId
+                                }]
+                            }) 
                         }else{
                             formattedArr.push({id, name, done, date, typeId, priorityId,  subtasks:[]}) 
                         }  

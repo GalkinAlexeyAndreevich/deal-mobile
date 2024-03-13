@@ -222,7 +222,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                     />
                                     {/* <Text>Создать подзадачу</Text> */}
                                 </Pressable>
-                                <Pressable
+                                {/* <Pressable
                                     onPress={() => setLocked((prev) => !prev)}
                                     style={{
                                         paddingLeft: 5,
@@ -233,7 +233,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                                     ) : (
                                         <Fontisto name="unlocked" size={20} />
                                     )}
-                                </Pressable>
+                                </Pressable> */}
                             </View>
                             <Button
                                 title="Создать цель"

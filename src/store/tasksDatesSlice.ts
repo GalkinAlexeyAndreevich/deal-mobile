@@ -76,6 +76,7 @@ const tasksDatesSlice = createSlice({
             }
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
+
         setSubtask(
             state,
             action: PayloadAction<{ taskId: number; subtaskId: number }>
@@ -89,22 +90,19 @@ const tasksDatesSlice = createSlice({
             let foundSubtask = foundTask.subtasks[subtaskIndex];
             foundSubtask.subtask_done = !foundSubtask.subtask_done;
             updateSubtask(foundSubtask)
-            // Если задание было выполнено, но мы отменили выполнение подзадания, задание будет отменено
-            if (foundTask.done && !foundSubtask.subtask_done) {
-                foundTask.done = false;
-            } else {
-                // Если все подзадания будут выполнены, задание будет выполнено
+            // Если задача была выполнена, но мы отменили выполнение подзадачи, задача будет отменена
+            if (foundTask.done && !foundSubtask.subtask_done) foundTask.done = false;
+            else {
+                // Если все подзадачи будут выполнены, задача будет выполнена
                 let checkOnDone = true;
                 for (let item of foundTask.subtasks) {
                     if (!item.subtask_done) checkOnDone = false;
                 }
-                if (checkOnDone) {
-                    foundTask.done = true;
-                }
+                if (checkOnDone)  foundTask.done = true;
             }
             updateTask(foundTask)
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
+
         changeArrSubtaskInTask(
             state,
             action: PayloadAction<{ taskId: number; subtasks: SubTask[] }>
