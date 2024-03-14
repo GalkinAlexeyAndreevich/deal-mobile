@@ -1,10 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-// import StatisticsPage from "@Pages/StatisticsPage";
-import TaskOnDayPage from "@Pages/TaskOnDayPage";
 import CalendarPage from "@Pages/CalendarPage";
 import { Image } from "react-native-elements";
-import TaskPage from "@src/Pages/TaskPage";
-import Header from "@src/components/Header";
 import TaskNavigator from "./TaskNavigator";
 export type RootStackParamList = {
     AddTask: undefined;
@@ -62,17 +58,7 @@ function TabNavigator() {
                             })
                       },
                 })}
-                // initialParams={{dateNow:new Date().toISOString()}}
             />
-            {/* <Tab.Screen
-                name="TaskPage"
-                options={{
-                    tabBarItemStyle: {
-                        display: "none",
-                    },
-                }}
-                component={TaskPage}
-            /> */}
         </Tab.Navigator>
     );
 }

@@ -2,7 +2,7 @@
   "expo": {
     "name": "DEAL",
     "slug": "deal-mobile",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "icon": "./src/assets/icon-app4.png",
@@ -40,7 +40,9 @@
     "web": {
       "favicon": "./src/assets/icon-clock.png"
     },
-    "runtimeVersion": "1.0.0",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
     "plugins": [
       [
         "@config-plugins/react-native-ble-plx",

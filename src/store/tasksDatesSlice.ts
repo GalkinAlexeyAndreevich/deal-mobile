@@ -7,12 +7,14 @@ interface TypeState {
     tasks: Task[];
     subtasks: SubTask[];
     typesTask: ITypeTask[];
+    changeLengthId:number
 }
 
 const initialState: TypeState = {
     tasks: [],
     subtasks: [],
     typesTask: [],
+    changeLengthId:0
 };
 
 interface ChangeNameProps {
@@ -28,6 +30,14 @@ const tasksDatesSlice = createSlice({
         setTasks(state, actions: PayloadAction<Task[]>) {
             state.tasks = actions.payload;
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
+        },
+        addTaskInState(state,actions:PayloadAction<Task>){
+            const task = actions.payload
+            if(task){
+                state.tasks = [...state.tasks,task]
+                state.changeLengthId = state.changeLengthId +1
+            }
+           
         },
         setType(state, action: PayloadAction<ITypeTask[]>) {
             state.typesTask = action.payload;
@@ -74,7 +84,7 @@ const tasksDatesSlice = createSlice({
                 console.log('new task name', foundTask.name);
                 
             }
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
+            state.changeLengthId = state.changeLengthId +1
         },
 
         setSubtask(
@@ -130,6 +140,7 @@ const tasksDatesSlice = createSlice({
             const taskId = action.payload;
             const newTasks = state.tasks.filter((task) => task.id !== taskId);
             state.tasks = newTasks;
+            state.changeLengthId = state.changeLengthId +1
             AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         deleteSubtask(

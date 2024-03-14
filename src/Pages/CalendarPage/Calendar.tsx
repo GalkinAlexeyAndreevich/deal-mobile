@@ -8,10 +8,10 @@ import HeaderComponent from "./HeaderComponent";
 import defineLocale from "./localeConfig";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import type { RootStackParamList } from "@src/routes/TabNavigator";
+import { useAppSelector } from "@src/store/hook";
 interface Props {
     markedDates: MarkedDates;
     setOpenModal: (open: boolean) => void;
-    countTask: number;
     currentDate: string;
     setCurrentDate: (date: string) => void;
     navigation:NativeStackNavigationProp<RootStackParamList, "CalendarPage">
@@ -27,25 +27,12 @@ type countOnWeek = {
 export default function CustomCalendar({
     markedDates,
     setOpenModal,
-    countTask,
     currentDate,
     setCurrentDate,
     navigation
 }: Props) {
     let monthYear = moment(currentDate).format("MM-yyyy");
-    const countWord = () => {
-        console.log("test", Object.values(markedDates));
-        const arrDates = Object.values(markedDates);
-        let count = 0;
-        for (let i = 0; i < arrDates.length; i++) {
-            if (!arrDates[i].dots) continue;
-            for (let j = 0; j < arrDates[i].dots!.length; j++) {
-                count += arrDates[i].dots![j].key?.length || 0;
-            }
-        }
-        return count;
-    };
-    const count = countWord();
+    const {changeLengthId} = useAppSelector(state=>state.tasksDates)
     const getTextLength = (markedDates: MarkedDates, date: string) => {
         let textLength = 0;
         for (let i = 0; i < markedDates[date]?.dots!.length; i++) {
@@ -120,10 +107,10 @@ export default function CustomCalendar({
     };
 
     // Перерасчет произойдет если изменится месяц или год,
-    // количество заданий, или общее количество символов
+    // количество заданий, или изменится имя у задачи
     const countOnWeek = useMemo(
         () => optimizeHeightOnWeeks(currentDate),
-        [countTask, monthYear, count]
+        [monthYear,changeLengthId]
     );
     defineLocale();
 

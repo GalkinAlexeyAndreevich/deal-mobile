@@ -35,7 +35,6 @@ export default function DayComponent({
     marking,
     navigation
 }: Props) {
-    // const [heightDay, setHeightDay] = useState(50)
     const lastPress = useRef(Date.now());
     const getHeightOnCount = (date: string) => {
         if (!countOnWeek) return 50;
@@ -53,7 +52,7 @@ export default function DayComponent({
     };
     const handlePress = () => {
         const now = Date.now();
-        if (now - lastPress.current <= 300) { // '300' is the duration within which the second press should happen
+        if (now - lastPress.current <= 300) {
             lastPress.current = 0; // reset
             navigation.navigate("TasksOnDayPage",{
                 screen:'TaskOnDayPage',
@@ -66,16 +65,10 @@ export default function DayComponent({
                 setCurrentDate(date.dateString);  
                 lastPress.current = 0; // reset
             }
-          }, 300); // wait for 300ms to confirm it's a single press
+          }, 300);
         }
     };
     const hyphenatedText = (text: string): string => {
-        // return text
-        //     .split(" ")
-        //     .map((word) => word.split("").join("\u00AD"))
-        //     .join(" ");
-        console.log(h.hyphenateText(text));
-
         return h.hyphenateText(text);
     };
 

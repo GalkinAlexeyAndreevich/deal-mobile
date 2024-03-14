@@ -29,7 +29,6 @@ export default function CalendarPage({ navigation,route }: Props) {
         if(!dateNow)return
         setCurrentDate(dateNow)
     },[dateNow])
-    let countTask = useRef(0);
     let monthYear = moment(currentDate).format("MM-yyyy");
     const getTypeColor = (typeId: number) => {
         const findItem = typesTask.find((element) => element.key == typeId);
@@ -49,7 +48,6 @@ export default function CalendarPage({ navigation,route }: Props) {
             return acc;
         }, {});
         setMarkedDates(map);
-        countTask.current = tasks.length;
         console.log("Объедиение по полю", map);
     }, [monthYear, tasks]);
 
@@ -67,7 +65,6 @@ export default function CalendarPage({ navigation,route }: Props) {
             <CustomCalendar
                 markedDates={markedDates}
                 setOpenModal={setOpenModal}
-                countTask={countTask.current}
                 currentDate={moment(currentDate).format("YYYY-MM-DD")}
                 setCurrentDate={setCurrentDate}
                 navigation={navigation}
