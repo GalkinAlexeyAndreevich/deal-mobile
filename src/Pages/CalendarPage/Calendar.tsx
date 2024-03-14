@@ -6,12 +6,15 @@ import moment from "moment";
 import DayComponent from "./DayComponent";
 import HeaderComponent from "./HeaderComponent";
 import defineLocale from "./localeConfig";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "@src/routes/TabNavigator";
 interface Props {
     markedDates: MarkedDates;
     setOpenModal: (open: boolean) => void;
     countTask: number;
     currentDate: string;
     setCurrentDate: (date: string) => void;
+    navigation:NativeStackNavigationProp<RootStackParamList, "CalendarPage">
 }
 type countOnWeek = {
     [key: number]: {
@@ -27,6 +30,7 @@ export default function CustomCalendar({
     countTask,
     currentDate,
     setCurrentDate,
+    navigation
 }: Props) {
     let monthYear = moment(currentDate).format("MM-yyyy");
     const countWord = () => {
@@ -146,6 +150,7 @@ export default function CustomCalendar({
                             currentDate={currentDate}
                             setCurrentDate={setCurrentDate}
                             countOnWeek={countOnWeek}
+                            navigation={navigation}
                         />
                     )
                 }

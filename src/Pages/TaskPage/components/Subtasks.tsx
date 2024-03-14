@@ -145,5 +145,6 @@ const styles = StyleSheet.create({
         padding: 0,
         fontSize: 20,
         width: "75%",
+        maxHeight: 100,
     },
 });

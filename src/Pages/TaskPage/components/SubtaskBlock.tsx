@@ -146,7 +146,6 @@ export default function SubtaskBlock({
                 </Pressable>
             </View>
             <View>
-                {/* <NestableScrollContainer> */}
                 <NestableDraggableFlatList
                     scrollEnabled={false}
                     data={sortedArr}
@@ -168,8 +167,6 @@ export default function SubtaskBlock({
                             setChanged={setChanged}
                         />
                     )}
-                    // simultaneousHandlers={scrollViewRef}
-                    // activationDistance={20}
                 />
             </View>
         </>

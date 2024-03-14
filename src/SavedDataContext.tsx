@@ -3,7 +3,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch } from "./store/hook";
 import { setTasks, setType } from "./store/tasksDatesSlice";
 import { defaultTypeTasks } from "./utils/dataNoFetch";
-import type {ResultSetRowList} from "react-native-sqlite-storage"
 import { createTables, getTasksWithSubtask } from "db";
 import type { SubTask, Task } from "./interfaces";
 
@@ -12,11 +11,7 @@ const SavedDataContext = createContext({});
 interface Props {
     children: React.ReactNode;
 }
-export interface ResultSet {
-    insertId: number;
-    rowsAffected: number;
-    rows: ResultSetRowList;
-}
+
 
 export const SavedDataProvider = ({ children }: Props) => {
     const dispatch = useAppDispatch();

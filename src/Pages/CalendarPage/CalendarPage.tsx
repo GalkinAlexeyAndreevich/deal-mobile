@@ -70,6 +70,7 @@ export default function CalendarPage({ navigation,route }: Props) {
                 countTask={countTask.current}
                 currentDate={moment(currentDate).format("YYYY-MM-DD")}
                 setCurrentDate={setCurrentDate}
+                navigation={navigation}
             />
             <View
                 style={{

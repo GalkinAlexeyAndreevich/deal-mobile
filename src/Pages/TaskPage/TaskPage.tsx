@@ -16,8 +16,10 @@ import SubtaskBlock from "./components/SubtaskBlock";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { NestableScrollContainer } from "react-native-draggable-flatlist";
+import type { TaskStackParamList } from "@src/routes/TaskNavigator";
+import { useNavigation } from "@react-navigation/native";
 
-type Props = NativeStackScreenProps<RootStackParamList, "TaskPage">;
+type Props = NativeStackScreenProps<TaskStackParamList, "OneTaskPage">;
 
 export default function TaskPage({ navigation, route }: Props) {
     const { taskId, uniqueId,currentDate } = route.params;
@@ -36,18 +38,41 @@ export default function TaskPage({ navigation, route }: Props) {
             </View>
         );
     }
+    // const navigationF = useNavigation();
+
+    // useEffect(() => {
+    //   const unsubscribe = navigation.addListener('beforeRemove', (e) => {
+    //     // Prevent default behavior of leaving the screen
+    //     e.preventDefault();
+    //     // Perform your custom back action here
+  
+    //     // If you want to allow the back action after your custom logic,
+    //     // you can call `unsubscribe()` and then navigate back programmatically:
+    //     // unsubscribe();
+    //     // navigationF.goBack()
+    //     // navigation.navigate("TaskOnDayPage", {
+    //     //     dateNow:new Date(currentDate).toISOString()
+    //     // })
+    //     unsubscribe();
+    //   });
+  
+    //   return unsubscribe;
+    // }, [navigation]);
 
     return (
         <View style={styles.container}>
             <NestableScrollContainer>
                 <View>
                     <Pressable
-                        onPress={() => navigation.navigate("TaskOnDayPage", {
-                            dateNow:new Date(currentDate).toISOString()
-                        })}
+                        onPress={() => {
+                            console.log("press");
+                            
+                            navigation.goBack()
+                        }}
                         style={{
                             width: 40,
                             height: 40,
+                            paddingVertical:5
                         }}>
                         <AntDesign name="back" color={"red"} size={30} />
                     </Pressable>

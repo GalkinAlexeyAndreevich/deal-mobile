@@ -7,15 +7,16 @@ import AddTask from "@components/AddTask";
 import ChangeDate from "./components/ChangeDate";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@src/routes/TabNavigator";
+import type { TaskStackParamList } from "@src/routes/TaskNavigator";
 
 
-type Props = NativeStackScreenProps<RootStackParamList, 'TaskOnDayPage'>;
+type Props = NativeStackScreenProps<TaskStackParamList, 'TaskOnDayPage'>;
 
 export default function TaskOnDayPage({navigation,route}:Props) {
     const [currentDate, setCurrentDate] = useState<string>(
         new Date().toISOString()
     );
-    const {dateNow} = route.params
+    const dateNow = route.params?.dateNow
     useEffect(()=>{
         if(!dateNow)return
         setCurrentDate(dateNow)

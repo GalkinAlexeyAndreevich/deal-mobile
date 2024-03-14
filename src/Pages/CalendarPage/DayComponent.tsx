@@ -1,10 +1,12 @@
 import { View, Text, Pressable } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import { DateData } from "react-native-calendars";
 import { MarkingProps } from "react-native-calendars/src/calendar/day/marking";
 import Hypher from "hypher";
 import russian from "hyphenation.ru";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import type { RootStackParamList } from "@src/routes/TabNavigator";
 
 const h = new Hypher(russian);
 
@@ -22,6 +24,7 @@ interface Props {
     setCurrentDate: (date: string) => void;
     currentDate: string;
     marking: MarkingProps | undefined;
+    navigation:NativeStackNavigationProp<RootStackParamList, "CalendarPage">
 }
 
 export default function DayComponent({
@@ -30,8 +33,10 @@ export default function DayComponent({
     setCurrentDate,
     currentDate,
     marking,
+    navigation
 }: Props) {
     // const [heightDay, setHeightDay] = useState(50)
+    const lastPress = useRef(Date.now());
     const getHeightOnCount = (date: string) => {
         if (!countOnWeek) return 50;
         const week = moment(date).isoWeek();
@@ -46,6 +51,24 @@ export default function DayComponent({
         let sum = 50 + countOnWeek[week].maxLength;
         return sum;
     };
+    const handlePress = () => {
+        const now = Date.now();
+        if (now - lastPress.current <= 300) { // '300' is the duration within which the second press should happen
+            lastPress.current = 0; // reset
+            navigation.navigate("TasksOnDayPage",{
+                screen:'TaskOnDayPage',
+                params:{dateNow:date.dateString}
+            })
+        } else {
+          lastPress.current = now;
+          setTimeout(() => {
+            if (lastPress.current !== 0) {
+                setCurrentDate(date.dateString);  
+                lastPress.current = 0; // reset
+            }
+          }, 300); // wait for 300ms to confirm it's a single press
+        }
+    };
     const hyphenatedText = (text: string): string => {
         // return text
         //     .split(" ")
@@ -59,10 +82,7 @@ export default function DayComponent({
     const maxWeek = Math.max.apply(null, Object.keys(countOnWeek).map(Number));
     return (
         <Pressable
-            onPress={() => {
-                console.log("selected day", date.dateString);
-                setCurrentDate(date.dateString);
-            }}
+            onPress={handlePress}
             style={{
                 width: "100%",
                 height: getHeightOnCount(date.dateString),

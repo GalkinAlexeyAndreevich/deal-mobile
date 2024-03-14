@@ -12,8 +12,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "@src/routes/TabNavigator";
 import moment from "moment";
 import { setOrderTask } from "db";
+import type { TaskStackParamList } from "@src/routes/TaskNavigator";
 interface IProps {
-    navigation: NativeStackNavigationProp<RootStackParamList, "TaskOnDayPage">;
+    navigation: NativeStackNavigationProp<TaskStackParamList, "TaskOnDayPage">;
     currentDate: string;
 }
 
@@ -41,7 +42,7 @@ export default function Tasks({ currentDate, navigation }: IProps) {
 
     const redirectToTask = (task: Task) => {
         console.log("redirectOnNewPage", task);
-        navigation.navigate("TaskPage", {
+        navigation.push("OneTaskPage", {
             taskId: task.id,
             uniqueId: moment().toISOString(),
             currentDate: currentDate,

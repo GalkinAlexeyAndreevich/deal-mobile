@@ -5,10 +5,11 @@ import CalendarPage from "@Pages/CalendarPage";
 import { Image } from "react-native-elements";
 import TaskPage from "@src/Pages/TaskPage";
 import Header from "@src/components/Header";
+import TaskNavigator from "./TaskNavigator";
 export type RootStackParamList = {
     AddTask: undefined;
     Statistics: undefined;
-    TaskOnDayPage:  {dateNow?: string};
+    TasksOnDayPage:  {screen:string, params:{dateNow?: string}};
     CalendarPage: {dateNow?: string};
     TaskPage: { taskId: number,uniqueId:string,currentDate:string };
 };
@@ -20,16 +21,7 @@ function TabNavigator() {
                 headerShown: false,
                 tabBarActiveTintColor: "#00bcfb",
             })}
-            screenListeners={({ navigation, route }) => ({
-                tabPress:(e)=>{
-                   e.preventDefault() 
-                   if(route.name == 'TaskOnDayPage' || route.name == 'CalendarPage'){
-                        navigation.navigate(route.name,{dateNow:new Date().toISOString()})
-                   }
-                   navigation.navigate(route.name)
-                },
-            })}
-            initialRouteName="TaskOnDayPage">
+            initialRouteName="TasksOnDayPage">
             <Tab.Screen
                 name="CalendarPage"
                 options={{
@@ -41,11 +33,16 @@ function TabNavigator() {
                         />
                     ),
                 }}
+                listeners={({navigation})=>({
+                    tabPress: () => {
+                        navigation.navigate('CalendarPage',{dateNow:new Date().toISOString()})
+                      },
+                })}
                 component={CalendarPage}
                 initialParams={{dateNow:new Date().toISOString()}}
             />
             <Tab.Screen
-                name="TaskOnDayPage"
+                name="TasksOnDayPage"
                 options={{
                     title: "День",
                     tabBarIcon: () => (
@@ -54,11 +51,20 @@ function TabNavigator() {
                             source={require("@assets/taskOnDay1.jpg")}
                         />
                     ),
+                    
                 }}
-                component={TaskOnDayPage}
-                initialParams={{dateNow:new Date().toISOString()}}
+                component={TaskNavigator}
+                listeners={({navigation})=>({
+                    tabPress: () => {
+                            navigation.navigate("TasksOnDayPage",{
+                                screen:'TaskOnDayPage',
+                                params:{dateNow:new Date().toISOString()}
+                            })
+                      },
+                })}
+                // initialParams={{dateNow:new Date().toISOString()}}
             />
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="TaskPage"
                 options={{
                     tabBarItemStyle: {
@@ -66,7 +72,7 @@ function TabNavigator() {
                     },
                 }}
                 component={TaskPage}
-            />
+            /> */}
         </Tab.Navigator>
     );
 }
