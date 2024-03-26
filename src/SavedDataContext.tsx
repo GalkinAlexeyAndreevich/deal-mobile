@@ -3,8 +3,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch } from "./store/hook";
 import { setTasks, setType } from "./store/tasksDatesSlice";
 import { defaultTypeTasks } from "./utils/dataNoFetch";
-import { createTables, getTasksWithSubtask } from "db";
-import type { SubTask, Task } from "./interfaces";
+import { createTables, getTasksWithSubtask, getTypeTask } from "db";
+import type { ITypeTask, SubTask, Task } from "./interfaces";
 
 const SavedDataContext = createContext({});
 
@@ -17,26 +17,10 @@ export const SavedDataProvider = ({ children }: Props) => {
     const dispatch = useAppDispatch();
     console.log("Достаю сохраненные данные");
     useEffect(() => {
-        async function getSaveData() {
-            await AsyncStorage.removeItem('savedTypesTask')
-            let typesTask = await JSON.parse(
-                (await AsyncStorage.getItem("savedTypesTask")) || "[]"
-            );
-            AsyncStorage.setItem("savedTask",JSON.stringify([]))
-            if (!typesTask || !typesTask.length) {
-                await AsyncStorage.setItem(
-                    "savedTypesTask",
-                    JSON.stringify(defaultTypeTasks)
-                );
-                dispatch(setType(defaultTypeTasks));
-            }
-            else dispatch(setType(defaultTypeTasks));
-
-            console.log("Сохраненные данные перенесены");
-        }
-        getSaveData();
         try{
             createTables().then(async()=>{
+                const typeTask = await getTypeTask() as ITypeTask[]
+                dispatch(setType(typeTask))
                 const allData = await getTasksWithSubtask() as (Task & SubTask)[]
                 let formattedArr:Task[] = []
                 for(let i=0;i<allData.length;i++){

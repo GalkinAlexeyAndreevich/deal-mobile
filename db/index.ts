@@ -1,5 +1,6 @@
 import * as SQLite from 'expo-sqlite';
 import type { SubTask, Task } from '@src/interfaces';
+import { defaultTypeTasks } from '@src/utils/dataNoFetch';
 
 
 
@@ -41,6 +42,18 @@ export const createTables = async() => {
         id INTEGER PRIMARY KEY AUTOINCREMENT, value TEXT, color TEXT
       );
     `);
+    const countType = await tx.executeSqlAsync(`
+    SELECT COUNT(*) countType FROM TYPE_TASKS
+    `)
+    if(!countType.rows[0].countType){
+      for(let i=0;i<defaultTypeTasks.length;i++){
+        await tx.executeSqlAsync(
+          'INSERT INTO TYPE_TASKS(value, color) VALUES (?, ?)',
+          [defaultTypeTasks[i].value,defaultTypeTasks[i].color]
+        );
+      }
+
+    }
   });
 };
 
@@ -114,6 +127,18 @@ export const getTasks = async()=>{
   return new Promise((resolve)=>{
     db.transactionAsync(async (tx) => {
       const result = await tx.executeSqlAsync('SELECT * FROM TASKS', []);
+      resolve(result.rows)
+    });
+  })
+} 
+
+export const getTypeTask = async()=>{
+  const db = SQLite.openDatabase("Deal.db")
+  return new Promise<unknown[]>((resolve)=>{
+    db.transactionAsync(async (tx) => {
+      const result = await tx.executeSqlAsync('SELECT id key, value, color FROM TYPE_TASKS', []);
+      console.log(result.rows);
+      
       resolve(result.rows)
     });
   })

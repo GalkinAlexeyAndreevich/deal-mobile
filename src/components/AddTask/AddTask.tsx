@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from "@store/hook";
 import Fontisto from "react-native-vector-icons/Fontisto";
 // import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { ITypeTask, SubTask, Task } from "@interfaces";
-import { setTasks } from "@store/tasksDatesSlice";
+import { addTaskInState, setTasks } from "@store/tasksDatesSlice";
 import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
 import { Button } from "react-native-elements";
@@ -76,6 +76,8 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 : typesTask[0].key > 0
                 ? typesTask[0].key
                 : 1;
+        console.log(chosenType, typeTask);
+            
         for (let i = 0; i < subtasks.length; i++) {
             if (!subtasks[i].subtask_name.length) continue;
             finalArrSubtask.push({
@@ -105,7 +107,8 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
         setInputValue("");
         setChosenType(typesTask[0]);
         addTask(object);
-        dispatch(setTasks([...tasks,object]));
+        dispatch(addTaskInState(object))
+        // dispatch(setTasks([...tasks,object]));
     };
 
     const SubtaskItem = ({ item }: { item: SubTask }) => {

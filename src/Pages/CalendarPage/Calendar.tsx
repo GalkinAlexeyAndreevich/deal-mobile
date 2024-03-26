@@ -1,5 +1,5 @@
 import { ScrollView, View } from "react-native";
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Calendar } from "react-native-calendars";
 import { MarkedDates, Theme } from "react-native-calendars/src/types";
 import moment from "moment";
@@ -32,7 +32,13 @@ export default function CustomCalendar({
     navigation
 }: Props) {
     let monthYear = moment(currentDate).format("MM-yyyy");
-    const {changeLengthId} = useAppSelector(state=>state.tasksDates)
+    const [firstRender, setFirstRender] = useState(false)
+    let {changeLengthId} = useAppSelector(state=>state.tasksDates)
+
+    useEffect(()=>{
+        setFirstRender(prev=>!prev)
+    },[])
+
     const getTextLength = (markedDates: MarkedDates, date: string) => {
         let textLength = 0;
         for (let i = 0; i < markedDates[date]?.dots!.length; i++) {
@@ -41,7 +47,8 @@ export default function CustomCalendar({
         }
         return textLength;
     };
-
+    console.log("new id", changeLengthId);
+    
     const maxLengthOnWeek = (
         filtered: countOnWeek,
         markedDates: MarkedDates,
@@ -110,7 +117,7 @@ export default function CustomCalendar({
     // количество заданий, или изменится имя у задачи
     const countOnWeek = useMemo(
         () => optimizeHeightOnWeeks(currentDate),
-        [monthYear,changeLengthId]
+        [monthYear,changeLengthId,firstRender]
     );
     defineLocale();
 

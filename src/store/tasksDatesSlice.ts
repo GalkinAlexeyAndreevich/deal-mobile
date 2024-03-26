@@ -29,15 +29,16 @@ const tasksDatesSlice = createSlice({
     reducers: {
         setTasks(state, actions: PayloadAction<Task[]>) {
             state.tasks = actions.payload;
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
+            state.changeLengthId = state.changeLengthId +1
         },
         addTaskInState(state,actions:PayloadAction<Task>){
             const task = actions.payload
             if(task){
                 state.tasks = [...state.tasks,task]
                 state.changeLengthId = state.changeLengthId +1
-            }
-           
+                console.log("recount",state.changeLengthId);
+                
+            }  
         },
         setType(state, action: PayloadAction<ITypeTask[]>) {
             state.typesTask = action.payload;
@@ -60,14 +61,11 @@ const tasksDatesSlice = createSlice({
                 else el.subtasks[i].subtask_done = false;
                 updateSubtask(el.subtasks[i])
             }
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         setNameTask(state, action: PayloadAction<ChangeNameProps>) {
             const { taskId, subtaskId, text } = action.payload;
-            
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
             let foundTask = state.tasks[taskIndex];
-            console.log(foundTask);
             
             if (subtaskId) {
                 const subIndex = foundTask.subtasks.findIndex(
@@ -80,9 +78,7 @@ const tasksDatesSlice = createSlice({
                 }
             }  else if(foundTask) {
                 foundTask.name = text;
-                updateTask(foundTask)
-                console.log('new task name', foundTask.name);
-                
+                updateTask(foundTask)  
             }
             state.changeLengthId = state.changeLengthId +1
         },
@@ -121,27 +117,18 @@ const tasksDatesSlice = createSlice({
             const taskIndex = state.tasks.findIndex(
                 (element) => element.id === taskId
             );
-            console.log("изменяю положение подзадач", subtasks);
-            console.log(taskIndex);
-
             state.tasks[taskIndex].subtasks = subtasks;
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         setPositionTasks(state, action:PayloadAction<{newTasks:Task[], currentDate:string}>){
             const {newTasks, currentDate} = action.payload
-            
-            // const newArr = [...state.tasks].concat(newTasks).unique(); 
-            // state.tasks = Array.from(new Set(state.tasks.concat(newTasks)))
             state.tasks = state.tasks.filter(task=>task.date != currentDate)
             state.tasks = state.tasks.concat(newTasks)
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         deleteTask(state, action: PayloadAction<number>) {
             const taskId = action.payload;
             const newTasks = state.tasks.filter((task) => task.id !== taskId);
             state.tasks = newTasks;
             state.changeLengthId = state.changeLengthId +1
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         deleteSubtask(
             state,
@@ -153,14 +140,12 @@ const tasksDatesSlice = createSlice({
                 (subtask) => subtask.subtask_id !== subtaskId
             );
             state.tasks[taskIndex].subtasks = newSubtask;
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         setTypeTask(state, action:PayloadAction<{taskId:number, newTypeId:number}>){
             const {taskId, newTypeId} = action.payload
             const taskIndex = state.tasks.findIndex((el) => el.id === taskId);
             state.tasks[taskIndex].typeId = newTypeId
             updateTask(state.tasks[taskIndex])
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         },
         addSubtaskInTask(state,action:PayloadAction<{taskId:number, subtask:SubTask}>){
             const {taskId, subtask} = action.payload
@@ -169,7 +154,6 @@ const tasksDatesSlice = createSlice({
             if(state.tasks[taskIndex].done && !subtask.subtask_done){
                 state.tasks[taskIndex].done = false
             }
-            AsyncStorage.setItem("savedTask", JSON.stringify(state.tasks));
         }
     },
 });
@@ -186,7 +170,8 @@ export const {
     changeArrSubtaskInTask,
     setPositionTasks,
     setTypeTask,
-    addSubtaskInTask
+    addSubtaskInTask,
+    addTaskInState
 } = tasksDatesSlice.actions;
 
 export default tasksDatesSlice.reducer;

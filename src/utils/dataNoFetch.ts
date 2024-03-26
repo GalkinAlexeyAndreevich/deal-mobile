@@ -5,8 +5,6 @@ export const defaultTypeTasks:ITypeTask[] = [
         { key: 3, value: "Работа", color: "rgb(204,204,254)" },
         { key: 4, value: "Спорт", color: "rgb(255,171,171)" },
         { key: 5, value: "Работа по дому", color: "rgb(194,239,154)" },
-        // { key: "Другое", value: "Другое", color: "rgb(186,214,228)" },
-        
 ];
 export const variableColors = [
     "#FFA398","#FFABAB","#FFC48C","#FFFCB9","#E0FA8D",

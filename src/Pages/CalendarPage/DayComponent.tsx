@@ -107,21 +107,29 @@ export default function DayComponent({
                             style={{
                                 // alignItems: "center",
                                 backgroundColor: item?.color,
-                                paddingHorizontal:1,
+                                paddingHorizontal:1.2,
                                 paddingVertical: 3,
                                 marginVertical: 3,
                                 marginHorizontal: 2,
+                                // flexGrow: 0.25, 
+                                // height:0,
+                                // flexDirection: 'row',
+                                // justifyContent:"center"
                             }}>
                             <Text
-                                android_hyphenationFrequency="normal"
+                                android_hyphenationFrequency="full"
+                                textBreakStrategy="simple"
+                                // numberOfLines={10}
+                                // ellipsizeMode="head"
                                 style={{
                                     borderWidth:
                                         item?.color == "white" ? 0.2 : 0,
                                     color: item?.selectedDotColor,
+                                    width:'100%',
                                     fontSize: 10,
-                                    width: "100%",
-                                    textAlign: "center"
+                                    textAlign: "center",
                                 }}>
+                                
                                 {hyphenatedText(item.key || "")}
                             </Text>
                         </View>
