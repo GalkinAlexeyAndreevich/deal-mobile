@@ -18,7 +18,7 @@ import moment from "moment";
 import ModalTypeTask from "@components/ModalTypeTask";
 import { Button } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { addTask } from "db";
+import { addTask, getMaxSubtaskId } from "db";
 
 export default function AddTask({ currentDate }: { currentDate: string }) {
     const {
@@ -77,11 +77,15 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                 ? typesTask[0].key
                 : 1;
         console.log(chosenType, typeTask);
+        let maxSubtask_id = await getMaxSubtaskId()
+        console.log("max created subtaskId", maxSubtask_id);
+        
+        maxSubtask_id = Number(maxSubtask_id)? maxSubtask_id+1:1
             
         for (let i = 0; i < subtasks.length; i++) {
             if (!subtasks[i].subtask_name.length) continue;
             finalArrSubtask.push({
-                subtask_id: subtasks[i].subtask_id,
+                subtask_id: maxSubtask_id + i,
                 subtask_name: subtasks[i].subtask_name,
                 subtask_done: false,
                 subtask_priorityId: i,
@@ -106,8 +110,10 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
         };
         setInputValue("");
         setChosenType(typesTask[0]);
-        addTask(object);
-        dispatch(addTaskInState(object))
+        addTask(object).then((insertedId:number)=>{
+            dispatch(addTaskInState({...object, id:insertedId}))
+        });
+        // dispatch(addTaskInState(object))
         // dispatch(setTasks([...tasks,object]));
     };
 

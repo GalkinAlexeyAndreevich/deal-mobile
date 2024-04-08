@@ -32,8 +32,6 @@ export default function CalendarPage({ navigation,route }: Props) {
     let monthYear = moment(currentDate).format("MM-yyyy");
     const getTypeColor = (typeId: number) => {
         const findItem = typesTask.find((element) => element.key == typeId);
-        console.log("color: ", findItem?.color);
-        
         return findItem && findItem.color.length ? findItem.color : "white";
     };
     useEffect(() => {

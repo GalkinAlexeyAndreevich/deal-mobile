@@ -57,34 +57,39 @@ export const createTables = async() => {
   });
 };
 
-export const addTask = async({name, done, date,typeId,subtasks}:Task)=>{
+export const addTask = async({name, done, date,typeId,subtasks}:Task):Promise<number>=>{
   const db = SQLite.openDatabase("Deal.db")
-  
-  await db.transactionAsync(async (tx) => {
-    let priorityId = 0
-    const priorityIdQuery = await tx.executeSqlAsync(
-      'select max(priorityId) priority from tasks where date=?',[date]
-    )
-    console.log("priority", priorityIdQuery);
-    
-    if(priorityIdQuery.rows[0].priority!=null){
-      priorityId = priorityIdQuery.rows[0].priority + 1
-    }
-    const task = await tx.executeSqlAsync(
-      'INSERT INTO tasks(name,done,date,typeId, priorityId) VALUES (?, ?,?,?,?)',
-      [name, String(done), date,typeId,Number(priorityId)]
-    );
-    console.log("created task", task);
-    
-    if(!task.insertId)return
-    for(let i=0;i<subtasks.length;i++){
-      let {subtask_name, subtask_done} = subtasks[i]
-      await tx.executeSqlAsync(
-        'INSERT INTO subtasks(subtask_name, subtask_done, task_id,subtask_priorityId) VALUES (?,?,?,?)',
-        [subtask_name, String(subtask_done),task.insertId,i]
+  return new Promise<number>((resolve)=>{
+    db.transactionAsync(async (tx) => {
+      let priorityId = 0
+      const priorityIdQuery = await tx.executeSqlAsync(
+        'select max(priorityId) priority from tasks where date=?',[date]
+      )
+      if(priorityIdQuery.rows[0].priority!=null){
+        priorityId = priorityIdQuery.rows[0].priority + 1
+      }
+      const task = await tx.executeSqlAsync(
+        'INSERT INTO tasks(name,done,date,typeId, priorityId) VALUES (?, ?,?,?,?)',
+        [name, String(done), date,typeId,Number(priorityId)]
       );
-    }
-  });
+      console.log("created task", task);
+      
+      if(!task.insertId) {
+        resolve(0)
+        return
+      }
+      
+      for(let i=0;i<subtasks.length;i++){
+        let {subtask_name, subtask_done} = subtasks[i]
+        await tx.executeSqlAsync(
+          'INSERT INTO subtasks(subtask_name, subtask_done, task_id,subtask_priorityId) VALUES (?,?,?,?)',
+          [subtask_name, String(subtask_done),task.insertId,i]
+        );
+      }
+      resolve(task.insertId)
+    });
+  })
+ 
 } 
 
 export const addSubtaskDb = async({subtask_name, subtask_done}:SubTask,task_id:number)=>{
@@ -97,28 +102,35 @@ export const addSubtaskDb = async({subtask_name, subtask_done}:SubTask,task_id:n
     if(priorityIdQuery.rows[0].priority!=null){
       priorityId = priorityIdQuery.rows[0].priority + 1
     }
-    console.log(priorityId);
     const taskData = await tx.executeSqlAsync(
       'select * from tasks where id=?',[task_id]
     )
+    console.log("taskData", taskData);
+    
     if(taskData.rows[0].done && !subtask_done){
-      const updateTask = await tx.executeSqlAsync(
+      await tx.executeSqlAsync(
         `update TASKS set done=false where id=?`,
         [task_id]
       );
-      console.log("updated status task", updateTask);
     }
-  
-    
-    const result = await tx.executeSqlAsync(
+    await tx.executeSqlAsync(
       'INSERT INTO subtasks(subtask_name, subtask_done, task_id,subtask_priorityId) VALUES (?, ?,?, ?)',
       [subtask_name, String(subtask_done),task_id,priorityId]
     );
-    console.log("subtask add", result);
-    
-    
   });
 } 
+
+export const getMaxSubtaskId = async()=>{
+  const db = SQLite.openDatabase("Deal.db")
+  return new Promise<number>((resolve)=>{
+    db.transactionAsync(async (tx) => {
+      const result = await tx.executeSqlAsync('SELECT max(subtask_id) maxId FROM SUBTASKS', []);
+      console.log("max subtask_id", result.rows);
+      
+      resolve(result.rows[0].maxId)
+    });
+  })
+}
 
 
 

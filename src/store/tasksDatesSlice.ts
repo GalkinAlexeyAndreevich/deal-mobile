@@ -37,7 +37,6 @@ const tasksDatesSlice = createSlice({
                 state.tasks = [...state.tasks,task]
                 state.changeLengthId = state.changeLengthId +1
                 console.log("recount",state.changeLengthId);
-                
             }  
         },
         setType(state, action: PayloadAction<ITypeTask[]>) {

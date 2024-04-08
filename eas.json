@@ -1,7 +1,7 @@
 {
   "cli": {
     "version": ">= 5.9.3",
-    "appVersionSource":"remote"
+    "appVersionSource": "remote"
   },
   "build": {
     "development": {
@@ -12,7 +12,7 @@
     "preview": {
       "distribution": "internal",
       "channel": "preview",
-      "autoIncrement":true
+      "autoIncrement": true
     },
     "production": {
       "android": {

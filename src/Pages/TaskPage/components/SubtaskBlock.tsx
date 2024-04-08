@@ -29,7 +29,7 @@ import Subtasks from "./Subtasks";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { CheckBox } from "react-native-elements";
-import { addSubtaskDb, setOrderSubtask } from "db";
+import { addSubtaskDb, getMaxSubtaskId, setOrderSubtask } from "db";
 
 interface Props {
     task: Task;
@@ -47,23 +47,22 @@ export default function SubtaskBlock({
 }: Props) {
     const dispatch = useAppDispatch();
     const [subtaskValue, setSubtaskValue] = useState("");
-    // const [modeCreate, setModeCreate] = useState(false);
     const subtaskRef = useRef<TextInput>(null);
     const [sortedArr, setSortedArr] = useState<SubTask[]>([])
     const [statusSubtask, setStatusSubtask] = useState(false);
     const clearInput = () => {
         setSubtaskValue("");
-        // setModeCreate(false);
         setStatusSubtask(false);
     };
     useEffect(clearInput, [uniqueId]);
-    // console.log(visibleSubtasks);
-    const addSubtask = () => {
+    const addSubtask = async() => {
         if (!subtaskValue.length) return;
         console.log("try add new subtask");
+        let maxSubtask_id = await getMaxSubtaskId()
+        maxSubtask_id = Number(maxSubtask_id)? maxSubtask_id+1:1
         
         const newSubtask: SubTask = {
-            subtask_id: new Date().getTime(),
+            subtask_id: maxSubtask_id,
             subtask_name: subtaskValue,
             subtask_done: statusSubtask,
             subtask_priorityId:0
@@ -82,7 +81,6 @@ export default function SubtaskBlock({
         task: Task,
         subtask: SubTask = {} as SubTask
     ) => {
-        // if (!text.length) return;
         dispatch(
             setNameTask({ text, taskId: task.id, subtaskId: subtask?.subtask_id })
         );
@@ -98,7 +96,6 @@ export default function SubtaskBlock({
     };
     return (
         <>
-            {/* <Text>Редактирование подцелей</Text> */}
             <View
                 style={{
                     display: "flex",
@@ -134,7 +131,6 @@ export default function SubtaskBlock({
                         onChangeText={(text) => setSubtaskValue(text)}
                         blurOnSubmit={true}
                         onSubmitEditing={() => addSubtask()}
-                        // onEndEditing={() => addSubtask()}
                         placeholder="введите подцель"
                     />
                 </View>
@@ -150,7 +146,6 @@ export default function SubtaskBlock({
                     scrollEnabled={false}
                     data={sortedArr}
                     onDragEnd={({ data }) => checkDif(task.id, data)}
-                    // onDragBegin={() => setOuterScrollEnabled(false)}
                     keyExtractor={(item) => String(item.subtask_id)}
                     renderItem={({
                         item,

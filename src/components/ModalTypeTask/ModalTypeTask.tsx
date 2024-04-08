@@ -45,12 +45,9 @@ export default function ModalTypeTask({selectedType, setSelectedType}:Props) {
 									setOpenModal(true);
 							}}
 							style={{
-									// height: 50,
 									zIndex: 2,
-									// padding: 15,
 									paddingHorizontal:10,
 									paddingVertical:10,
-									// borderRadius: 10,
 									marginLeft: 8,
 									backgroundColor:Object.keys(selectedType).length?selectedType.color:"#d9fcff",
 									display: "flex",
@@ -58,7 +55,6 @@ export default function ModalTypeTask({selectedType, setSelectedType}:Props) {
 							<Text style={{opacity:0.5}}>
 								{selectedType.value || ""}
 							</Text>
-							{/* <Text style={{color:selectedType.color, fontSize:35}}>#</Text> */}
 					</Pressable>
 
 					<Modal

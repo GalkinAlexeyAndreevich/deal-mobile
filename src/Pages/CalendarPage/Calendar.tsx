@@ -39,6 +39,11 @@ export default function CustomCalendar({
         setFirstRender(prev=>!prev)
     },[])
 
+    useEffect(()=>{
+        console.log("new id 2.0", changeLengthId);
+        setFirstRender(prev=>!prev)
+    },[changeLengthId])
+    
     const getTextLength = (markedDates: MarkedDates, date: string) => {
         let textLength = 0;
         for (let i = 0; i < markedDates[date]?.dots!.length; i++) {
@@ -47,7 +52,6 @@ export default function CustomCalendar({
         }
         return textLength;
     };
-    console.log("new id", changeLengthId);
     
     const maxLengthOnWeek = (
         filtered: countOnWeek,
@@ -90,7 +94,7 @@ export default function CustomCalendar({
         }
         const maxLengthOnWeeks = Object.keys(markedDates).reduce(
             (filtered, date) => {
-                const currentNumberWeek = moment(date).isoWeek();
+                let currentNumberWeek = moment(date).isoWeek();
                 if (moment(date).year() !== moment(month).year())
                     return filtered;
                 if (
@@ -115,10 +119,11 @@ export default function CustomCalendar({
 
     // Перерасчет произойдет если изменится месяц или год,
     // количество заданий, или изменится имя у задачи
-    const countOnWeek = useMemo(
+    let countOnWeek = useMemo(
         () => optimizeHeightOnWeeks(currentDate),
-        [monthYear,changeLengthId,firstRender]
+        [monthYear,changeLengthId,firstRender,Object.keys(markedDates).length]
     );
+
     defineLocale();
 
     return (

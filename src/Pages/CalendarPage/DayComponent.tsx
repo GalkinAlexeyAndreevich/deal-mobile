@@ -105,22 +105,15 @@ export default function DayComponent({
                     return (
                         <View key={index}
                             style={{
-                                // alignItems: "center",
                                 backgroundColor: item?.color,
                                 paddingHorizontal:1.2,
                                 paddingVertical: 3,
                                 marginVertical: 3,
                                 marginHorizontal: 2,
-                                // flexGrow: 0.25, 
-                                // height:0,
-                                // flexDirection: 'row',
-                                // justifyContent:"center"
                             }}>
                             <Text
                                 android_hyphenationFrequency="full"
                                 textBreakStrategy="simple"
-                                // numberOfLines={10}
-                                // ellipsizeMode="head"
                                 style={{
                                     borderWidth:
                                         item?.color == "white" ? 0.2 : 0,

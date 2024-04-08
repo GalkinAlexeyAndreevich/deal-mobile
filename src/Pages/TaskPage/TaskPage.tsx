@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@src/routes/TabNavigator";
 import { useAppDispatch, useAppSelector } from "@src/store/hook";
 import TypeTaskSelect from "./components/TypeTaskSelect";
 import TaskInput from "./components/TaskInput";
@@ -17,12 +16,11 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { NestableScrollContainer } from "react-native-draggable-flatlist";
 import type { TaskStackParamList } from "@src/routes/TaskNavigator";
-import { useNavigation } from "@react-navigation/native";
 
 type Props = NativeStackScreenProps<TaskStackParamList, "OneTaskPage">;
 
 export default function TaskPage({ navigation, route }: Props) {
-    const { taskId, uniqueId,currentDate } = route.params;
+    const { taskId, uniqueId } = route.params;
     const { tasks } = useAppSelector((state) => state.tasksDates);
     const [changed, setChanged] = useState(false);
     const [openSubtask, setOpenSubtask] = useState(true);
@@ -38,26 +36,6 @@ export default function TaskPage({ navigation, route }: Props) {
             </View>
         );
     }
-    // const navigationF = useNavigation();
-
-    // useEffect(() => {
-    //   const unsubscribe = navigation.addListener('beforeRemove', (e) => {
-    //     // Prevent default behavior of leaving the screen
-    //     e.preventDefault();
-    //     // Perform your custom back action here
-  
-    //     // If you want to allow the back action after your custom logic,
-    //     // you can call `unsubscribe()` and then navigate back programmatically:
-    //     // unsubscribe();
-    //     // navigationF.goBack()
-    //     // navigation.navigate("TaskOnDayPage", {
-    //     //     dateNow:new Date(currentDate).toISOString()
-    //     // })
-    //     unsubscribe();
-    //   });
-  
-    //   return unsubscribe;
-    // }, [navigation]);
 
     return (
         <View style={styles.container}>
