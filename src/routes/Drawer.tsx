@@ -50,8 +50,8 @@ export function MyDrawer() {
             initialRouteName="TabNavigator"
             screenOptions={() => ({
                 headerStyle: {
-                    height: 100,
-                    borderWidth:0
+                    height: !__DEV__?100:130,
+                    borderWidth:0,
                 },
                 headerTitle: () => <Header />,
                 drawerStyle: {

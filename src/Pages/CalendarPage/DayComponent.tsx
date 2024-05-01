@@ -37,9 +37,9 @@ export default function DayComponent({
 }: Props) {
     const lastPress = useRef(Date.now());
     const getHeightOnCount = (date: string) => {
-        if (!countOnWeek) return 50;
+        if (!countOnWeek) return 70;
         const week = moment(date).isoWeek();
-        if (!countOnWeek[week]) return 50;
+        if (!countOnWeek[week]) return 70;
         if (countOnWeek[week].textLength < 10)
             return (
                 70 *
@@ -79,8 +79,9 @@ export default function DayComponent({
             style={{
                 width: "100%",
                 height: getHeightOnCount(date.dateString),
-                borderWidth: 0.2,
-                borderColor: "#a0a0a0",
+                minHeight:70,
+                borderWidth: 0.25,
+                borderColor: "#e4e3e3",
                 borderBottomWidth:
                     moment(date.dateString).isoWeek() === maxWeek ? 1 : 0.2,
                 backgroundColor:
