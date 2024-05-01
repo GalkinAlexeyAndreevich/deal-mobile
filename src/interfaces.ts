@@ -32,3 +32,5 @@ export interface SelectItem {
 	disabled?: boolean;
 }
 
+export type TypeDeal = "Мелкая сделка" | "Крупная сделка"
+

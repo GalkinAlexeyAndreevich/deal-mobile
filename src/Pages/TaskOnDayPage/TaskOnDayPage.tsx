@@ -6,8 +6,8 @@ import Tasks from "./components/Tasks";
 import AddTask from "@components/AddTask";
 import ChangeDate from "./components/ChangeDate";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { RootStackParamList } from "@src/routes/TabNavigator";
 import type { TaskStackParamList } from "@src/routes/TaskNavigator";
+import MiniTimer from "@src/components/MiniTimer";
 
 
 type Props = NativeStackScreenProps<TaskStackParamList, 'TaskOnDayPage'>;
@@ -32,6 +32,14 @@ export default function TaskOnDayPage({navigation,route}:Props) {
             </View>
             <View style={styles.addTask}>
                 <AddTask currentDate={currentDate} />
+            </View>
+            <View
+                style={{
+                    position: "absolute",
+                    bottom: "3%",
+                    left: 30,
+                }}>
+                <MiniTimer navigation={navigation.getParent()} />
             </View>
         </View>
     );

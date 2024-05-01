@@ -11,6 +11,7 @@ import AddTask from "@components/AddTask";
 import moment from "moment";
 import { RootStackParamList } from "@src/routes/TabNavigator";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import MiniTimer from "@src/components/MiniTimer";
 
 type Props = NativeStackScreenProps<RootStackParamList, 'CalendarPage'>;
 export default function CalendarPage({ navigation,route }: Props) {
@@ -74,6 +75,14 @@ export default function CalendarPage({ navigation,route }: Props) {
                     right: 8,
                 }}>
                 <AddTask currentDate={currentDate} />
+            </View>
+            <View
+                style={{
+                    position: "absolute",
+                    bottom: "3%",
+                    left: 30,
+                }}>
+                <MiniTimer navigation={navigation} />
             </View>
 
             {openModal && (
