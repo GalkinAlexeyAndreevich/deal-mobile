@@ -11,7 +11,7 @@ interface Props {
 export default function TaskInput({ task }: Props) {
     const dispatch = useAppDispatch();
     const changeNameTask = (text: string, task: Task) => {
-        // if (!text) return;
+        if (!text.length) return;
         console.log(text, task.id);
         dispatch(setNameTask({ text, taskId: task.id, subtaskId: undefined }));
     };

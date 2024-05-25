@@ -210,7 +210,7 @@ export const setOrderSubtask = async(subtasks:SubTask[])=>{
         update SUBTASKS set subtask_priorityId=? where subtask_id=?`, [i, subtasks[i].subtask_id]);
         console.log("Изменение порядка подзадач", result);
       }
-  })
+    })
 }
 
 export const updateTask = async(task:Task)=>{
@@ -232,6 +232,39 @@ export const updateSubtask = async(subtask:SubTask)=>{
       `, [subtask_name, String(subtask_done),subtask_id]);    
   })
 }
+
+export const getCompleteAndNotCompleteCountTask = async()=>{
+  const db = SQLite.openDatabase("Deal.db")
+  return new Promise<{ completed: unknown, notCompleted: unknown }>((resolve)=>{
+    db.transactionAsync(async (tx) => {
+      const completed = await tx.executeSqlAsync(`
+        select count(*) as completed from tasks where done = 'true'
+      `)
+      const notCompleted = await tx.executeSqlAsync(`
+        select count(*) as notCompleted from tasks where done = 'false'
+      `)
+      console.log("Что вернет статистика",completed.rows, notCompleted.rows);
+      
+      resolve({completed:completed.rows[0].completed, notCompleted:notCompleted.rows[0].notCompleted})
+    })
+  })
+}
+
+export const getTasksCountOnType = async()=>{
+  const db = SQLite.openDatabase("Deal.db")
+  return new Promise<unknown[]>((resolve)=>{
+    db.transactionAsync(async (tx) => {
+      const result = await tx.executeSqlAsync(`
+        select count(*) as countOnType,TYPE_TASKS.value,TYPE_TASKS.color from TASKS,TYPE_TASKS
+        where typeId=TYPE_TASKS.id and (done='false' or done='true') group by  typeId
+      `)
+      
+      resolve(result.rows)
+    })
+  })
+}
+
+
 
 
 

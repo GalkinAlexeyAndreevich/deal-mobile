@@ -47,7 +47,6 @@ export default function CalendarPage({ navigation,route }: Props) {
             return acc;
         }, {});
         setMarkedDates(map);
-        console.log("Объедиение по полю", map);
     }, [monthYear, tasks]);
 
     const changeDatePicker = (

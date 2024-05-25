@@ -27,7 +27,7 @@ export interface ITypeTask {
 
 export interface SelectItem {
 	value: string;
-	key: string;
+	key: number;
 	label: string;
 	disabled?: boolean;
 }

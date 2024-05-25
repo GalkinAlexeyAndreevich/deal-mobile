@@ -1,10 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, Vibration, View } from "react-native";
 import { AddTaskParamList } from "@routes/AddTaskNavigator";
 import { useAppSelector } from "@store/hook";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useBackgroundTimer } from "@src/TimerContext";
-import moment from "moment";
+import { useEffect } from "react";
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 const clockify = (secondsLeft: number) => {
@@ -29,6 +29,11 @@ export default function DealWithTimerPage({ navigation }: TProps) {
         setTimerOn(false);
         setDiff(0)
     };
+    useEffect(()=>{
+        if(diff === 0 && !timerOn){
+            Vibration.vibrate(500)
+        }
+    },[timerOn,diff])
     // const time = diff==0?'00:00:00':`${moment.utc( diff*1000 ).format( 'hh:mm:ss' )}`;
     const time = `${hours > 0?(hours >= 10 ? hours:"0"+hours + ' :'):''}${mins >= 10 ? mins:"0"+mins} : ${seconds >= 10 ? seconds:"0"+seconds}`
     return (

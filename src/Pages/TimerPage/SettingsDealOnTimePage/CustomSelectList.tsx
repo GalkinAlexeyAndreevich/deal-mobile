@@ -14,7 +14,7 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
     const [selectData, setSelectData] = useState<SelectItem[]>([]);
     const [filtered1, setFiltered1] = useState<Task[]>([]);
 
-    const [selectKey, setSelectedKey] = useState<string>('-1');
+    const [selectKey, setSelectedKey] = useState<number>(-1);
     useEffect(() => {
         let newArr = tasks.filter(
             (task) => moment(task.date).format('LL')=== moment().format('LL')
@@ -28,7 +28,7 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
             onlyValue.push({
                 value: item.name,
                 key: item.id,
-                label: item.id,
+                label: String(item.id),
                 disabled: false,
             });
         }
@@ -40,7 +40,7 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
     //     setSelectedTask(filtered1[0])
     // },[filtered1])
 
-    const selectTask = (key: string) => {
+    const selectTask = (key: number) => {
         if (selectKey) {
             for (let i = 0; i < selectData.length; i++) {
                 if (selectData[i].key == selectKey)
@@ -72,13 +72,14 @@ export default function CustomSelectList({ setSelectedTask }: Props) {
                     backgroundColor: "#d9fcff",
                     borderWidth: 0,
                 }}
-                setSelected={(key: string) => selectTask(key)}
-                inputStyles={{color:selectKey =='-1'?"black":"grey"}}
+                setSelected={(key: string) => selectTask(Number(key))}
+                inputStyles={{color:selectKey ==-1?"black":"grey"}}
                 disabledTextStyles={{ fontWeight: "bold" }}
                 data={selectData}
                 save="key"
                 searchPlaceholder="Выберите цель из списка"
                 placeholder="Выберите цель из списка"
+                notFoundText="На сегодня у вас нет заданий"
             />
         </View>
     );

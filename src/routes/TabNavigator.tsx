@@ -4,33 +4,54 @@ import { Image } from "react-native-elements";
 import TaskNavigator from "./TaskNavigator";
 import { AddTaskNavigator } from "./AddTaskNavigator";
 import { TouchableOpacity } from "react-native";
+import StatisticPage from "@src/Pages/StatisticPage";
+
 export type RootStackParamList = {
     AddTask: undefined;
     Statistics: undefined;
     TasksOnDayPage: { screen: string; params: { dateNow?: string } };
     CalendarPage: { dateNow?: string };
     TaskPage: { taskId: number; uniqueId: string; currentDate: string };
+    StatisticPage: undefined;
 };
 const Tab = createBottomTabNavigator<RootStackParamList>();
 function TabNavigator() {
     return (
         <Tab.Navigator
-            screenOptions={({navigation,route}) => ({
+            screenOptions={({ navigation, route }) => ({
                 headerShown: false,
                 tabBarActiveTintColor: "#00bcfb",
                 tabBarButton: (props) => (
                     <TouchableOpacity
-                      {...props}
-                      onPress={(e) => {
-                        // Check the route name and decide if you want to prevent navigation
-                        if (!(route.name == 'AddTask' && navigation.isFocused())) {
-                          props.onPress?.(e);
-                        }
-                      }}
+                        {...props}
+                        onPress={(e) => {
+                            // Check the route name and decide if you want to prevent navigation
+                            if (
+                                !(
+                                    route.name == "AddTask" &&
+                                    navigation.isFocused()
+                                )
+                            ) {
+                                props.onPress?.(e);
+                            }
+                        }}
                     />
                 ),
             })}
-            initialRouteName="TasksOnDayPage">
+            initialRouteName="StatisticPage">
+            <Tab.Screen
+                name="StatisticPage"
+                options={{
+                    title: "Статистика",
+                    tabBarIcon: () => (
+                        <Image
+                            style={{ width: 34, height: 33 }}
+                            source={require("@assets/statistic.png")}
+                        />
+                    ),
+                }}
+                component={StatisticPage}
+            />
             <Tab.Screen
                 name="AddTask"
                 options={{

@@ -1,8 +1,6 @@
 import React, { createContext, useContext, useEffect } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useAppDispatch } from "./store/hook";
 import { setTasks, setType } from "./store/tasksDatesSlice";
-import { defaultTypeTasks } from "./utils/dataNoFetch";
 import { createTables, getTasksWithSubtask, getTypeTask } from "db";
 import type { ITypeTask, SubTask, Task } from "./interfaces";
 
@@ -22,6 +20,8 @@ export const SavedDataProvider = ({ children }: Props) => {
                 const typeTask = await getTypeTask() as ITypeTask[]
                 dispatch(setType(typeTask))
                 const allData = await getTasksWithSubtask() as (Task & SubTask)[]
+                console.log("Все задачи", allData);
+                
                 let formattedArr:Task[] = []
                 for(let i=0;i<allData.length;i++){
                     let index = formattedArr.findIndex(element=>element.id==allData[i].id)

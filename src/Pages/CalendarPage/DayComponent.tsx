@@ -24,7 +24,7 @@ interface Props {
     setCurrentDate: (date: string) => void;
     currentDate: string;
     marking: MarkingProps | undefined;
-    navigation:NativeStackNavigationProp<RootStackParamList, "CalendarPage">
+    navigation: NativeStackNavigationProp<RootStackParamList, "CalendarPage">;
 }
 
 export default function DayComponent({
@@ -33,7 +33,7 @@ export default function DayComponent({
     setCurrentDate,
     currentDate,
     marking,
-    navigation
+    navigation,
 }: Props) {
     const lastPress = useRef(Date.now());
     const getHeightOnCount = (date: string) => {
@@ -54,18 +54,18 @@ export default function DayComponent({
         const now = Date.now();
         if (now - lastPress.current <= 300) {
             lastPress.current = 0; // reset
-            navigation.navigate("TasksOnDayPage",{
-                screen:'TaskOnDayPage',
-                params:{dateNow:date.dateString}
-            })
+            navigation.navigate("TasksOnDayPage", {
+                screen: "TaskOnDayPage",
+                params: { dateNow: date.dateString },
+            });
         } else {
-          lastPress.current = now;
-          setTimeout(() => {
-            if (lastPress.current !== 0) {
-                setCurrentDate(date.dateString);  
-                lastPress.current = 0; // reset
-            }
-          }, 300);
+            lastPress.current = now;
+            setTimeout(() => {
+                if (lastPress.current !== 0) {
+                    setCurrentDate(date.dateString);
+                    lastPress.current = 0; // reset
+                }
+            }, 300);
         }
     };
     const hyphenatedText = (text: string): string => {
@@ -79,7 +79,7 @@ export default function DayComponent({
             style={{
                 width: "100%",
                 height: getHeightOnCount(date.dateString),
-                minHeight:70,
+                minHeight: 70,
                 borderWidth: 0.25,
                 borderColor: "#e4e3e3",
                 borderBottomWidth:
@@ -101,35 +101,56 @@ export default function DayComponent({
                 }}>
                 {date.day}{" "}
             </Text>
-            <View style={{ flex: 1 }}>
+            <View style={{ flexGrow: 1 }}>
                 {marking?.dots?.map((item, index) => {
                     return (
-                        <View key={index}
-                            style={{
-                                backgroundColor: item?.color,
-                                paddingHorizontal:1.2,
-                                paddingVertical: 3,
-                                marginVertical: 3,
-                                marginHorizontal: 2,
-                            }}>
-                            <Text
-                                android_hyphenationFrequency="full"
-                                textBreakStrategy="simple"
-                                style={{
-                                    borderWidth:
-                                        item?.color == "white" ? 0.2 : 0,
-                                    color: item?.selectedDotColor,
-                                    width:'100%',
-                                    fontSize: 10,
-                                    textAlign: "center",
-                                }}>
-                                
-                                {hyphenatedText(item.key || "")}
-                            </Text>
+                        <View style={{
+                            display:'flex', 
+                            justifyContent:'center',
+                            alignItems:'center',
+                            paddingVertical: 1,
+                            marginVertical: 3,
+                            backgroundColor: item?.color,
+                            }} key={index}>
+                                <View style={{width:"96%"}}>
+                                    <Text
+                                        android_hyphenationFrequency="full"
+                                        textBreakStrategy="simple"
+                                        lineBreakStrategyIOS="hangul-word"
+                                        style={{
+                                            width:"100%",
+                                            textAlign: "center",
+                                            fontSize: 10,
+                                        }}>
+                                        <Text>{hyphenatedText(item.key || "")}</Text>
+                                    </Text>
+                                </View>
+     
                         </View>
+
                     );
                 })}
             </View>
         </Pressable>
     );
 }
+// <Text
+//     key={index}
+//     android_hyphenationFrequency="full"
+//     textBreakStrategy="highQuality"
+//     lineBreakStrategyIOS='hangul-word'
+//     style={{
+//         backgroundColor: item?.color,
+//         paddingVertical: 3,
+//         marginVertical: 3,
+//         marginHorizontal: 2,
+//         textAlign:'center',
+//         fontSize: 10,
+//     }}>
+//     <Text
+//         android_hyphenationFrequency="full"
+//         textBreakStrategy="highQuality"
+//     >
+//         {hyphenatedText(item.key || "")}
+//     </Text>
+// </Text>
