@@ -43,6 +43,8 @@
     "runtimeVersion": {
       "policy": "appVersion"
     },
+    "modules": ["expo-haptics", "expo-task-manager"],
+    "permissions": ["vibrate", "background-fetch"],
     "plugins": [
       [
         "@config-plugins/react-native-ble-plx",

@@ -6,7 +6,6 @@ import {
 } from "@react-navigation/drawer";
 import { Platform, Pressable, Text, View } from "react-native";
 import Header from "@components/Header";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import TabNavigator from "./TabNavigator";
 import { Button } from "@rneui/base";
 import { DrawerNavigationHelpers } from "@react-navigation/drawer/lib/typescript/src/types";

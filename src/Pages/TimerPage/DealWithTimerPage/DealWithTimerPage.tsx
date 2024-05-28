@@ -5,6 +5,11 @@ import { useAppSelector } from "@store/hook";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useBackgroundTimer } from "@src/TimerContext";
 import { useEffect } from "react";
+import BackgroundTimer from 'react-native-background-timer';
+
+import * as TaskManager from "expo-task-manager";
+import * as BackgroundFetch from "expo-background-fetch";
+
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 const clockify = (secondsLeft: number) => {
@@ -19,23 +24,80 @@ const clockify = (secondsLeft: number) => {
 };
 
 export default function DealWithTimerPage({ navigation }: TProps) {
-    const { timerOn,setTimerOn, diff,setDiff } = useBackgroundTimer();
+    const { timerOn, setTimerOn, diff, setDiff } = useBackgroundTimer();
     const { nameTask } = useAppSelector((state) => state.dealSettings);
     const { hours, mins, seconds } = clockify(diff);
     const handlePause = () => {
-        setTimerOn(prev=>!prev);
+        setTimerOn((prev) => !prev);
     };
     const handleStop = () => {
         setTimerOn(false);
-        setDiff(0)
+        setDiff(0);
     };
-    useEffect(()=>{
-        if(diff === 0 && !timerOn){
-            Vibration.vibrate(500)
+    useEffect(() => {
+        if (diff === 0 && !timerOn) {
+            Vibration.vibrate(500);
+            // unregisterTask();
         }
-    },[timerOn,diff])
+    }, [timerOn, diff]);
+
+    // const TASK_NAME = 'vibrate-after-5-minutes';
+
+    // TaskManager.defineTask(TASK_NAME, async () => {
+    //   await BackgroundFetch.setMinimumIntervalAsync(300); // 5 minutes
+    //   Vibration.vibrate(1000); // vibrate for 1 second
+    // });
+    
+    // useEffect(() => {
+    //   TaskManager.getTaskListAsync().then(taskList => {
+    //     if (!taskList.includes(TASK_NAME)) {
+    //       TaskManager.registerTaskAsync(TASK_NAME);
+    //     }
+    //   });
+    // }, []);
+    
+    // BackgroundFetch.startAsync();
+    // useEffect(() => {
+    //     unregisterTask()
+    //     registerTask();
+    // }, []);
+
+    // const TASK_NAME = "BACKGROUND_TASK";
+
+    // TaskManager.defineTask(TASK_NAME, () => {
+    //     try {
+    //         // Вставьте здесь код для вибрации
+    //         console.log("Выполняется фоновая задача", diff);
+    //         if (diff > 2) {
+    //             unregisterTask()
+    //             registerTask();
+    //         }
+    //         return BackgroundFetch.BackgroundFetchResult.NewData;
+    //     } catch (err) {
+    //         return BackgroundFetch.BackgroundFetchResult.Failed;
+    //     }
+    // });
+
+    // async function registerTask() {
+    //     console.log("Зарегистрировано", diff);
+        
+    //     await BackgroundFetch.registerTaskAsync(TASK_NAME, {
+    //         minimumInterval: diff + 1,
+    //         stopOnTerminate: false,
+    //         startOnBoot: true,
+    //     });
+    // }
+
+    // async function unregisterTask() {
+    //     await TaskManager.unregisterTaskAsync(TASK_NAME);
+    // }
+
     // const time = diff==0?'00:00:00':`${moment.utc( diff*1000 ).format( 'hh:mm:ss' )}`;
-    const time = `${hours > 0?(hours >= 10 ? hours:"0"+hours + ' :'):''}${mins >= 10 ? mins:"0"+mins} : ${seconds >= 10 ? seconds:"0"+seconds}`
+    const time = `${
+        hours > 0 ? (hours >= 10 ? hours : "0" + hours + " :") : ""
+    }${mins >= 10 ? mins : "0" + mins} : ${
+        seconds >= 10 ? seconds : "0" + seconds
+    }`;
     return (
         <View style={styles.container}>
             <Text style={styles.title}>{nameTask}</Text>
@@ -53,12 +115,15 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                         paddingVertical: 20,
                         paddingHorizontal: 30,
                     }}>
-                        
-                    <Text style={{fontSize: 30, color: diff==0?"red":"black" }}>{time}</Text>
+                    <Text
+                        style={{
+                            fontSize: 30,
+                            color: diff == 0 ? "red" : "black",
+                        }}>
+                        {time}
+                    </Text>
                     {diff === 0 && !timerOn && (
-                        <Text style={{ fontSize: 30}}>
-                            Время истекло
-                        </Text>
+                        <Text style={{ fontSize: 30 }}>Время истекло</Text>
                     )}
                 </View>
             </View>
@@ -68,8 +133,7 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                         flex: 2,
                         justifyContent: "center",
                     }}
-                    onPress={()=>navigation.navigate("TypeDealPage")}
-                    >
+                    onPress={() => navigation.navigate("TypeDealPage")}>
                     <Text
                         style={{
                             fontSize: 20,
@@ -85,8 +149,12 @@ export default function DealWithTimerPage({ navigation }: TProps) {
             ) : (
                 <View style={{ flex: 2, justifyContent: "center" }}>
                     <Pressable onPress={handlePause}>
-                    {timerOn && <Icon name="pause-circle-outline" size={140} />}
-                    {!timerOn && <Icon name="play-circle-outline" size={140} />}
+                        {timerOn && (
+                            <Icon name="pause-circle-outline" size={140} />
+                        )}
+                        {!timerOn && (
+                            <Icon name="play-circle-outline" size={140} />
+                        )}
                     </Pressable>
                     <Pressable
                         style={{

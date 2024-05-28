@@ -25,7 +25,6 @@ function TabNavigator() {
                     <TouchableOpacity
                         {...props}
                         onPress={(e) => {
-                            // Check the route name and decide if you want to prevent navigation
                             if (
                                 !(
                                     route.name == "AddTask" &&

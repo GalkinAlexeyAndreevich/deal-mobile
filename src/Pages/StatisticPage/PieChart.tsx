@@ -14,21 +14,10 @@ export default function PieChartComponent({
         color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
         strokeWidth: 2,
     };
-    const getRandomColor = () => {
-        const letters = "0123456789ABCDEF";
-
-        let color = "#";
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
-        }
-        return color;
-    };
-
     const pieData = data.map((item) => ({
         name: item.value,
         percentage: item.countOnType,
         color: item.color,
-        // color:getRandomColor(),
         svg: {
             fill: () => `#${Math.floor(Math.random() * 16777215).toString(16)}`,
         },
@@ -56,7 +45,7 @@ export default function PieChartComponent({
                 height={220}
                 chartConfig={chartConfig}
                 accessor="percentage"
-                backgroundColor="#989ebc"
+                backgroundColor="#ffffff"
                 paddingLeft="15"
                 absolute
             />

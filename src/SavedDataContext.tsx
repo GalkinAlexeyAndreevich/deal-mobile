@@ -20,8 +20,6 @@ export const SavedDataProvider = ({ children }: Props) => {
                 const typeTask = await getTypeTask() as ITypeTask[]
                 dispatch(setType(typeTask))
                 const allData = await getTasksWithSubtask() as (Task & SubTask)[]
-                console.log("Все задачи", allData);
-                
                 let formattedArr:Task[] = []
                 for(let i=0;i<allData.length;i++){
                     let index = formattedArr.findIndex(element=>element.id==allData[i].id)
@@ -46,7 +44,6 @@ export const SavedDataProvider = ({ children }: Props) => {
                         }  
                     }
                 }
-                console.log("отформатированный массив", formattedArr);
                 dispatch(setTasks(formattedArr));    
             })
         }catch(err){

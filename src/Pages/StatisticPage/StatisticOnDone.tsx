@@ -6,24 +6,14 @@ interface IStatisticOnDone {
         completed: number;
         notCompleted: number;
     }
-
 }
 
 export default function StatisticOnDoneComponent({
     statisticOnDone,
 }: IStatisticOnDone) {
-    console.log(statisticOnDone);
-
     return (
         <View
-            style={{
-                display: "flex",
-                flexDirection: "row",
-                // alignItems: "center",
-                justifyContent: "center",
-                paddingLeft:20,
-                width:Dimensions.get("window").width - 20
-            }}>
+            style={styles.container}>
             <View
                 style={{
                     ...styles.column,
@@ -31,7 +21,7 @@ export default function StatisticOnDoneComponent({
                     width: (Dimensions.get("window").width - 20) / 2 - ((Dimensions.get("window").width - 20) / 100 * 2.5),
                     height: 100,
                     marginRight: "5%",
-                    backgroundColor: "#989ebc",
+                    backgroundColor: "#ffffff",
                 }}>
                 <Text style={{ fontWeight: "bold", fontSize: 30 }}>
                     {String(statisticOnDone.completed)}
@@ -43,9 +33,8 @@ export default function StatisticOnDoneComponent({
                 style={{
                     ...styles.column,
                     padding: 10,
-                    // width: "45%",
                     height: 100,
-                    backgroundColor: "#989ebc",
+                    backgroundColor: "#ffffff",
                     width: (Dimensions.get("window").width - 20) / 2 - ((Dimensions.get("window").width - 20) / 100 * 2.5),
                 }}>
                 <Text style={{ fontWeight: "bold", fontSize: 30 }}>
@@ -60,9 +49,11 @@ export default function StatisticOnDoneComponent({
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        paddingVertical: 5,
-        backgroundColor: "white",
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "center",
+        paddingLeft:20,
+        width:Dimensions.get("window").width - 20
     },
     column: {
         display: "flex",

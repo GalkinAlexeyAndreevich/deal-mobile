@@ -10,9 +10,8 @@ export type AddTaskParamList = {
 };
 const Stack = createNativeStackNavigator<AddTaskParamList>();
 export function AddTaskNavigator(){
-	const {timeEnd, timerOn} = useBackgroundTimer()
-	// console.log(timerOn,timeEnd);
-	
+	const {timeEnd} = useBackgroundTimer()
+
 	const initialPage = timeEnd?"DealWithTimerPage":"TypeDealPage"
 	return (
 			<Stack.Navigator
@@ -20,7 +19,14 @@ export function AddTaskNavigator(){
 					// screenListeners={}
 					screenOptions={{
 							headerShown: false,
-					}}>
+					}}
+					screenListeners={({ route }) => ({
+						beforeRemove:(e)=>{
+							if(e.data?.action?.type == "GO_BACK" && route.name == "DealWithTimerPage"){
+								e.preventDefault(); 
+							}
+						}
+					})}>
 					<Stack.Screen name="TypeDealPage" component={TypeDealPage} />
 					<Stack.Screen
 							name="SettingsDealOnTimePage"

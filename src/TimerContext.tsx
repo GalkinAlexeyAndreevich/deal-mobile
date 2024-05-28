@@ -43,6 +43,7 @@ export const TimerProvider = ({ children }: Props) => {
         setDifPause(0)
         setPausedBegin("")
     }
+
     useEffect(()=>{
         setDiff(0)
         console.log("render ",diffPause,pausedBegin);

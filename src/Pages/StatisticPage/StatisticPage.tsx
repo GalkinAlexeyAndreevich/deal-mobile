@@ -1,17 +1,10 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    Dimensions,
-    TouchableOpacity,
-    ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { getCompleteAndNotCompleteCountTask, getTasksCountOnType } from "db";
 import { useAppSelector } from "@src/store/hook";
-import BarChartComponent from "./BarChartComponent";
-import PieChartComponent from "./PieChartComponent";
-import StatisticOnDoneComponent from "./StatisticOnDoneComponent";
+import BarChartComponent from "./BarChart";
+import PieChartComponent from "./PieChart";
+import StatisticOnDoneComponent from "./StatisticOnDone";
 
 interface IStatisticOnDone {
     completed: number;
@@ -25,7 +18,7 @@ export default function StatisticPage() {
         notCompleted: 0,
     });
     const [countOnType, setCountOnType] = useState<
-        { countOnType: number; value: string; color:string }[]
+        { countOnType: number; value: string; color: string }[]
     >([]);
 
     useEffect(() => {
@@ -36,7 +29,7 @@ export default function StatisticPage() {
             let getCountOnType = (await getTasksCountOnType()) as {
                 countOnType: number;
                 value: string;
-								color:string
+                color: string;
             }[];
             console.log("Распределение по типам", getCountOnType);
             setCountOnType(getCountOnType);
@@ -47,15 +40,7 @@ export default function StatisticPage() {
     return (
         <View style={styles.container}>
             <ScrollView>
-                <Text
-                    style={{
-                        fontWeight: "600",
-                        fontSize: 18,
-                        paddingLeft: 10,
-                        paddingBottom: 10,
-                    }}>
-                    Ваша статистика
-                </Text>
+                <Text style={styles.statistic}>Ваша статистика</Text>
                 <StatisticOnDoneComponent statisticOnDone={statisticOnDone} />
                 <BarChartComponent />
                 <PieChartComponent data={countOnType} />
@@ -81,5 +66,11 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
+    },
+    statistic: {
+        fontWeight: "600",
+        fontSize: 18,
+        paddingLeft: 10,
+        paddingBottom: 10,
     },
 });
