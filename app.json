@@ -2,7 +2,7 @@
   "expo": {
     "name": "DEAL",
     "slug": "deal-mobile",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "icon": "./src/assets/icon-app4.png",
@@ -34,7 +34,11 @@
       "permissions": [
         "android.permission.BLUETOOTH",
         "android.permission.BLUETOOTH_ADMIN",
-        "android.permission.BLUETOOTH_CONNECT"
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.SCHEDULE_EXACT_ALARM",
+        "android.permission.RECEIVE_BOOT_COMPLETED",
+        "android.permission.VIBRATE",
+        "android.permission.FOREGROUND_SERVICE"
       ]
     },
     "web": {
@@ -43,8 +47,6 @@
     "runtimeVersion": {
       "policy": "appVersion"
     },
-    "modules": ["expo-haptics", "expo-task-manager"],
-    "permissions": ["vibrate", "background-fetch"],
     "plugins": [
       [
         "@config-plugins/react-native-ble-plx",

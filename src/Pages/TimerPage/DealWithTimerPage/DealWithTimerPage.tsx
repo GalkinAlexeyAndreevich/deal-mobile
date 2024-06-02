@@ -1,14 +1,18 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { Pressable, StyleSheet, Text, Vibration, View } from "react-native";
+import {
+    Platform,
+    Pressable,
+    StyleSheet,
+    Text,
+    Vibration,
+    View,
+} from "react-native";
 import { AddTaskParamList } from "@routes/AddTaskNavigator";
 import { useAppSelector } from "@store/hook";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useBackgroundTimer } from "@src/TimerContext";
-import { useEffect } from "react";
-import BackgroundTimer from 'react-native-background-timer';
-
-import * as TaskManager from "expo-task-manager";
-import * as BackgroundFetch from "expo-background-fetch";
+import { useEffect, useState } from "react";
+import * as Notifications from "expo-notifications";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
@@ -23,11 +27,24 @@ const clockify = (secondsLeft: number) => {
     };
 };
 
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+        priority: Notifications.AndroidNotificationPriority.MAX,
+    }),
+});
+let notificationId = "";
 export default function DealWithTimerPage({ navigation }: TProps) {
     const { timerOn, setTimerOn, diff, setDiff } = useBackgroundTimer();
     const { nameTask } = useAppSelector((state) => state.dealSettings);
     const { hours, mins, seconds } = clockify(diff);
-    const handlePause = () => {
+    const [isLoad, setIdLoad] = useState(false)
+
+    const handlePause = async () => {
+        if(timerOn)await Notifications.cancelScheduledNotificationAsync(notificationId);
+        else schedulePushNotification(diff)
         setTimerOn((prev) => !prev);
     };
     const handleStop = () => {
@@ -36,63 +53,55 @@ export default function DealWithTimerPage({ navigation }: TProps) {
     };
     useEffect(() => {
         if (diff === 0 && !timerOn) {
-            Vibration.vibrate(500);
-            // unregisterTask();
+            Vibration.vibrate([0, 250, 250, 250]);
         }
     }, [timerOn, diff]);
+    useEffect(()=>{
+        if(diff && !isLoad)setIdLoad(true)
+    },[diff])
+    async function schedulePushNotification(time:number) {
+        console.log("Время до инициализации таймер",diff);
+        if (Platform.OS == "android") {
+            Notifications.setNotificationChannelAsync("one-channel", {
+                name: "default",
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [0, 250, 250, 250],
+                lightColor: "#FF231F7C",
+            });
+        }
+        notificationId = await Notifications.scheduleNotificationAsync({
+            content: {
+                title: "Время вышло",
+                body: nameTask,
+                vibrate: [0, 250, 250, 250],
+                priority: Notifications.AndroidNotificationPriority.MAX,
+            },
+            trigger: {
+                seconds: time,
+                channelId: "one-channel",
+            },
+        });
+    }
 
-    // const TASK_NAME = 'vibrate-after-5-minutes';
+    useEffect(() => {
+        if(!isLoad)return
+        Notifications.cancelAllScheduledNotificationsAsync().then(()=>{
+            schedulePushNotification(diff);
+        });
+    }, [isLoad]);
 
-    // TaskManager.defineTask(TASK_NAME, async () => {
-    //   await BackgroundFetch.setMinimumIntervalAsync(300); // 5 minutes
-    //   Vibration.vibrate(1000); // vibrate for 1 second
-    // });
-    
-    // useEffect(() => {
-    //   TaskManager.getTaskListAsync().then(taskList => {
-    //     if (!taskList.includes(TASK_NAME)) {
-    //       TaskManager.registerTaskAsync(TASK_NAME);
-    //     }
-    //   });
-    // }, []);
-    
-    // BackgroundFetch.startAsync();
-    // useEffect(() => {
-    //     unregisterTask()
-    //     registerTask();
-    // }, []);
+    useEffect(() => {
+        setIdLoad(false)
+        const subscription = Notifications.addNotificationReceivedListener(
+            () => {
+                console.log("Вызвали функцию21412");
+            }
+        );
+        return () => {
+            subscription.remove();
+        };
+    }, []);
 
-    // const TASK_NAME = "BACKGROUND_TASK";
-
-    // TaskManager.defineTask(TASK_NAME, () => {
-    //     try {
-    //         // Вставьте здесь код для вибрации
-    //         console.log("Выполняется фоновая задача", diff);
-    //         if (diff > 2) {
-    //             unregisterTask()
-    //             registerTask();
-    //         }
-    //         return BackgroundFetch.BackgroundFetchResult.NewData;
-    //     } catch (err) {
-    //         return BackgroundFetch.BackgroundFetchResult.Failed;
-    //     }
-    // });
-
-    // async function registerTask() {
-    //     console.log("Зарегистрировано", diff);
-        
-    //     await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-    //         minimumInterval: diff + 1,
-    //         stopOnTerminate: false,
-    //         startOnBoot: true,
-    //     });
-    // }
-
-    // async function unregisterTask() {
-    //     await TaskManager.unregisterTaskAsync(TASK_NAME);
-    // }
-
-    // const time = diff==0?'00:00:00':`${moment.utc( diff*1000 ).format( 'hh:mm:ss' )}`;
     const time = `${
         hours > 0 ? (hours >= 10 ? hours : "0" + hours + " :") : ""
     }${mins >= 10 ? mins : "0" + mins} : ${

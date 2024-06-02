@@ -61,12 +61,13 @@ export default function App() {
             check1.current = 0;
         }
     }
-    useEffect(() => {
+    useEffect(() => {  
         if (!__DEV__) {
             new Promise(async () => {
                 fetch().then(async (state) => {
                     if (state.isConnected) await onFetchUpdateAsync();
                 });
+                
             });
         }
     }, []);

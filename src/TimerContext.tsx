@@ -16,7 +16,11 @@ type contextType = {
     diff:number,
     timeEnd:string,
     setDiff:Dispatch<SetStateAction<number>>,
-    setBeginTimer:Dispatch<SetStateAction<boolean>>;
+    setBeginTimer:Dispatch<SetStateAction<{timeOn:boolean,time:number}>>;
+    beginTimer:{
+        timeOn:boolean,
+        time:number
+    }
 };
 const TimerContext = createContext<contextType>({
     timerOn: false,
@@ -25,14 +29,21 @@ const TimerContext = createContext<contextType>({
     timeEnd:'',
     diff:0,
     setDiff:()=>{},
-    setBeginTimer:()=>{}
+    setBeginTimer:()=>{},
+    beginTimer:{
+        timeOn:false,
+        time:0
+    }
 });
 
 interface Props {
     children: React.ReactNode;
 }
 export const TimerProvider = ({ children }: Props) => {
-    const [beginTimer,setBeginTimer] = useState(false)
+    const [beginTimer,setBeginTimer] = useState({
+        timeOn:false,
+        time:0
+    })
     const [timerOn, setTimerOn] = useState(false);
     const [timeEnd, setTimeEnd] = useState("");
     const [pausedBegin, setPausedBegin] = useState("");
@@ -75,7 +86,10 @@ export const TimerProvider = ({ children }: Props) => {
             timer.current && clearInterval(timer.current)
             setTimeEnd("")
             clearPause()
-            setBeginTimer(false)
+            setBeginTimer({
+                timeOn:false,
+                time:0
+            })
         }
     },[diff])
 
@@ -96,7 +110,8 @@ export const TimerProvider = ({ children }: Props) => {
                 timeEnd,
                 diff,
                 setDiff,
-                setBeginTimer
+                setBeginTimer,
+                beginTimer
             }}>
             {children}
         </TimerContext.Provider>

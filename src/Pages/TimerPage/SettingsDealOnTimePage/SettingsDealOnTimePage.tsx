@@ -35,9 +35,13 @@ export default function SettingsDealOnTimePage({ navigation }: TProps) {
         const minutes = selectedMinutes % 60
         console.log(moment().toISOString(),moment().add(hours,'h').add(minutes,'m').toISOString());
         // console.log(moment().add(hours,'h').add(minutes,'m').toISOString());
+
         setTimerOn(true);
         setTimeEnd(moment().add(hours,'h').add(minutes,'m').toISOString())
-        setBeginTimer(true)
+        setBeginTimer({
+            timeOn:true,
+            time:moment().add(hours,'h').add(minutes,'m').diff(moment(), 'seconds')
+        })
         dispatch(addTask(selectedTask));
         navigation.navigate("DealWithTimerPage");
     };
