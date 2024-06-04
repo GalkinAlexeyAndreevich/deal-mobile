@@ -14,6 +14,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { deleteSubtask, setSubtask } from "@src/store/tasksDatesSlice";
 import { useAppDispatch } from "@src/store/hook";
 import { deleteSubtaskDb } from "db";
+import AlertAsync from "react-native-alert-async";
 
 interface Props {
     task: Task;
@@ -48,6 +49,30 @@ export default function Subtasks({
         setChanged(true);
         setIsActiveInput(true);
     };
+
+    const deleteSubtaskHandler = async()=>{
+        const confirmDelete = await AlertAsync(
+            "Подтвердить действие",
+            "Вы действительно хотити удалить подзадачу?",
+            [
+                {
+                    text: "Отменить",
+                    onPress: () => false,
+                    style: "cancel",
+                },
+                { text: "Удалить", onPress: () => true },
+            ],
+            { cancelable: false }
+        );
+        if(confirmDelete){
+            dispatch(deleteSubtask({
+                taskId: task.id,
+                subtaskId: subtask.subtask_id,
+            })
+        );
+        deleteSubtaskDb(subtask.subtask_id)
+        }
+    }
     
     const [isActiveInput, setIsActiveInput] = useState(false);
     return (
@@ -111,15 +136,7 @@ export default function Subtasks({
             <Pressable
                 style={{ padding: 3,marginRight:10 }}
                 onLongPress={longPress}
-                onPress={() =>{
-                    dispatch(
-                        deleteSubtask({
-                            taskId: task.id,
-                            subtaskId: subtask.subtask_id,
-                        })
-                    );
-                    deleteSubtaskDb(subtask.subtask_id)
-                }}>
+                onPress={deleteSubtaskHandler}>
                 <Icon name="close" size={25} color="red" />
             </Pressable>
         </TouchableOpacity>

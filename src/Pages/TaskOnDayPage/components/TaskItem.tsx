@@ -12,6 +12,7 @@ import { CheckBox, Image } from "react-native-elements";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { Task } from "@interfaces";
 import { deleteTaskDb } from "db";
+import AlertAsync from "react-native-alert-async";
 
 interface Props {
     task: Task;
@@ -26,6 +27,27 @@ export default function TaskItem({ task, drag, isActive,redirect }: Props) {
         console.log("long press");
         drag();
     };
+
+    const deleteTaskHandler = async()=>{
+        const confirmDelete = await AlertAsync(
+            "Подтвердить действие",
+            "Вы действительно хотити удалить задачу?",
+            [
+                {
+                    text: "Отменить",
+                    onPress: () => false,
+                    style: "cancel",
+                },
+                { text: "Удалить", onPress: () => true },
+            ],
+            { cancelable: false }
+        );
+        if(confirmDelete){
+            dispatch(deleteTask(task.id))
+            deleteTaskDb(task.id)
+        }
+    }
+    
 
     return (
         <TouchableOpacity
@@ -72,10 +94,7 @@ export default function TaskItem({ task, drag, isActive,redirect }: Props) {
             <Pressable
                 style={{ paddingHorizontal: 3 }}
                 onLongPress={longPress}
-                onPress={() => {
-                    dispatch(deleteTask(task.id))
-                    deleteTaskDb(task.id)
-                }}>
+                onPress={deleteTaskHandler}>
                 <Icon name="close" size={25} color="red" />
             </Pressable>
         </TouchableOpacity>

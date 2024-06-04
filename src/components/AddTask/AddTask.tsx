@@ -160,6 +160,7 @@ export default function AddTask({ currentDate }: { currentDate: string }) {
                     padding: 15,
                     borderRadius: 100,
                     backgroundColor: "#d9fcff",
+                    display:moment(currentDate).diff(moment(),'days')>=0?"flex":'none'
                 }}>
                 <Fontisto name="plus-a" color={"black"} size={30} />
             </Pressable>

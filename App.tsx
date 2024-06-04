@@ -20,38 +20,40 @@ export default function App() {
         try {
             const update = await Updates.checkForUpdateAsync();
             if (update.isAvailable) {
-                const confirmUpdate = await AlertAsync(
-                    "",
-                    "Установить обновление?",
-                    [
-                        {
-                            text: "Cancel",
-                            onPress: () => false,
-                            style: "cancel",
-                        },
-                        { text: "OK", onPress: () => true },
-                    ],
-                    { cancelable: false }
-                );
+                await Updates.fetchUpdateAsync()
+                await Updates.reloadAsync()
+                // const confirmUpdate = await AlertAsync(
+                //     "",
+                //     "Установить обновление?",
+                //     [
+                //         {
+                //             text: "Cancel",
+                //             onPress: () => false,
+                //             style: "cancel",
+                //         },
+                //         { text: "OK", onPress: () => true },
+                //     ],
+                //     { cancelable: false }
+                // );
 
-                if (confirmUpdate) {
-                    check1.current = 1;
-                    await Updates.fetchUpdateAsync()
-                        .then(async (result) => {
-                            if (result.isNew) {
-                                check1.current = 2;
-                            }
-                            // await AlertAsync(`Обновление скачено, статус: ${installStatus}`);
-                        })
-                        .then(() => {
-                            Updates.reloadAsync().then(async () => {
-                                check1.current = 0;
-                                await AlertAsync(
-                                    "Вы успешно установили обновление"
-                                );
-                            });
-                        });
-                }
+                // if (confirmUpdate) {
+                //     check1.current = 1;
+                //     await Updates.fetchUpdateAsync()
+                //         .then(async (result) => {
+                //             if (result.isNew) {
+                //                 check1.current = 2;
+                //             }
+                //             // await AlertAsync(`Обновление скачено, статус: ${installStatus}`);
+                //         })
+                //         .then(() => {
+                //             Updates.reloadAsync().then(async () => {
+                //                 check1.current = 0;
+                //                 await AlertAsync(
+                //                     "Вы успешно установили обновление"
+                //                 );
+                //             });
+                //         });
+                // }
             }
         } catch (error) {
             Alert.alert(

@@ -11,8 +11,9 @@ import { AddTaskParamList } from "@routes/AddTaskNavigator";
 import { useAppSelector } from "@store/hook";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useBackgroundTimer } from "@src/TimerContext";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as Notifications from "expo-notifications";
+import moment from "moment";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
@@ -36,14 +37,20 @@ Notifications.setNotificationHandler({
     }),
 });
 let notificationId = "";
+let notificationTextId = ""
 export default function DealWithTimerPage({ navigation }: TProps) {
     const { timerOn, setTimerOn, diff, setDiff } = useBackgroundTimer();
     const { nameTask } = useAppSelector((state) => state.dealSettings);
     const { hours, mins, seconds } = clockify(diff);
     const [isLoad, setIdLoad] = useState(false)
 
+    const responseListener = useRef<Notifications.Subscription | null>(null);
+
     const handlePause = async () => {
-        if(timerOn)await Notifications.cancelScheduledNotificationAsync(notificationId);
+        if(timerOn){
+            await Notifications.cancelScheduledNotificationAsync(notificationId);
+            await Notifications.cancelScheduledNotificationAsync(notificationTextId);
+        }
         else schedulePushNotification(diff)
         setTimerOn((prev) => !prev);
     };
@@ -51,11 +58,6 @@ export default function DealWithTimerPage({ navigation }: TProps) {
         setTimerOn(false);
         setDiff(0);
     };
-    useEffect(() => {
-        if (diff === 0 && !timerOn) {
-            Vibration.vibrate([0, 250, 250, 250]);
-        }
-    }, [timerOn, diff]);
     useEffect(()=>{
         if(diff && !isLoad)setIdLoad(true)
     },[diff])
@@ -65,15 +67,34 @@ export default function DealWithTimerPage({ navigation }: TProps) {
             Notifications.setNotificationChannelAsync("one-channel", {
                 name: "default",
                 importance: Notifications.AndroidImportance.MAX,
-                vibrationPattern: [0, 250, 250, 250],
+                vibrationPattern: [250, 250, 250, 250,250],
                 lightColor: "#FF231F7C",
             });
         }
+        notificationTextId = await Notifications.scheduleNotificationAsync({
+            content: {
+                title: nameTask,
+                body: `Вы поставили таймер на ${Math.round((diff + 1)/60)} минут.\nКонец таймера в ${moment().add(diff,'seconds').format('HH:mm')}`,
+                data:{
+                    notificationPage:'DealWithTimerPage'
+                },
+                priority: Notifications.AndroidNotificationPriority.MAX,
+                
+            },
+            trigger:null
+        });
+        
+        setTimeout(() => {
+            Notifications.dismissNotificationAsync(notificationTextId);
+        }, (diff-1) * 1000);
         notificationId = await Notifications.scheduleNotificationAsync({
             content: {
-                title: "Время вышло",
-                body: nameTask,
-                vibrate: [0, 250, 250, 250],
+                title: nameTask,
+                body: `Время на задачу вышло`,
+                data:{
+                    notificationPage:'DealWithTimerPage'
+                },
+                vibrate: [250, 250, 250, 250,250],
                 priority: Notifications.AndroidNotificationPriority.MAX,
             },
             trigger: {
@@ -86,19 +107,22 @@ export default function DealWithTimerPage({ navigation }: TProps) {
     useEffect(() => {
         if(!isLoad)return
         Notifications.cancelAllScheduledNotificationsAsync().then(()=>{
+            console.log("Время перед загрузкой", diff);
+            
             schedulePushNotification(diff);
         });
     }, [isLoad]);
 
     useEffect(() => {
         setIdLoad(false)
-        const subscription = Notifications.addNotificationReceivedListener(
-            () => {
-                console.log("Вызвали функцию21412");
+        responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+            const data = response.notification.request.content.data;
+            if (data && data.notificationPage == 'DealWithTimerPage') {
+              navigation.navigate('DealWithTimerPage');
             }
-        );
+          });
         return () => {
-            subscription.remove();
+            responseListener.current && Notifications.removeNotificationSubscription(responseListener.current)
         };
     }, []);
 

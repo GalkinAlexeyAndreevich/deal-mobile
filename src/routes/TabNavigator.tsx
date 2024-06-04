@@ -37,7 +37,7 @@ function TabNavigator() {
                     />
                 ),
             })}
-            initialRouteName="StatisticPage">
+            initialRouteName="TasksOnDayPage">
             <Tab.Screen
                 name="StatisticPage"
                 options={{
@@ -54,10 +54,9 @@ function TabNavigator() {
             <Tab.Screen
                 name="AddTask"
                 options={{
-                    tabBarItemStyle: { padding: 0, margin: 0 }, //use This for Icon or image
-                    tabBarLabelStyle: { padding: 0, margin: 0 }, // use This for lable
+                    tabBarItemStyle: { padding: 0, margin: 0 },
+                    tabBarLabelStyle: { padding: 0, margin: 0 },
                     tabBarLabel: "Таймер",
-                    // title: "Таймер",
                     tabBarIcon: () => (
                         <Image
                             style={{ width: 25, height: 28 }}

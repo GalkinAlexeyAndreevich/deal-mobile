@@ -25,23 +25,16 @@ export default function Tasks({ currentDate, navigation }: IProps) {
 
     useEffect(() => {
         let filteredArr = [];
-        console.log(tasks);
-
         for (let i = 0; i < tasks.length; i++) {
             if (tasks[i].date == currentDate) filteredArr.push(tasks[i]);
         }
-        console.log(
-            "отсортированный массив",
-            filteredArr.sort((a, b) => (a.priorityId > b.priorityId ? 1 : -1))
-        );
-
         setFiltered(
             filteredArr.sort((a, b) => (a.priorityId > b.priorityId ? 1 : -1))
         );
     }, [tasks, currentDate]);
 
     const redirectToTask = (task: Task) => {
-        console.log("redirectOnNewPage", task);
+        // console.log("redirectOnNewPage", task);
         navigation.push("OneTaskPage", {
             taskId: task.id,
             uniqueId: moment().toISOString(),

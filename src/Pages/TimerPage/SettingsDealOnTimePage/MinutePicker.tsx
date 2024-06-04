@@ -10,6 +10,7 @@ interface Props{
 const getTimeOnType = (type:TypeDeal)=>{
     let resultArr:number[] = []
     if(type === "Мелкая сделка"){
+        resultArr.push(1)
         for(let i=5;i<=30;i++){
             if(i%5==0)resultArr.push(i)
         }
