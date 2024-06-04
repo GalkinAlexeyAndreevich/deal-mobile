@@ -11,6 +11,7 @@ import { SavedDataProvider } from "@src/SavedDataContext";
 import { fetch } from "@react-native-community/netinfo";
 import AlertAsync from "react-native-alert-async";
 import { TimerProvider } from "@src/TimerContext";
+import * as Notifications from "expo-notifications"
 
 moment().locale("ru");
 
@@ -64,6 +65,18 @@ export default function App() {
         }
     }
     useEffect(() => {  
+        async function getPermissions(){
+            const { status: existingStatus } = await Notifications.getPermissionsAsync();
+            let finalStatus = existingStatus;
+            console.log("Статус", finalStatus);
+            
+            if (existingStatus !== 'granted') {
+                AlertAsync("Разрешение на уведомления", 'Для уведомлений в таймере необходимо разрешить уведомления в настройках')
+                const { status } = await Notifications.requestPermissionsAsync();
+                finalStatus = status;
+            }
+        }
+        getPermissions()
         if (!__DEV__) {
             new Promise(async () => {
                 fetch().then(async (state) => {

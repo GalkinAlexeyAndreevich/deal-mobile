@@ -22,6 +22,7 @@ interface IPageProps {
 
 export default function MiniTimer({navigation}:IPageProps) {
     const {diff} = useBackgroundTimer()
+    
     // const {hours, mins, seconds} = clockify(diff)
     const time = `${ moment.utc( diff*1000 ).format( 'mm:ss' )}`;
     if(!diff){

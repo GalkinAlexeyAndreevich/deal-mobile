@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import moment from "moment";
 import React, {
     createContext,
@@ -8,6 +9,7 @@ import React, {
     SetStateAction,
     useRef,
 } from "react";
+import { useAppSelector } from "./store/hook";
 
 type contextType = {
     timerOn: boolean;
@@ -16,11 +18,14 @@ type contextType = {
     diff:number,
     timeEnd:string,
     setDiff:Dispatch<SetStateAction<number>>,
-    setBeginTimer:Dispatch<SetStateAction<{timeOn:boolean,time:number}>>;
+    setBeginTimer:Dispatch<SetStateAction<{timeOn:boolean,time:number,timePause:number}>>;
     beginTimer:{
         timeOn:boolean,
-        time:number
+        time:number,
+        timePause:number
     }
+    setDifPause:Dispatch<SetStateAction<number>>
+    setPausedBegin:Dispatch<SetStateAction<string>>
 };
 const TimerContext = createContext<contextType>({
     timerOn: false,
@@ -32,8 +37,11 @@ const TimerContext = createContext<contextType>({
     setBeginTimer:()=>{},
     beginTimer:{
         timeOn:false,
-        time:0
-    }
+        time:0,
+        timePause:0
+    },
+    setDifPause:()=>{},
+    setPausedBegin:()=>{}
 });
 
 interface Props {
@@ -42,8 +50,10 @@ interface Props {
 export const TimerProvider = ({ children }: Props) => {
     const [beginTimer,setBeginTimer] = useState({
         timeOn:false,
-        time:0
+        time:0,
+        timePause:0
     })
+    let { nameTask } = useAppSelector((state) => state.dealSettings);
     const [timerOn, setTimerOn] = useState(false);
     const [timeEnd, setTimeEnd] = useState("");
     const [pausedBegin, setPausedBegin] = useState("");
@@ -56,25 +66,67 @@ export const TimerProvider = ({ children }: Props) => {
     }
 
     useEffect(()=>{
-        setDiff(0)
-        console.log("render ",diffPause,pausedBegin);
-    },[timeEnd,beginTimer])
+        console.log("что пришло", nameTask, timerOn, timeEnd, diffPause, pausedBegin);
+        
+        if(!beginTimer.time && !nameTask.length && !timeEnd.length)return
+        console.log("Где могло измениться имя задачи", nameTask);
+        
+        AsyncStorage.setItem("timerInfo",JSON.stringify({
+            timerOn, timeEnd, diffPause, pausedBegin, nameTask:nameTask || "Задание не найдено"
+        }))
+    },[timerOn, timeEnd, diffPause, pausedBegin,nameTask])
+
     useEffect(() => {
-        if(!timeEnd)return
-        if(!timerOn && diff){
+        console.log("render ", beginTimer);
+        if (!diff && beginTimer.time>0) {
+            console.log("diff 0");
+            setDiff(beginTimer.time);
+            setDifPause(beginTimer.timePause * 1000)
+        }
+        else if (
+            timeEnd.length &&
+            moment(timeEnd).diff(moment(), "seconds") > 0
+        ) {
+            console.log("timeEnd.length");
+            setDiff(moment(timeEnd).diff(moment(), "seconds") + Math.round((diffPause ||0)/1000) + moment().diff(moment(pausedBegin),'seconds') );
+        } 
+        // else {
+        //     setDiff(0);
+        //     setDifPause(0);
+        // }
+    }, [timeEnd, beginTimer]);
+
+    // useEffect(()=>{
+    //     if(timerOn){
+    //         timer.current && clearInterval(timer.current)
+    //     }
+    // },[timerOn])
+
+    useEffect(() => {
+        console.log("Главный useEffect", timerOn,timeEnd,timeEnd.length, moment().toISOString());
+        
+        if(!timeEnd.length)return
+        if(!timerOn && diff && !pausedBegin.length){
             setPausedBegin(moment().toISOString())
+            timer.current && clearInterval(timer.current)
         }
         if(timerOn && pausedBegin.length){
             setDifPause(prev=>prev + Math.abs(moment(moment()).diff(pausedBegin)) + 300)
             console.log("change dif because pause",diffPause);
             setPausedBegin("")
         }
-        if (timerOn) startTimer();
+        console.log("Прошли по условию", timerOn);
+        
+        if (timerOn){
+            startTimer();
+            console.log("Таймер начался");
+            
+        } 
         else {
             timer.current && clearInterval(timer.current)
         }
         return () => {
-            timer.current && clearInterval(timer.current)
+            timerOn && timer.current && clearInterval(timer.current)
         };
     }, [timerOn,timeEnd,diffPause]);
     useEffect(()=>{
@@ -84,20 +136,21 @@ export const TimerProvider = ({ children }: Props) => {
     useEffect(()=>{
         if(diff<=0){
             timer.current && clearInterval(timer.current)
-            setTimeEnd("")
+            // setTimeEnd("")
             clearPause()
-            setBeginTimer({
-                timeOn:false,
-                time:0
-            })
+            // setBeginTimer({
+            //     timeOn:false,
+            //     time:0
+            // })
         }
-    },[diff])
+    },[diff,timeEnd])
 
     const startTimer = () => {
         timer.current = setInterval(()=>{
             const dif = moment(timeEnd).diff(moment(),'seconds') + Math.round(diffPause/1000);            
             if(dif>0) setDiff(dif);
             else setDiff(0)
+            // console.log("Это интервал", diff, dif);
         },500)
     };
 
@@ -111,7 +164,9 @@ export const TimerProvider = ({ children }: Props) => {
                 diff,
                 setDiff,
                 setBeginTimer,
-                beginTimer
+                beginTimer,
+                setDifPause,
+                setPausedBegin
             }}>
             {children}
         </TimerContext.Provider>

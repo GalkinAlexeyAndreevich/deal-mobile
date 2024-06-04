@@ -12,7 +12,8 @@ const Stack = createNativeStackNavigator<AddTaskParamList>();
 export function AddTaskNavigator(){
 	const {timeEnd} = useBackgroundTimer()
 
-	const initialPage = timeEnd?"DealWithTimerPage":"TypeDealPage"
+	const initialPage = timeEnd.length?"DealWithTimerPage":"TypeDealPage"
+	
 	return (
 			<Stack.Navigator
 					initialRouteName={initialPage}

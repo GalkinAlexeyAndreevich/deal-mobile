@@ -10,6 +10,7 @@ import MinutePicker from "./MinutePicker";
 import { useBackgroundTimer } from "@src/TimerContext";
 import CustomSelectList from "./CustomSelectList";
 import moment from "moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
@@ -24,7 +25,7 @@ export default function SettingsDealOnTimePage({ navigation }: TProps) {
         dispatch(setNameTask(""))
     },[])
 
-    const saveChange = () => {
+    const saveChange = async() => {
         console.log(selectedTask, selectedMinutes);
         const check = !selectedTask || Object.keys(selectedTask).length<1
         if (check || !selectedMinutes) {
@@ -35,13 +36,16 @@ export default function SettingsDealOnTimePage({ navigation }: TProps) {
         const minutes = selectedMinutes % 60
         console.log(moment().toISOString(),moment().add(hours,'h').add(minutes,'m').toISOString());
         // console.log(moment().add(hours,'h').add(minutes,'m').toISOString());
-
-        setTimerOn(true);
-        setTimeEnd(moment().add(hours,'h').add(minutes,'m').toISOString())
+        await AsyncStorage.removeItem('timerInfo')
+        console.log("Разница", moment().add(hours,'h').add(minutes,'m').diff(moment(), 'seconds'));
+        
         setBeginTimer({
             timeOn:true,
-            time:moment().add(hours,'h').add(minutes,'m').diff(moment(), 'seconds')
+            time:moment().add(hours,'h').add(minutes,'m').diff(moment(), 'seconds'),
+            timePause:0
         })
+        setTimeEnd(moment().add(hours,'h').add(minutes,'m').toISOString())
+        setTimerOn(true);
         dispatch(addTask(selectedTask));
         navigation.navigate("DealWithTimerPage");
     };

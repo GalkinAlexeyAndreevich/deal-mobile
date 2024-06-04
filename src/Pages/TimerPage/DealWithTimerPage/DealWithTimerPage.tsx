@@ -14,10 +14,12 @@ import { useBackgroundTimer } from "@src/TimerContext";
 import { useEffect, useRef, useState } from "react";
 import * as Notifications from "expo-notifications";
 import moment from "moment";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 const clockify = (secondsLeft: number) => {
+    secondsLeft = secondsLeft || 0
     let hours = Math.floor(secondsLeft / 60 / 60);
     let mins = Math.floor((secondsLeft / 60) % 60);
     let seconds = Math.floor(secondsLeft % 60);
@@ -45,11 +47,11 @@ export default function DealWithTimerPage({ navigation }: TProps) {
     const [isLoad, setIdLoad] = useState(false)
 
     const responseListener = useRef<Notifications.Subscription | null>(null);
-
+    console.log(diff);
+    
     const handlePause = async () => {
         if(timerOn){
             await Notifications.cancelScheduledNotificationAsync(notificationId);
-            await Notifications.cancelScheduledNotificationAsync(notificationTextId);
         }
         else schedulePushNotification(diff)
         setTimerOn((prev) => !prev);
@@ -57,6 +59,7 @@ export default function DealWithTimerPage({ navigation }: TProps) {
     const handleStop = () => {
         setTimerOn(false);
         setDiff(0);
+        AsyncStorage.removeItem('timerInfo')
     };
     useEffect(()=>{
         if(diff && !isLoad)setIdLoad(true)
@@ -71,22 +74,22 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                 lightColor: "#FF231F7C",
             });
         }
-        notificationTextId = await Notifications.scheduleNotificationAsync({
-            content: {
-                title: nameTask,
-                body: `Вы поставили таймер на ${Math.round((diff + 1)/60)} минут.\nКонец таймера в ${moment().add(diff,'seconds').format('HH:mm')}`,
-                data:{
-                    notificationPage:'DealWithTimerPage'
-                },
-                priority: Notifications.AndroidNotificationPriority.MAX,
+        // notificationTextId = await Notifications.scheduleNotificationAsync({
+        //     content: {
+        //         title: nameTask,
+        //         body: `Вы поставили таймер на ${Math.round((diff + 1)/60)} минут.\nКонец таймера в ${moment().add(diff,'seconds').format('HH:mm')}`,
+        //         data:{
+        //             notificationPage:'DealWithTimerPage'
+        //         },
+        //         priority: Notifications.AndroidNotificationPriority.MAX,
                 
-            },
-            trigger:null
-        });
+        //     },
+        //     trigger:null
+        // });
         
-        setTimeout(() => {
-            Notifications.dismissNotificationAsync(notificationTextId);
-        }, (diff-1) * 1000);
+        // setTimeout(() => {
+        //     Notifications.dismissNotificationAsync(notificationTextId);
+        // }, (diff-1) * 1000);
         notificationId = await Notifications.scheduleNotificationAsync({
             content: {
                 title: nameTask,
@@ -166,7 +169,10 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                         flex: 2,
                         justifyContent: "center",
                     }}
-                    onPress={() => navigation.navigate("TypeDealPage")}>
+                    onPress={async() => {
+                        navigation.navigate("TypeDealPage")
+                        AsyncStorage.removeItem('timerInfo')
+                    }}>
                     <Text
                         style={{
                             fontSize: 20,
