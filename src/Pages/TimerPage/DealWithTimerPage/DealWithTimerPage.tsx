@@ -1,10 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
-    Platform,
     Pressable,
     StyleSheet,
     Text,
-    Vibration,
     View,
 } from "react-native";
 import { AddTaskParamList } from "@routes/AddTaskNavigator";
