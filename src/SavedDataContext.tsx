@@ -16,7 +16,7 @@ interface Props {
 
 export const SavedDataProvider = ({ children }: Props) => {
     const dispatch = useAppDispatch();
-    const {setTimerOn, setTimeEnd, setPausedBegin, setDifPause,setBeginTimer} = useBackgroundTimer()
+    let {setTimerOn, setTimeEnd, setPausedBegin, setDifPause,setBeginTimer} = useBackgroundTimer()
     useEffect(() => {
         async function getDataFromDb() {
             await createTables();
@@ -85,7 +85,7 @@ export const SavedDataProvider = ({ children }: Props) => {
                     
                 if (timerInfoString.length) {
                     let timerInfo = JSON.parse(timerInfoString) as {
-                        timeOn: boolean;
+                        timerOn: boolean;
                         diffPause: number;
                         timeEnd: string;
                         pausedBegin: string;
@@ -95,17 +95,25 @@ export const SavedDataProvider = ({ children }: Props) => {
                     setTimeEnd(timerInfo?.timeEnd || "");
                     setPausedBegin(timerInfo?.pausedBegin || "");
                     setDifPause(timerInfo?.diffPause || 0);
+                    setTimerOn(timerInfo?.timerOn || false);
                     dispatch(setNameTask(timerInfo?.nameTask))
-                    setTimerOn(timerInfo?.timeOn || false);
+                    
                     let pauseTime = (timerInfo?.pausedBegin.length)?moment().diff(moment(timerInfo?.pausedBegin),'seconds'):0 
-                    console.log((moment(timerInfo?.timeEnd).diff(moment(), 'seconds') || 0) , pauseTime, timerInfo?.diffPause);
+
                     console.log(pauseTime);
-                    let timePause = (pauseTime || 0) + Math.floor((timerInfo?.diffPause ||0)/1000)
+                    console.log("Проверкка паузы", timerInfo?.timerOn || false);
+                    let dif = timerInfo?.timeEnd.length?(moment(timerInfo?.timeEnd).diff(moment(), 'seconds')):0
+                    let timePause = (pauseTime || 0) + Math.round((timerInfo?.diffPause ||0)/1000)
+                    let time = dif + timePause
+                    
+                    console.log(dif, pauseTime, timePause, timerInfo?.diffPause,time);
                     setBeginTimer({
-                        timeOn:timerInfo?.timeOn || false,
-                        time:(moment(timerInfo?.timeEnd).diff(moment(), 'seconds') || 0) + pauseTime + Math.floor((timerInfo?.diffPause ||0)/1000),
+                        timeOn:timerInfo?.timerOn || false,
+                        time:Number.isNaN(time) || time<=0?0:time,
                         timePause:timePause
                     })
+                    console.log("Данные о паузе",timerInfo?.timerOn, Boolean(timerInfo?.timerOn) || false);
+                    
                 }
             });
         } catch (err) {

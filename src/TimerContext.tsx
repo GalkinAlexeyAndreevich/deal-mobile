@@ -68,7 +68,7 @@ export const TimerProvider = ({ children }: Props) => {
     useEffect(()=>{
         console.log("что пришло", nameTask, timerOn, timeEnd, diffPause, pausedBegin);
         
-        if(!beginTimer.time && !nameTask.length && !timeEnd.length)return
+        if(!nameTask.length && !timeEnd.length)return
         console.log("Где могло измениться имя задачи", nameTask);
         
         AsyncStorage.setItem("timerInfo",JSON.stringify({
@@ -82,14 +82,19 @@ export const TimerProvider = ({ children }: Props) => {
             console.log("diff 0");
             setDiff(beginTimer.time);
             setDifPause(beginTimer.timePause * 1000)
+            setTimerOn(beginTimer.timeOn)
         }
         else if (
             timeEnd.length &&
             moment(timeEnd).diff(moment(), "seconds") > 0
         ) {
             console.log("timeEnd.length");
-            setDiff(moment(timeEnd).diff(moment(), "seconds") + Math.round((diffPause ||0)/1000) + moment().diff(moment(pausedBegin),'seconds') );
+            setTimerOn(beginTimer.timeOn)
+            setDiff(moment(timeEnd).diff(moment(), "seconds") + Math.round((diffPause ||0)/1000) + (pausedBegin.length?moment().diff(moment(pausedBegin),'seconds'):0) );
         } 
+        if(beginTimer.timeOn){
+            setTimerOn(beginTimer.timeOn)
+        }
         // else {
         //     setDiff(0);
         //     setDifPause(0);

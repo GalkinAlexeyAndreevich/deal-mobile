@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from "react";
 import * as Notifications from "expo-notifications";
 import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AlertAsync from "react-native-alert-async";
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
@@ -41,10 +42,10 @@ Notifications.setNotificationHandler({
 let notificationId = "";
 let notificationTextId = ""
 export default function DealWithTimerPage({ navigation }: TProps) {
-    const { timerOn, setTimerOn, diff, setDiff } = useBackgroundTimer();
+    let { beginTimer,timerOn, setTimerOn, diff, setDiff, setDifPause, setPausedBegin } = useBackgroundTimer();
     const { nameTask } = useAppSelector((state) => state.dealSettings);
     const { hours, mins, seconds } = clockify(diff);
-    const [isLoad, setIdLoad] = useState(false)
+    const [isLoad, setIsLoad] = useState(false)
 
     const responseListener = useRef<Notifications.Subscription | null>(null);
     console.log(diff);
@@ -53,7 +54,7 @@ export default function DealWithTimerPage({ navigation }: TProps) {
         if(timerOn){
             await Notifications.cancelScheduledNotificationAsync(notificationId);
         }
-        else schedulePushNotification(diff)
+        else await schedulePushNotification(diff)
         setTimerOn((prev) => !prev);
     };
     const handleStop = () => {
@@ -62,7 +63,8 @@ export default function DealWithTimerPage({ navigation }: TProps) {
         AsyncStorage.removeItem('timerInfo')
     };
     useEffect(()=>{
-        if(diff && !isLoad)setIdLoad(true)
+        if(diff && !isLoad)setIsLoad(true)
+
     },[diff])
     async function schedulePushNotification(time:number) {
         console.log("Время до инициализации таймер",diff);
@@ -109,15 +111,26 @@ export default function DealWithTimerPage({ navigation }: TProps) {
 
     useEffect(() => {
         if(!isLoad)return
-        Notifications.cancelAllScheduledNotificationsAsync().then(()=>{
+        if(!diff || diff <=0){
+            setIsLoad(false)
+            return
+        }
+        Notifications.cancelAllScheduledNotificationsAsync().then(async()=>{
             console.log("Время перед загрузкой", diff);
-            
-            schedulePushNotification(diff);
+            // AlertAsync('Время до установки таймера',`${diff}`)
+            await schedulePushNotification(diff);
+            // setTimeout(async()=>{
+            //     await handlePause()
+            //     setTimeout(async()=>{
+            //         await handlePause()
+            //     },500)
+            // },1000)
+
         });
-    }, [isLoad]);
+    }, [isLoad,nameTask]);
 
     useEffect(() => {
-        setIdLoad(false)
+        setIsLoad(false)
         responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
             const data = response.notification.request.content.data;
             if (data && data.notificationPage == 'DealWithTimerPage') {
@@ -158,7 +171,7 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                         }}>
                         {time}
                     </Text>
-                    {diff === 0 && !timerOn && (
+                    {diff < 1 && !timerOn && (
                         <Text style={{ fontSize: 30 }}>Время истекло</Text>
                     )}
                 </View>
@@ -172,6 +185,11 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                     onPress={async() => {
                         navigation.navigate("TypeDealPage")
                         AsyncStorage.removeItem('timerInfo')
+                        setDifPause(0)
+                        setPausedBegin("")
+                        setIsLoad(false)
+                        setDiff(0)
+                        await Notifications.cancelScheduledNotificationAsync(notificationId);
                     }}>
                     <Text
                         style={{

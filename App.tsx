@@ -1,5 +1,5 @@
 import "react-native-get-random-values";
-import { View, Text, Alert, ActivityIndicator } from "react-native";
+import { View, Text, Alert, ActivityIndicator, Platform } from "react-native";
 import { AppNavigator } from "./src/routes";
 import { Provider } from "react-redux";
 import store from "@store/index";
@@ -15,46 +15,55 @@ import * as Notifications from "expo-notifications"
 
 moment().locale("ru");
 
+if (Platform.OS == "android") {
+    Notifications.setNotificationChannelAsync("one-channel", {
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [250, 250, 250, 250,250],
+        lightColor: "#FF231F7C",
+    });
+}
+
 export default function App() {
     const check1 = useRef(0);
     async function onFetchUpdateAsync() {
         try {
             const update = await Updates.checkForUpdateAsync();
             if (update.isAvailable) {
-                await Updates.fetchUpdateAsync()
-                await Updates.reloadAsync()
-                // const confirmUpdate = await AlertAsync(
-                //     "",
-                //     "Установить обновление?",
-                //     [
-                //         {
-                //             text: "Cancel",
-                //             onPress: () => false,
-                //             style: "cancel",
-                //         },
-                //         { text: "OK", onPress: () => true },
-                //     ],
-                //     { cancelable: false }
-                // );
+                // await Updates.fetchUpdateAsync()
+                // await Updates.reloadAsync()
+                const confirmUpdate = await AlertAsync(
+                    "",
+                    "Установить обновление?",
+                    [
+                        {
+                            text: "Cancel",
+                            onPress: () => false,
+                            style: "cancel",
+                        },
+                        { text: "OK", onPress: () => true },
+                    ],
+                    { cancelable: false }
+                );
 
-                // if (confirmUpdate) {
-                //     check1.current = 1;
-                //     await Updates.fetchUpdateAsync()
-                //         .then(async (result) => {
-                //             if (result.isNew) {
-                //                 check1.current = 2;
-                //             }
-                //             // await AlertAsync(`Обновление скачено, статус: ${installStatus}`);
-                //         })
-                //         .then(() => {
-                //             Updates.reloadAsync().then(async () => {
-                //                 check1.current = 0;
-                //                 await AlertAsync(
-                //                     "Вы успешно установили обновление"
-                //                 );
-                //             });
-                //         });
-                // }
+                if (confirmUpdate) {
+                    check1.current = 1;
+                    await Updates.fetchUpdateAsync()
+                        .then(async (result) => {
+                            if (result.isNew) {
+                                check1.current = 2;
+                            }
+                            // await AlertAsync(`Обновление скачено, статус: ${installStatus}`);
+                        })
+                        .then(() => {
+                            Updates.reloadAsync().then(async () => {
+                                check1.current = 0;
+                                await AlertAsync(
+                                    "Вы успешно установили обновление"
+                                );
+                            });
+                        });
+                }
             }
         } catch (error) {
             Alert.alert(
@@ -71,9 +80,10 @@ export default function App() {
             console.log("Статус", finalStatus);
             
             if (existingStatus !== 'granted') {
-                AlertAsync("Разрешение на уведомления", 'Для уведомлений в таймере необходимо разрешить уведомления в настройках')
+                await AlertAsync("Разрешение на уведомления", 'Для уведомлений в таймере необходимо разрешить уведомления в настройках')
                 const { status } = await Notifications.requestPermissionsAsync();
                 finalStatus = status;
+                console.log("Статус после уведомления", finalStatus);
             }
         }
         getPermissions()

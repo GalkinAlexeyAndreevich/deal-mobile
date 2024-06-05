@@ -16,7 +16,7 @@ type TProps = NativeStackScreenProps<AddTaskParamList>;
 
 export default function SettingsDealOnTimePage({ navigation }: TProps) {
     const dispatch = useAppDispatch();
-    const { setTimerOn,setTimeEnd,setBeginTimer } = useBackgroundTimer();
+    let { setTimerOn,setTimeEnd,setBeginTimer } = useBackgroundTimer();
     const [selectedMinutes, setSelectedMinutes] = useState(5);
     const [selectedTask, setSelectedTask] = useState<Task>({} as Task)
 
