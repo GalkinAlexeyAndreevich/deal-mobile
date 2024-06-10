@@ -31,7 +31,7 @@ export default function TaskItem({ task, drag, isActive,redirect }: Props) {
     const deleteTaskHandler = async()=>{
         const confirmDelete = await AlertAsync(
             "Подтвердить действие",
-            "Вы действительно хотити удалить задачу?",
+            "Вы действительно хотите удалить задачу?",
             [
                 {
                     text: "Отменить",

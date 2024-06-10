@@ -15,14 +15,7 @@ import * as Notifications from "expo-notifications"
 
 moment().locale("ru");
 
-if (Platform.OS == "android") {
-    Notifications.setNotificationChannelAsync("one-channel", {
-        name: "default",
-        importance: Notifications.AndroidImportance.MAX,
-        vibrationPattern: [250, 250, 250, 250,250],
-        lightColor: "#FF231F7C",
-    });
-}
+
 
 export default function App() {
     const check1 = useRef(0);

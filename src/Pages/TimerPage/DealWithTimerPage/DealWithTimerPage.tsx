@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
+    Platform,
     Pressable,
     StyleSheet,
     Text,
@@ -68,15 +69,16 @@ export default function DealWithTimerPage({ navigation }: TProps) {
 
     },[diff])
     async function schedulePushNotification(time:number) {
+        if(!diff || !nameTask.length)return
         console.log("Время до инициализации таймер",diff);
-        // if (Platform.OS == "android") {
-        //     Notifications.setNotificationChannelAsync("one-channel", {
-        //         name: "default",
-        //         importance: Notifications.AndroidImportance.MAX,
-        //         vibrationPattern: [250, 250, 250, 250,250],
-        //         lightColor: "#FF231F7C",
-        //     });
-        // }
+        if (Platform.OS == "android") {
+            Notifications.setNotificationChannelAsync("one-channel", {
+                name: "default",
+                importance: Notifications.AndroidImportance.MAX,
+                vibrationPattern: [250, 250, 250, 250,250],
+                lightColor: "#FF231F7C",
+            });
+        }
         // notificationTextId = await Notifications.scheduleNotificationAsync({
         //     content: {
         //         title: nameTask,
@@ -96,7 +98,7 @@ export default function DealWithTimerPage({ navigation }: TProps) {
         notificationId = await Notifications.scheduleNotificationAsync({
             content: {
                 title: nameTask,
-                body: `Время на выполнение задачи вышло`,
+                body: `Время на выполнение задачи истекло`,
                 data:{
                     notificationPage:'DealWithTimerPage'
                 },
@@ -173,7 +175,7 @@ export default function DealWithTimerPage({ navigation }: TProps) {
                         {time}
                     </Text>
                     {diff < 1 && (
-                        <Text style={{ fontSize: 30 }}>Время истекло</Text>
+                        <Text style={{ fontSize: 30 }}>Время вышло</Text>
                     )}
                 </View>
             </View>

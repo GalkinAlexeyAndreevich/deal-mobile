@@ -53,7 +53,7 @@ export default function Subtasks({
     const deleteSubtaskHandler = async()=>{
         const confirmDelete = await AlertAsync(
             "Подтвердить действие",
-            "Вы действительно хотити удалить подзадачу?",
+            "Вы действительно хотите удалить подзадачу?",
             [
                 {
                     text: "Отменить",

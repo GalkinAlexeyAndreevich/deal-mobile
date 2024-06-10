@@ -5,7 +5,7 @@
     "version": "2.0.1",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "icon": "./src/assets/icon-app4.png",
+    "icon": "./src/assets/adaptive-icon-black8.png",
     "splash": {
       "image": "./src/assets/deal.png",
       "resizeMode": "contain",
@@ -45,6 +45,13 @@
       "policy": "appVersion"
     },
     "plugins": [
+      [
+        "expo-notifications",
+        {
+          "icon": "./src/assets/adaptive-icon-black8.png",
+          "color":  "#000000"
+        }
+      ],
       [
         "expo-updates",
         {
