@@ -41,6 +41,10 @@
     "web": {
       "favicon": "./src/assets/icon-clock.png"
     },
+    "notification": {
+      "icon": "./src/assets/notification-round.png",
+      "color":  "#000000"
+    },
     "runtimeVersion": {
       "policy": "appVersion"
     },
@@ -48,8 +52,9 @@
       [
         "expo-notifications",
         {
-          "icon": "./src/assets/adaptive-icon-black8.png",
+          "icon": "./src/assets/notification-round.png",
           "color":  "#000000"
+
         }
       ],
       [

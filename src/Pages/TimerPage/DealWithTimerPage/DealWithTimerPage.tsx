@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import {
+    Dimensions,
     Platform,
     Pressable,
     StyleSheet,
@@ -12,9 +13,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useBackgroundTimer } from "@src/TimerContext";
 import { useEffect, useRef, useState } from "react";
 import * as Notifications from "expo-notifications";
-import moment from "moment";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import AlertAsync from "react-native-alert-async";
+
 
 type TProps = NativeStackScreenProps<AddTaskParamList>;
 
@@ -34,10 +34,11 @@ Notifications.setNotificationHandler({
     handleNotification: async () => ({
         shouldShowAlert: true,
         shouldPlaySound: true,
-        shouldSetBadge: false,
+        shouldSetBadge: true,
         priority: Notifications.AndroidNotificationPriority.MAX,
     }),
 });
+
 let notificationId = "";
 let notificationTextId = ""
 export default function DealWithTimerPage({ navigation }: TProps) {
@@ -95,13 +96,15 @@ export default function DealWithTimerPage({ navigation }: TProps) {
         // setTimeout(() => {
         //     Notifications.dismissNotificationAsync(notificationTextId);
         // }, (diff-1) * 1000);
+        
         notificationId = await Notifications.scheduleNotificationAsync({
             content: {
                 title: nameTask,
                 body: `Время на выполнение задачи истекло`,
                 data:{
-                    notificationPage:'DealWithTimerPage'
+                    notificationPage:'DealWithTimerPage',
                 },
+                
                 vibrate: [250, 250, 250, 250,250],
                 priority: Notifications.AndroidNotificationPriority.MAX,
             },
